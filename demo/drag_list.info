@@ -1,0 +1,5 @@
+; $Id$
+name = Drag List
+description = Drag links into a box to create a list.
+package = List Mixer
+core = 6.x

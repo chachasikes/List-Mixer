@@ -1,0 +1,3 @@
+<?php
+
+include_once('drag_list_blocks.features.inc');

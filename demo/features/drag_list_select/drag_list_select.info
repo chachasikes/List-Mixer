@@ -1,0 +1,6 @@
+core = "6.x"
+dependencies[] = "views"
+features[views][] = "drag_list_select"
+name = "drag_list_select"
+package = "Features"
+project = "drag_list_select"

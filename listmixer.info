@@ -1,0 +1,5 @@
+; $Id$
+name = List Mixer
+description = Create presets for interactions that allow users to push data to lists
+package = List Mixer
+core = 6.x

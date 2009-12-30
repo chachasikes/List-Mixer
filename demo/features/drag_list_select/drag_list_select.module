@@ -1,0 +1,7 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ */
+include_once('drag_list_select.features.inc');

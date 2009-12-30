@@ -1,0 +1,122 @@
+<?php
+// $Id$
+
+/*
+ *******************************************************************************
+ * @file listmixer.module
+ * Main module file for List Mixer module
+ *******************************************************************************
+ */
+ 
+ 
+
+/**
+ * Implementation of hook_help().
+ */
+function listmixer_help($section) {
+  switch ($section) {
+    case 'admin/help#listmixer':
+  return '<p>'. t('List Mixer helps users of a Drupal website to manage methods
+  of creating and updating lists of content. List Mixer works with fields, views 
+  and taxonomy. 
+  A site administrator can set up any number of interaction presets. The 
+  interaction presets allow associations of content types, fields, views, taxonomy
+  terms, block ids to be connected up to a variety of ajax-tools and data storage
+  methods.') .'</p>';
+      
+  }
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function listmixer_perm() {
+  return array('administer list mixer', 'access list mixer');
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function listmixer_menu() { 
+  $items = array();
+  // Code extract configuration pages
+  $items['admin/settings/listmixer'] = array(
+    'title' => 'List Mixer Settings',
+    'description' => 'Configure List Mixer',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('listmixer_admin_settings'),
+    'access arguments' => array('administer list mixer'),
+    'file' => 'includes/listmixer.admin.inc',
+  );
+  $items['admin/settings/listmixer/presets'] = array(
+    'title' => 'Create and manage List Mixer Presets',
+    'description' => 'Configure List Mixer Presets',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('listmixer_preset_settings'),
+    'access arguments' => array('administer list mixer'),
+    'file' => 'includes/listmixer.presets.inc',
+  );
+  /*$items['admin/settings/listmixer/presets/create'] = array(
+    'title' => 'Create List Mixer Presets',
+    'description' => 'Create List Mixer Presets',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('listmixer_preset_settings_create'),
+    'access arguments' => array('administer list mixer'),
+    'file' => 'includes/listmixer.presets.inc',
+  );
+  $items['admin/settings/listmixer/presets/edit/%'] = array(
+    'title' => 'Create List Mixer Presets',
+    'description' => 'Create List Mixer Presets',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('listmixer_preset_settings_edit'),
+    'access arguments' => array('administer list mixer'),
+    'file' => 'includes/listmixer.presets.inc',
+  );*/ 
+  /*
+  TODO: Add capacity to export listmixer preset settings (probably
+  through chaos tools and possibly also through drush/features.
+  Need to figure out how that might happen.
+  $items['admin/settings/listmixer/presets/export/%'] = array(
+    'title' => 'Create List Mixer Presets',
+    'description' => 'Create List Mixer Presets',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('listmixer_preset_settings_export'),
+    'access arguments' => array('administer list mixer'),
+    'file' => 'includes/listmixer.presets.inc',
+  );  
+   $items['admin/settings/listmixer/presets/drush/%'] = array(
+    'title' => 'Create List Mixer Presets',
+    'description' => 'Create List Mixer Presets',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('listmixer_preset_settings_export'),
+    'access arguments' => array('administer list mixer'),
+    'file' => 'includes/listmixer.presets.inc',
+  ); */ 
+  // TODO: Add menus and callbacks for any storage functions
+  
+  // TODO: Create callback that handles everything
+  
+  return $items;
+}
+/**
+ * Drag List, init 
+ *
+ */
+function listmixer_init() {
+  // Add the javascript.
+  $path = drupal_get_path('module', 'listmixer');
+ /* 
+ // Set Drupal javascript value to the block ID stored in settings.
+  // TODO: move these to interaction presets and load variables from the settings for 
+  // the presets into the right format for the ajax functions
+  drupal_add_js( array(
+    'drag_list' => array(
+      'dragListBlockId' => variable_get('drag_list_allowed_block', 'block-views-drag_list_blocks-block_1'), 
+      ),
+    ),
+   'setting');
+  // Add main javascript file.
+  drupal_add_js($path .'/drag_list.js');
+  // Add custom style sheet.
+  drupal_add_css($path .'/drag_list.css');*/
+}

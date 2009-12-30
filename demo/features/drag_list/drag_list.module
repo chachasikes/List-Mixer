@@ -1,0 +1,245 @@
+<?php
+// $Id$
+
+/******************************************************************************
+ * @file
+ * Main module file for Drag List module
+ *
+ * This is a relatively simple module that will be used for the 
+ * Test Writing workshop. 
+ *
+ * While the module is relatively simple, there are lots of places where
+ * it could break. 
+ 
+ 
+ 
+ * How to use the module.
+ 1. Install and enable the Drag List module.
+ 2. Install and enable the Drag List content types and views.
+ 
+ 
+ 
+ * How the module works:
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ * Drag List allows users to store links from Drupal pages. 
+ * To use, a views block is available on a page.
+ *  They can click
+ * links, and the path will be stored in a list in a node. 
+ 
+ * TODO: Currently, the module does not actually support 'dragging' links into
+ * a box. Dragging is not very accessible, so the default mode is to click
+ * an 'Activate' button, which then highlights all links on the page. The
+ * user can click the links they would like to store. 
+
+ * The settings allow for users to customize how Drag List works. You can
+ * customize the drag_list views (to allow custom content types) which will
+ * help filter which links can be stored. 
+ 
+ * Internal Links are filtered by the view settings. Drupal system paths are
+ * not currently stored, only node paths. Additional widgets could be added
+ * to allow storage of other data, for example, users and selected text.
+ 
+ * External links are absolute urls. 
+
+ * You can change the content types allowed to work with Drag List. At the 
+ * moment, the content type settings do not actually do anything, except
+ * to help keep track of which content types are allowed.
+ 
+ * If you do make more than one list type, you will need to make sure that 
+ * the fields are included. This module only works with one field per type
+ * of data. 
+ 
+ 
+ * Test recommendations.
+ 
+ * This module is brand new. 
+ 
+ * This module has some settings which, if wrong, might break the site.
+ * This module has some ajax callbacks which try to store data. The
+ * module could break if the wrong data is passed into the function.
+
+ * 
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function drag_list_help($section) {
+  switch ($section) {
+    case 'admin/help#drag_list':
+  return '<p>'. t('The Drag List module...') .'</p>';
+      
+  }
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function drag_list_perm() {
+  return array('administer drag list', 'access drag list');
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function drag_list_menu() { 
+  $items = array();
+  // Code extract configuration pages
+  $items['admin/settings/drag_list'] = array(
+    'title' => 'Drag List Settings',
+    'description' => 'Configure Drag List',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('drag_list_admin_settings'),
+    'access arguments' => array('administer drag list'),
+    'file' => 'includes/drag_list.admin.inc',
+  );
+  $items['admin/drag-list/ajax/store/%'] = array(
+    'title' => 'Load Drag List form',
+    'description' => 'loading form callback',
+    'page callback' => 'drag_list_ajax_store',
+    'page arguments' => array(4),
+    'access arguments' => array('access drag list'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+/**
+ * Drag List, init 
+ *
+ */
+function drag_list_init() {
+  // Add the javascript.
+  $path = drupal_get_path('module', 'drag_list');
+  // Set Drupal javascript value to the block ID stored in settings.
+  drupal_add_js( array(
+    'drag_list' => array(
+      'dragListBlockId' => variable_get('drag_list_allowed_block', 'block-views-drag_list_blocks-block_1'), 
+      ),
+    ),
+   'setting');
+  // Add main javascript file.
+  drupal_add_js($path .'/drag_list.js');
+  // Add custom style sheet.
+  drupal_add_css($path .'/drag_list.css');
+}
+
+/**
+ * Drag List, store values from paths.
+ * 
+ * $target_nid The node id of the node which is being used as a list.
+ */
+function drag_list_ajax_store($target_nid = NULL) {
+ // The value is set in the javascript.
+ $link_value = $_POST['drag_list_value'];
+ $is_relative_link = strpos($link_value, '/');
+ $is_absolute_link = strpos($link_value, 'http://');
+ $is_local_link = strpos($link_value, base_path());
+
+ // If a link is a relative link to something in the drupal system, strip off the drupal path and replace it with absolute path.
+ if (empty($is_absolute_link)) {
+  if ($is_local_link == 0) {
+     // Remove drupal path from the link
+     $link_value = str_replace(base_path(), '', $link_value);
+    // Get the node id by looking up the path alias.
+    // This will try to store the node id in the node reference field. That field has user determined validators, so only certain links will be stored. 
+    $path = drupal_get_normal_path($link_value);
+    // If the path points to a node, get the nid value
+    if (strpos($path, 'node/') >= 0) {
+      $nid = str_replace('node/', '', $path);
+      // Store the nodereference value in the nodereference field.
+      drag_list_ajax_store_value_nodereference($target_nid, $nid, variable_get('drag_list_allowed_link_internal', 'field_link_internal'));
+    }
+    
+  }
+ }
+ else{
+   // Store an absolute link as a link
+   drag_list_ajax_store_value_link($target_nid, $link_value, variable_get('drag_list_allowed_link_external', 'field_link_external')); 
+ }
+return 'Drag List value stored.';
+}
+
+function drag_list_ajax_store_value_nodereference($target_nid, $link_value, $field) {
+  if (isset($target_nid) && isset($link_value)) {
+    $node = node_load($target_nid);
+    // See if the value has already been set for the field.
+    foreach ($node->{$field} as $key => $value) {
+      $nid_exists = FALSE;
+      // TODO: require link/nodereference modules
+      if ($node->{$field}[$key]['nid'] == $link_value) {
+        $nid_exists = TRUE;
+        break; 
+      }     
+    }
+    if (!$nid_exists) {
+      // Add value to beginning of the array.
+       array_unshift($node->{$field}, array( 'nid' => $link_value ));
+       node_save($node);
+       return 'Node saved.';
+    }
+    else{
+      return 'Node not saved because value already exists.';
+    }
+  }
+  else{
+    return 'Nodereference value not stored due to an error.';
+  }
+}
+function drag_list_ajax_store_value_link($target_nid, $link_value, $field) {
+  if (isset($target_nid) && isset($link_value)) {
+    $node = node_load($target_nid);
+    // See if the value has already been set for the field.
+    foreach ($node->{$field} as $key => $value) {
+      $nid_exists = FALSE;
+      if ($node->{$field}[$key]['url'] == $link_value) {
+        $nid_exists = TRUE;
+        break; 
+      }     
+    }
+    if (!$nid_exists) {
+      // Add value to beginning of the array.
+       array_unshift($node->{$field}, array(
+        'url' => $link_value, 
+        'title' => '', 
+        'attributes' => array(
+          'target' => '',
+          'class' => '',
+          'rel' => '',
+        ),
+        ));
+        node_save($node);
+        return 'Node saved.';
+    }
+    // TODO: What happens if invalid code is passed into the node?
+    else{
+      return 'Node not saved because value already exists.';
+    }
+  }
+  else{
+    return 'Nodereference value not stored due to an error.';
+  }
+}
+// Theming functions
+/**
+ * Implementation of hook_theme().
+ */
+function drag_list_theme() {
+  return array(
+    'drag_list' => array('arguments' => array()),
+  );
+}
+
+/**
+ * Code Extract theme function.
+ */
+function theme_drag_list() {
+ 
+}
