@@ -1,0 +1,5 @@
+; $Id$
+name = List Mixer User Interface
+description = Administrative interface for List Mixer
+package = List Mixer
+core = 6.x

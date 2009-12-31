@@ -8,17 +8,17 @@
  *******************************************************************************
  */
  
-class ListMixerTest extends DrupalWebTestCase {
+class ListMixerUITest extends DrupalWebTestCase {
   public static function getInfo() {
     return array(
-      'name' => t('List Mixer Test'),
+      'name' => t('List Mixer UI Test'),
       'description' => t('Test something'),
       'group' => t('List Mixer'),
     );
   }
 
   function setUp() {
-    parent::setUp('listmixer');
+    parent::setUp('listmixer_ui');
   }
 } 
 

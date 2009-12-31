@@ -15,6 +15,7 @@
  */
 function listmixer_help($section) {
   switch ($section) {
+    // TODO: Should this be one line or in lines of 80 characters?
     case 'admin/help#listmixer':
     return '<p>'. t('List Mixer helps users of a Drupal website to manage 
     methods of creating and updating lists of content. List Mixer works with 
@@ -30,7 +31,7 @@ function listmixer_help($section) {
  * Implementation of hook_perm().
  */
 function listmixer_perm() {
-  return array('administer list mixer', 'access list mixer');
+  return array('access list mixer');
 }
 
 /**
@@ -47,50 +48,7 @@ function listmixer_menu() {
     'access arguments' => array('administer list mixer'),
     'file' => 'includes/listmixer.admin.inc',
   );
-  $items['admin/settings/listmixer/presets'] = array(
-    'title' => 'Create and manage List Mixer Presets',
-    'description' => 'Configure List Mixer Presets',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('listmixer_preset_settings'),
-    'access arguments' => array('administer list mixer'),
-    'file' => 'includes/listmixer.presets.inc',
-  );
-  /*$items['admin/settings/listmixer/presets/create'] = array(
-    'title' => 'Create List Mixer Presets',
-    'description' => 'Create List Mixer Presets',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('listmixer_preset_settings_create'),
-    'access arguments' => array('administer list mixer'),
-    'file' => 'includes/listmixer.presets.inc',
-  );
-  $items['admin/settings/listmixer/presets/edit/%'] = array(
-    'title' => 'Create List Mixer Presets',
-    'description' => 'Create List Mixer Presets',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('listmixer_preset_settings_edit'),
-    'access arguments' => array('administer list mixer'),
-    'file' => 'includes/listmixer.presets.inc',
-  );*/ 
-  /*
-  TODO: Add capacity to export listmixer preset settings (probably
-  through chaos tools and possibly also through drush/features.
-  Need to figure out how that might happen.
-  $items['admin/settings/listmixer/presets/export/%'] = array(
-    'title' => 'Create List Mixer Presets',
-    'description' => 'Create List Mixer Presets',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('listmixer_preset_settings_export'),
-    'access arguments' => array('administer list mixer'),
-    'file' => 'includes/listmixer.presets.inc',
-  );  
-   $items['admin/settings/listmixer/presets/drush/%'] = array(
-    'title' => 'Create List Mixer Presets',
-    'description' => 'Create List Mixer Presets',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('listmixer_preset_settings_export'),
-    'access arguments' => array('administer list mixer'),
-    'file' => 'includes/listmixer.presets.inc',
-  ); */ 
+
   // TODO: Add menus and callbacks for any storage functions
   
   // TODO: Create callback that handles everything
