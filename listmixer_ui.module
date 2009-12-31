@@ -47,6 +47,11 @@ function listmixer_ui_menu() {
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => -10,
   );
+  $items['admin/build/listmixer/%'] = array(
+    'title' => 'List Mixer Interactions',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  );
   // TODO: Test: check that presets are loaded, that the page makes sense, that it shows 'no lists' create one, and also and pre-installed default presets
   $items['admin/build/listmixer/add'] = array(
     'title' => 'Add new interaction preset',
@@ -87,6 +92,7 @@ function listmixer_ui_menu() {
     'type' => MENU_CALLBACK,
   );
   // TODO: Test: create export tests
+  /*
   $items['admin/build/listmixer/%listmixer_preset/override'] = array(
     'title callback' => 'listmixer_preset_title_callback',
     'title arguments' => array('Override interaction preset: !presetname', 3),
@@ -97,6 +103,7 @@ function listmixer_ui_menu() {
     'type' => MENU_CALLBACK,
   );
   // TODO: Test: create override tests
+  */
   return $items;
 }
 /**

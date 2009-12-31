@@ -42,69 +42,6 @@ function listmixer_ui_overview() {
   return $output;
 }
 
-function listmixer_ui_preset_delete_form($form_state, $preset = array()) {
-
-  if (empty($preset)) {
-    drupal_set_message(t('The specified preset was not found'), 'error');
-    drupal_goto('admin/build/listmixer');
-  }
-
-  $form = array();
-  $form['presetid'] = array('#type' => 'value', '#value' => $preset['presetid']);
-  return confirm_form(
-    $form,
-    t('Are you sure you want to delete the preset %preset?',
-      array('%preset' => $preset['presetname'])
-    ),
-    'admin/build/listmixer',
-    t('This action cannot be undone.'),
-    t('Delete'),  t('Cancel')
-  );
-}
-
-function listmixer_ui_preset_delete_form_submit($form, &$form_state) {
-  $preset = listmixer_preset($form_state['values']['presetid']);
-  listmixer_preset_delete($preset);
-  drupal_set_message(t('Preset %name (ID: @id) was deleted.', array('%name' => $preset['presetname'], '@id' => $preset['presetid'])));
-  $form_state['redirect'] = 'admin/build/listmixer';
-}
-
-/**
- * listmixer preset export form.
- */
-function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
-  if (empty($preset)) {
-    drupal_set_message(t('The specified preset was not found'), 'error');
-    $form_state['redirect'] = 'admin/build/listmixer';
-  }
-
-  if (isset($preset['presetid'])) {
-    unset($preset['presetid']);
-  }
-  if (isset($preset['storage'])) {
-    unset($preset['storage']);
-  }
-  /*foreach ($preset['actions'] as $id => $action) {
-    unset($preset['actions'][$id]['actionid']);
-    unset($preset['actions'][$id]['presetid']);
-  }*/
-  $exported = '$presets = array();';
-  $exported .= "\n";
-  $exported .= '$presets[\''. $preset['presetname'] .'\'] = ';
-  $exported .= var_export($preset, TRUE) .';';
-  $rows = substr_count($exported, "\n") + 1;
-
-  $form = array();
-  $form['export'] = array(
-    '#type' => 'textarea',
-    '#default_value' => $exported,
-    '#rows' => $rows,
-    '#resizable' => FALSE,
-  );
-  return $form;
-}
-
-
 function listmixer_ui_preset_form($form_state, $preset = array()) {
   $form = array();
 
@@ -256,4 +193,77 @@ function listmixer_ui_preset_form_submit($form, &$form_state) {
   */
   // Push back to the preset form
   $form_state['redirect'] = 'admin/build/listmixer/'. $preset['presetid'];
+}
+
+
+function listmixer_ui_preset_delete_form($form_state, $preset = array()) {
+
+  if (empty($preset)) {
+    drupal_set_message(t('The specified preset was not found'), 'error');
+    drupal_goto('admin/build/listmixer');
+  }
+
+  $form = array();
+  $form['presetid'] = array('#type' => 'value', '#value' => $preset['presetid']);
+  return confirm_form(
+    $form,
+    t('Are you sure you want to delete the preset %preset?',
+      array('%preset' => $preset['presetname'])
+    ),
+    'admin/build/listmixer',
+    t('This action cannot be undone.'),
+    t('Delete'),  t('Cancel')
+  );
+}
+
+function listmixer_ui_preset_delete_form_submit($form, &$form_state) {
+  $preset = listmixer_preset($form_state['values']['presetid']);
+  listmixer_preset_delete($preset);
+  drupal_set_message(t('Preset %name (ID: @id) was deleted.', array('%name' => $preset['presetname'], '@id' => $preset['presetid'])));
+  $form_state['redirect'] = 'admin/build/listmixer';
+}
+
+/**
+ * listmixer preset export form.
+ */
+function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
+  if (empty($preset)) {
+    drupal_set_message(t('The specified preset was not found'), 'error');
+    $form_state['redirect'] = 'admin/build/listmixer';
+  }
+
+  if (isset($preset['presetid'])) {
+    unset($preset['presetid']);
+  }
+  if (isset($preset['storage'])) {
+    unset($preset['storage']);
+  }
+  /*foreach ($preset['actions'] as $id => $action) {
+    unset($preset['actions'][$id]['actionid']);
+    unset($preset['actions'][$id]['presetid']);
+  }*/
+  $exported = '$presets = array();';
+  $exported .= "\n";
+  $exported .= '$presets[\''. $preset['presetname'] .'\'] = ';
+  $exported .= var_export($preset, TRUE) .';';
+  $rows = substr_count($exported, "\n") + 1;
+
+  $form = array();
+  $form['export'] = array(
+    '#type' => 'textarea',
+    '#default_value' => $exported,
+    '#rows' => $rows,
+    '#resizable' => FALSE,
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Done'),
+    '#weight' => 9,
+  );
+  $form_state['redirect'] = 'admin/build/listmixer';
+  return $form;
+}
+
+function listmixer_ui_preset_export_form_submit($form, &$form_state) {
+  $form_state['redirect'] = 'admin/build/listmixer';
 }
