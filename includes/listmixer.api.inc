@@ -12,7 +12,7 @@
  *   an listmixer preset array.
  * @return
  */
-function listmixer__preset($preset_id, $reset = FALSE) {
+function listmixer_preset($preset_id, $reset = FALSE) {
   $presets = listmixer_presets($reset);
   return (isset($presets[$preset_id])) ? $presets[$preset_id] : array();
 }
@@ -20,13 +20,18 @@ function listmixer__preset($preset_id, $reset = FALSE) {
 /*
  * Load list of all presets
  */
-function listmixer_presets(){
-  static $presets = array();
+function listmixer_presets($reset = FALSE){
+   static $presets = array();
 
   // Clear  caches if $reset is TRUE;
   if ($reset) {
     $presets = array();
     cache_clear_all('listmixer:presets', 'cache');
+
+    // Clear the content.module cache (refreshes the list of formatters provided by imagefield.module).
+   /* if (module_exists('content')) {
+      content_clear_type_cache();
+    }*/
   }
   // Return presets if the array is populated.
   if (!empty($presets)) {
@@ -44,7 +49,8 @@ function listmixer_presets(){
     $result = db_query('SELECT * FROM {listmixer_preset} ORDER BY presetname');
     while ($preset = db_fetch_array($result)) {
       $presets[$preset['presetid']] = $preset;
-      $presets[$preset['presetid']]['storage'] = listmixer_STORAGE_NORMAL;
+     // $presets[$preset['presetid']]['actions'] = listmixer_preset_actions($preset);
+      $presets[$preset['presetid']]['storage'] = LISTMIXER_STORAGE_NORMAL;
 
       // Collect normal preset names so we can skip defaults and mark overrides accordingly
       $normal_presets[$preset['presetname']] = $preset['presetid'];
@@ -60,18 +66,18 @@ function listmixer_presets(){
     foreach ($default_presets as $preset) {
       if (!empty($preset['presetname'])) {
         if (!isset($normal_presets[$preset['presetname']])) {
-          $preset['storage'] = listmixer_STORAGE_DEFAULT;
+          $preset['storage'] = LISTMIXER_STORAGE_DEFAULT;
           // Use a string preset identifier
           $preset['presetid'] = $preset['presetname'];
           $presets[$preset['presetname']] = $preset;
         }
         else {
           $presetid = $normal_presets[$preset['presetname']];
-          $presets[$presetid]['storage'] = listmixer_STORAGE_OVERRIDE;
+          $presets[$presetid]['storage'] = LISTMIXER_STORAGE_OVERRIDE;
         }
       }
     }
-    
+
     cache_set('listmixer:presets', $presets);
   }
   return $presets;
@@ -98,6 +104,24 @@ function listmixer_preset_by_name($preset_name) {
 }
 
 /**
+ * Load title for a preset
+ */
+function listmixer_preset_title_callback($title, $preset = array()) {
+  $replacements = array();
+  if (!empty($preset)) {
+    $replacements['!presetname'] = $preset['presetname'];
+    $replacements['!presetid'] = $preset['presetid'];
+  }
+  if (!empty($action) && !is_array($action)) {
+    $replacements['!actionname'] = $action;
+  }
+  elseif (!empty($action)) {
+    $replacements['!action'] = $action['action'];
+  }
+  return t($title, $replacements);
+}
+
+/**
  * Save an listmixer preset.
  *
  * @param preset
@@ -107,6 +131,7 @@ function listmixer_preset_by_name($preset_name) {
  */
 function listmixer_preset_save($preset) {
   // @todo: CRUD level validation?
+    dpm($preset);
   if (isset($preset['presetid']) && is_numeric($preset['presetid'])) {
     drupal_write_record('listmixer_preset', $preset, 'presetid');
   }

@@ -51,7 +51,18 @@ function listmixer_help($section) {
  * Implementation of hook_perm().
  */
 function listmixer_perm() {
-  return array('access list mixer');
+  $perms = array('access list mixer');
+  foreach (listmixer_presets() as $preset) {
+    $perms[] =  'view listmixer '. $preset['presetname'];
+  }
+  return $perms;
+}
+
+/**
+ * Clear imagecache presets cache on admin/build/modules form.
+ */
+function listmixer_form_system_modules_alter(&$form, $form_state) {
+  listmixer_presets(TRUE);
 }
 
 /**
@@ -106,7 +117,13 @@ function listmixer_init() {
  */
 function listmixer_theme() {
   return array(
-    'listmixer' => array('arguments' => array()),
+    'listmixer'  => array(
+      'arguments' => array(
+        'namespace' => NULL,
+        'path' => NULL,
+        'alt' => NULL,
+        'title' => NULL,
+    )),
   );
 }
 
