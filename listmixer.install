@@ -21,6 +21,12 @@ function listmixer_schema() {
         'length' => 255,
         'not null' => TRUE,
       ),
+      'preset_description' => array(
+        'description' => t('The primary identifier for a node.'),
+        'type' => 'text',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
     ),
     'primary key' => array('presetid'),
   );

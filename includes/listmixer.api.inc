@@ -130,8 +130,6 @@ function listmixer_preset_title_callback($title, $preset = array()) {
  *   a preset array.  In the case of a new preset, 'presetid' will be populated.
  */
 function listmixer_preset_save($preset) {
-  // @todo: CRUD level validation?
-    dpm($preset);
   if (isset($preset['presetid']) && is_numeric($preset['presetid'])) {
     drupal_write_record('listmixer_preset', $preset, 'presetid');
   }
@@ -144,7 +142,9 @@ function listmixer_preset_save($preset) {
 
   // Rebuild Theme Registry
   drupal_rebuild_theme_registry();
-
+  
+  // User feedback
+  drupal_set_message('List Mixer preset saved', 'status');
   return $preset;
 }
 

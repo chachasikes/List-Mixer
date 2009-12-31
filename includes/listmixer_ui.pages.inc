@@ -10,7 +10,7 @@
  * Create overview
  */ 
 function listmixer_ui_overview() {
-  $header = array(t('Interaction Preset'), t('Storage'), t('Actions'));
+  $header = array(t('Interaction Preset'), t('Storage'), t('Actions'), t('Description'));
   $rows = array();
   // Always clear the preset cache on this display.
   foreach (listmixer_presets(TRUE) as $preset) {
@@ -36,6 +36,7 @@ function listmixer_ui_overview() {
         break;
     }
     $row[] = implode('&nbsp;&nbsp;&nbsp;&nbsp;', $links);
+    $row[] = $preset['preset_description'];
     $rows[] = $row;
   }
   $output = theme('table', $header, $rows);
@@ -75,6 +76,15 @@ function listmixer_ui_preset_form($form_state, $preset = array()) {
       '#validate' => array('listmixer_element_presetname_validate' => array()),
     );
   }
+
+  $form['preset_description'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Preset Description'),
+    '#default_value' => $preset['preset_description'],
+    '#description' => t('Provide a description of this interaction preset.'),
+    '#rows' => 3,
+    '#weight' => 1,
+  );
 
   $form['submit'] = array(
     '#type' => 'submit',
