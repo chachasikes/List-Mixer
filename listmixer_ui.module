@@ -39,7 +39,7 @@ function listmixer_ui_menu() {
     'description' => 'Administer List Mixer',
     'page callback' => 'listmixer_ui_overview', //TODO: create function
     'access arguments' => array('administer list mixer'),
-    'file' => 'includes/listmixer_ui.presets.inc',
+    'file' => 'includes/listmixer_ui.pages.inc',
   );
   // TODO: Test: Check that overview page loads and has the right content
   $items['admin/build/listmixer/list'] = array(
@@ -50,7 +50,7 @@ function listmixer_ui_menu() {
   // TODO: Test: check that presets are loaded, that the page makes sense, that it shows 'no lists' create one, and also and pre-installed default presets
   $items['admin/build/listmixer/add'] = array(
     'title' => 'Add new interaction preset',
-    'file' => 'includes/listmixer_ui.presets.inc',
+    'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('listmaker_ui_preset_add'), // TODO: create function with default argument
     'access arguments' => array('administer list mixer'),
@@ -60,7 +60,7 @@ function listmixer_ui_menu() {
   $items['admin/build/listmixer/%listmixer_preset_edit'] = array( // TODO: i already hate this naming convention, change it
     'title callback' => 'listmixer_ui_preset_title_callback', // TODO: create function
     'title arguments' => array('Edit interaction preset: !presetname', 3),
-    'file' => 'includes/listmixer_ui.presets.inc',
+    'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('listmaker_ui_preset_edit'), // TODO: create function
     'access arguments' => array('administer list mixer'),
@@ -70,7 +70,7 @@ function listmixer_ui_menu() {
   $items['admin/build/listmixer/%listmixer_preset_delete'] = array( // TODO: i already hate this naming convention, change it
     'title callback' => 'listmixer_ui_preset_title_callback', // TODO: create function
     'title arguments' => array('Delete interaction preset: !presetname', 3),
-    'file' => 'includes/listmixer_ui.presets.inc',
+    'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('listmaker_ui_preset_delete'), // TODO: create function
     'access arguments' => array('administer list mixer'),
