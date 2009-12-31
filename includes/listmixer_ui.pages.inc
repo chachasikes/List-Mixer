@@ -43,6 +43,7 @@ function listmixer_ui_overview() {
 }
 
 function listmixer_ui_preset_delete_form($form_state, $preset = array()) {
+
   if (empty($preset)) {
     drupal_set_message(t('The specified preset was not found'), 'error');
     drupal_goto('admin/build/listmixer');
@@ -83,10 +84,10 @@ function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
   if (isset($preset['storage'])) {
     unset($preset['storage']);
   }
-  foreach ($preset['actions'] as $id => $action) {
+  /*foreach ($preset['actions'] as $id => $action) {
     unset($preset['actions'][$id]['actionid']);
     unset($preset['actions'][$id]['presetid']);
-  }
+  }*/
   $exported = '$presets = array();';
   $exported .= "\n";
   $exported .= '$presets[\''. $preset['presetname'] .'\'] = ';
