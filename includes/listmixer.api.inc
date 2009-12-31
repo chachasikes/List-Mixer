@@ -20,7 +20,7 @@ function listmixer_preset($preset_id, $reset = FALSE) {
 /*
  * Load list of all presets
  */
-function listmixer_presets($reset = FALSE){
+function listmixer_presets ($reset = FALSE){
    static $presets = array();
 
   // Clear  caches if $reset is TRUE;
