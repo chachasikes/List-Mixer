@@ -1,0 +1,43 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Installation file
+ */
+
+function listmixer_schema() {
+    $schema['listmixer_preset'] = array(
+    'fields' => array(
+      'presetid' => array(
+        'description' => t('The primary identifier for an listmixer_preset.'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'presetname' => array(
+        'description' => t('The primary identifier for a node.'),
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('presetid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function listmixer_install() {
+  drupal_install_schema('listmixer');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function listmixer_uninstall() {
+  drupal_uninstall_schema('listmixer');
+}

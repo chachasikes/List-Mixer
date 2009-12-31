@@ -8,7 +8,27 @@
  *******************************************************************************
  */
  
- 
+/**
+ * Imagecache preset storage constant for user-defined presets in the DB.
+ */
+define('LISTMIXER_STORAGE_NORMAL', 0);
+
+/**
+ * Imagecache preset storage constant for module-defined presets in code.
+ */
+define('LISTMIXER_STORAGE_DEFAULT', 1);
+
+/**
+ * Imagecache preset storage constant for user-defined presets that override
+ * module-defined presets.
+ */
+define('LISTMIXER_STORAGE_OVERRIDE', 2); 
+
+/**
+ * Include the API functions (these are only sort of API functions at the moment)
+ */
+include('includes/listmixer.api.inc'); 
+
 
 /**
  * Implementation of hook_help().

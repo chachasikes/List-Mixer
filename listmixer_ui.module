@@ -52,7 +52,7 @@ function listmixer_ui_menu() {
     'title' => 'Add new interaction preset',
     'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('listmaker_ui_preset_add'), // TODO: create function with default argument
+    'page arguments' => array('listmixer_ui_preset_form'), // TODO: create function with default argument
     'access arguments' => array('administer list mixer'),
     'type' => MENU_LOCAL_TASK,
   );
@@ -62,7 +62,7 @@ function listmixer_ui_menu() {
     'title arguments' => array('Edit interaction preset: !presetname', 3),
     'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('listmaker_ui_preset_edit'), // TODO: create function
+    'page arguments' => array('listmixer_ui_preset_form'), // TODO: create function
     'access arguments' => array('administer list mixer'),
     'type' => MENU_CALLBACK,
   );
@@ -72,7 +72,7 @@ function listmixer_ui_menu() {
     'title arguments' => array('Delete interaction preset: !presetname', 3),
     'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('listmaker_ui_preset_delete'), // TODO: create function
+    'page arguments' => array('listmixer_ui_preset_delete_form'), // TODO: create function
     'access arguments' => array('administer list mixer'),
     'type' => MENU_CALLBACK,
   );
@@ -82,7 +82,7 @@ function listmixer_ui_menu() {
     'title arguments' => array('Export interaction preset: !presetname', 3),
     'file' => 'imagecache_ui.pages.inc',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('listmaker_preset_export'), // TODO: create function
+    'page arguments' => array('listmixer_preset_export_form'), // TODO: create function
     'access arguments' => array('administer list mixer'),
     'type' => MENU_CALLBACK,
   );
@@ -92,7 +92,7 @@ function listmixer_ui_menu() {
     'title arguments' => array('Override interaction preset: !presetname', 3),
     'file' => 'imagecache_ui.pages.inc',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('listmaker_preset_override'), // TODO: create function
+    'page arguments' => array('listmixer_preset_override_form'), // TODO: create function
     'access arguments' => array('administer list mixer'),
     'type' => MENU_CALLBACK,
   );
@@ -105,19 +105,15 @@ function listmixer_ui_menu() {
 function listmixer_ui_preset_load($preset_id) {
   return listmixer_preset($preset_id, TRUE);
 }
-
+/**
+ * Load title for a preset
+ */
 function listmixer_ui_preset_title_callback($title, $preset = array(), $action = array()) {
   // TODO: Update so this works properly
   $replacements = array();
   if (!empty($preset)) {
     $replacements['!presetname'] = $preset['presetname'];
     $replacements['!presetid'] = $preset['presetid'];
-  }
-  if (!empty($action) && !is_array($action)) {
-    $replacements['!actionname'] = $action;
-  }
-  elseif (!empty($action)) {
-    $replacements['!action'] = $action['action'];
   }
   return t($title, $replacements);
 }
