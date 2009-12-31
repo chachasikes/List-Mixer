@@ -25,9 +25,10 @@ define('LISTMIXER_STORAGE_DEFAULT', 1);
 define('LISTMIXER_STORAGE_OVERRIDE', 2); 
 
 /**
- * Include the API functions (these are only sort of API functions at the moment)
- */
-include('includes/listmixer.api.inc'); 
+ * Includes
+ */ 
+include('includes/listmixer.presets.inc'); 
+include('includes/listmixer.hooks.inc'); 
 
 
 /**
@@ -93,6 +94,10 @@ function listmixer_menu() {
 function listmixer_init() {
   // Add the javascript.
   $path = drupal_get_path('module', 'listmixer');
+  
+  
+  listmixer_listmixer_storage_register_load();
+  
  /* 
  // Set Drupal javascript value to the block ID stored in settings.
   // TODO: move these to interaction presets and load variables from the settings for 

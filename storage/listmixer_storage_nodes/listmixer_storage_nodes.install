@@ -1,0 +1,129 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Install database tables for list mixer node storage tables.
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function listmixer_storage_nodes_install() {
+  drupal_install_schema('listmixer_storage_nodes');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function listmixer_storage_nodes_uninstall() {
+  drupal_uninstall_schema('listmixer_storage_nodes');
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function listmixer_storage_nodes_schema() {
+ $schema['listmixer_storage_nodes'] = array(
+    'fields' => array(
+      'interactionid' => array(
+        'description' => t('The primary identifier for an interaction.'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'presetid' => array(
+        'description' => t('The primary identifier for a listmixer preset.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+        /*
+        @TODO: 
+         Make this dynamically create the block name based on 
+         View name:Display name (machine)
+         Selection options: View generated Block id.
+         Other possibilities: any block, permanent node id...basically 
+         these are ways to get to a node id
+         however the node id and block id could change based on 
+         permissions, users, content...so a view is better. 
+         
+         If it points to a view + display, then the path can get updated
+         though the machine name of the view + display don't change,
+         so it might not matter. Better user interaction to 
+         pick the View and Display though.
+         
+         Maybe: an alternative
+         allow block id name or format viewname:displayname, and they get parsed
+         to read as the block id.
+         
+         For now, just use the block id.
+         
+         */
+      'interaction_target_id' => array(
+        'description' => t('The name of a views block id to be used as a container for storing list data.'),
+        'type' => 'text',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      /* @TODO
+        While we could make this module show up on the content type iteself, that's just
+        complicated and cluttered, and then you can't create variants.
+        I believe that if a user has permissions to write to a content type, 
+        that should handle all of the permissions necessary for this module.
+        
+        Some feedback should be given, if a user can't save, the buttons shouldn't
+        even bother showing up for them.
+        
+        So, that said, administrators can go hog-wild and propose lots of content types
+        that could be stored. Whether or not a field is set up to accept the user
+        and the data is another story.
+        
+        It would be more convenient to just go ahead and allow users to set
+        whatever content types they want per interaction. If there is an 
+        incompatibility, the listing should show up greyed out, but still
+        selectable. When the permissions issue is resolved, the option
+        should appear normally.
+        
+      */
+      'interaction_source_content_types' => array(
+        'description' => t('Select which content types will be allowed to be added to the list content type.'),
+        'type' => 'text',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'interaction_restrictions' => array(
+        'description' => '<p>' .t('Provide a newline separated list of markup targets to exclude. Enter in jQuery compatible format, ex div.view-favorites, form#edit-image.
+        This will restrict interactions on a page to a container or condition.') . '</p>',
+        'type' => 'text',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'interaction_inclusions' => array(
+        'description' => '<p>' .t('Provide a newline separated list of markup targets to exclude. Enter in jQuery compatible format, ex div.view-favorites, form#edit-image.
+        This will make interaction available to containers and conditions, especially if they were partly overridden by the restrictions.') . '</p>',
+        'type' => 'text',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      
+      /*
+        // @TODO: Maybe add this.
+        'data' => array(
+        'description' => t('The configuration data for the interaction.'),
+        'type' => 'text',
+        'not null' => TRUE,
+        'size' => 'big',
+        'serialize' => TRUE,
+      ),
+      */
+      
+    ),
+    'primary key' => array('interactionid'),
+    'indexes' => array(
+      'presetid' => array('presetid'),
+    ),
+  );
+  return $schema;
+}

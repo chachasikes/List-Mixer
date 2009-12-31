@@ -1,0 +1,57 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Installation file
+ *
+ * @TODO: Update this schema.
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function listmixer_storage_taxonomy_install() {
+  drupal_install_schema('listmixer_storage_taxonomy');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function listmixer_storage_taxonomy_uninstall() {
+  drupal_uninstall_schema('listmixer_storage_taxonomy');
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function listmixer_storage_taxonomy_schema() {
+ $schema['listmixer_storage_taxonomy'] = array(
+    'fields' => array(
+      'interactionid' => array(
+        'description' => t('The primary identifier for an interaction.'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'presetid' => array(
+        'description' => t('The primary identifier for a listmixer preset.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'interaction_term_name' => array(
+        'description' => t('The name of a term.'),
+        'type' => 'text',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('interactionid'),
+    'indexes' => array(
+      'presetid' => array('presetid'),
+    ),
+  );
+  return $schema;
+}

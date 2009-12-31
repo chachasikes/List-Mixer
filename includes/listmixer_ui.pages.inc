@@ -96,78 +96,31 @@ function listmixer_ui_preset_form($form_state, $preset = array()) {
   if (empty($preset['presetid'])) {
     return $form;
   }
-  /*
-  $form['actions'] = array(
+  
+  $form['interaction'] = listmixer_interaction_form($preset);
+  
+  return $form;
+}
+
+function listmixer_interaction_form($preset) {
+  $storage_methods = listmixer_listmixer_storage_register_load();
+  dpm($storage_methods);
+  $form = array(
     '#type' => 'fieldset',
-    '#title' => t('Actions'),
+    '#title' => t('Interaction'),
     '#tree' => TRUE,
-    '#theme' => 'listmixer_ui_preset_actions',
+   // '#theme' => 'listmixer_ui_preset_interaction',
   );
 
-  foreach ($preset['actions'] as $i => $action) {
-    // skip unknown actions...
-    if (!$definition = listmixer_action_definition($action['action'])) {
-      continue;
-    }
-    $action_form['name'] = array(
-      '#value' => t($definition['name']),
-    );
-
-    $action_form['action'] = array(
-      '#type' => 'value',
-      '#value' => $action['action'],
-    );
-    $action_form['actionid'] = array(
-      '#type' => 'value',
-      '#value' => $action['actionid'],
-    );
-    $action_form['presetid'] = array(
-      '#type' => 'value',
-      '#value' => $action['presetid'],
-    );
-
-    $action_form['settings'] = array(
-      '#theme' => $action['action'],
-      '#value' => $action['data'],
-    );
-    $action_form['data'] = array(
-      '#type' => 'value',
-      '#value' => $action['data'],
-    );
-    $action_form['weight'] = array(
-      '#type' => 'weight',
-      '#default_value' => $action['weight'],
-      '#access' => $preset['storage'] !== LISTMIXER_STORAGE_DEFAULT,
-    );
-    $action_form['configure'] = array(
-      '#value' => l(t('Configure'), 'admin/build/listmixer/'. $action['presetid'] .'/'. $action['actionid'] ),
-      '#access' => $preset['storage'] !== LISTMIXER_STORAGE_DEFAULT,
-    );
-    $action_form['remove'] = array(
-      '#value' => l(t('Delete'), 'admin/build/listmixer/'. $action['presetid'] .'/'. $action['actionid'] .'/delete'),
-      '#access' => $preset['storage'] !== LISTMIXER_STORAGE_DEFAULT,
-    );
-    $form['actions'][$i] = $action_form;
-  }
-
-  $form['actions']['new'] = array(
-    '#tree' => FALSE,
-    '#type' => 'fieldset',
-    '#title' => t('New Actions'),
-    '#collapsible' => TRUE,
-    '#collapsed' => count($preset['actions']) > 0,
-    '#access' => $preset['storage'] !== LISTMIXER_STORAGE_DEFAULT,
+  $form['block_id'] = array(
+    '#type' => 'select',
+    '#options' => listmixer_interaction_load_block_ids(),
+    '#title' => t('Select Target Block'),
+    '#default_value' => $preset['interaction']['block_id'],
+    '#description' => t('The namespace is used in URL\'s. Please only use alphanumeric characters, underscores (_), and hyphens (-) for preset names.'),
+    '#validate' => array('listmixer_element_presetname_validate' => array()),
   );
-  foreach (listmixer_action_definitions() as $action => $definition) {
-    $form['actions']['new'][] = array(
-      '#type' => 'markup',
-      '#prefix' => '<div>',
-      '#suffix' => '</div>',
-      '#value' => l(t('Add !action', array('!action' => $definition['name'])),
-                    'admin/build/listmixer/'.  $preset['presetid'] .'/add/'. $action) .
-                    ' - '. $definition['description'],
-    );
-  }*/
+
   return $form;
 }
 

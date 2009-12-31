@@ -1,7 +1,7 @@
 ; $Id$
 name = List Mixer User Interface
 description = Administrative interface for List Mixer
-dependencies[] = listmixer
+#dependencies[] = listmixer
 package = List Mixer
 project = "List Mixer"
 core = 6.x

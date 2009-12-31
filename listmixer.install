@@ -6,6 +6,24 @@
  * Installation file
  */
 
+ 
+/**
+ * Implementation of hook_install().
+ */
+function listmixer_install() {
+  drupal_install_schema('listmixer');
+}
+ 
+/**
+ * Implementation of hook_uninstall().
+ */
+function listmixer_uninstall() {
+  drupal_uninstall_schema('listmixer');
+}
+
+/**
+ * Implementation of hook_schema().
+ */
 function listmixer_schema() {
     $schema['listmixer_preset'] = array(
     'fields' => array(
@@ -27,23 +45,15 @@ function listmixer_schema() {
         'length' => 255,
         'not null' => TRUE,
       ),
+     'preset_method' => array(
+        'description' => t('The kind of interaction that will be created.'),
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
     ),
     'primary key' => array('presetid'),
   );
-
+ 
   return $schema;
-}
-
-/**
- * Implementation of hook_install().
- */
-function listmixer_install() {
-  drupal_install_schema('listmixer');
-}
-
-/**
- * Implementation of hook_uninstall().
- */
-function listmixer_uninstall() {
-  drupal_uninstall_schema('listmixer');
 }

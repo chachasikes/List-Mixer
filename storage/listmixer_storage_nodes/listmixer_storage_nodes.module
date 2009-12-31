@@ -1,0 +1,23 @@
+<?php
+// $Id$
+
+/*
+ *******************************************************************************
+ * @file listmixer_storage_nodes.module
+ * Main module file for List Mixer Node Storage module
+ *******************************************************************************
+ */
+ 
+include('includes/listmixer_storage_nodes.inc'); 
+ 
+/**
+ *  listmixer_storage_register hook implementation
+ *  Return this type to the list of storage methods available to the preset selector.
+ */
+ 
+function listmixer_storage_nodes_listmixer_storage_register() {
+  return array(
+    t('Nodes'), 
+    'listmixer_storage_nodes',
+  );
+}

@@ -1,0 +1,5 @@
+; $Id$
+name = List Mixer Storage Type: Taxonomy
+description = Allow nodes to be associated with a machine term
+package = List Mixer
+core = 6.x
