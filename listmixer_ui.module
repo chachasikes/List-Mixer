@@ -47,11 +47,6 @@ function listmixer_ui_menu() {
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => -10,
   );
-  $items['admin/build/listmixer/%'] = array(
-    'title' => 'List Mixer Interactions',
-    'type' => MENU_DEFAULT_LOCAL_TASK,
-    'weight' => -10,
-  );
   // TODO: Test: check that presets are loaded, that the page makes sense, that it shows 'no lists' create one, and also and pre-installed default presets
   $items['admin/build/listmixer/add'] = array(
     'title' => 'Add new interaction preset',
@@ -112,7 +107,6 @@ function listmixer_ui_menu() {
 function listmixer_ui_preset_load($preset_id) {
   return listmixer_preset($preset_id, TRUE);
 }
-
 
 // Theming functions
 

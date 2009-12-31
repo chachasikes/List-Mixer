@@ -14,8 +14,10 @@
  
 function listmixer_storage_taxonomy_listmixer_storage_register() {
   return array(
-    t('Taxonomy'), 
-    'listmixer_storage_taxonomy',
+    array(
+    'name' => 'Taxonomy', 
+    'module' => 'listmixer_storage_taxonomy',
+    ),
   );
 }
 

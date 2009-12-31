@@ -86,6 +86,18 @@ function listmixer_ui_preset_form($form_state, $preset = array()) {
     '#weight' => 1,
   );
 
+  $form['preset_method'] = array(
+    '#type' => 'select',
+    '#title' => t('Select the type of storage method for this interaction.'),
+    '#default_value' => $preset['preset_method'],
+    '#options' => listmixer_listmixer_storage_register_load(),
+    '#description' => t('Choose the method of how list data should be stored.'),
+    '#weight' => 2,
+  );
+
+  $form['interaction'] = listmixer_interaction_form($preset);
+  
+
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => $preset['storage'] === LISTMIXER_STORAGE_DEFAULT ? t('Override Defaults') : t('Save Preset'),
@@ -97,29 +109,6 @@ function listmixer_ui_preset_form($form_state, $preset = array()) {
     return $form;
   }
   
-  $form['interaction'] = listmixer_interaction_form($preset);
-  
-  return $form;
-}
-
-function listmixer_interaction_form($preset) {
-  $storage_methods = listmixer_listmixer_storage_register_load();
-  dpm($storage_methods);
-  $form = array(
-    '#type' => 'fieldset',
-    '#title' => t('Interaction'),
-    '#tree' => TRUE,
-   // '#theme' => 'listmixer_ui_preset_interaction',
-  );
-
-  $form['block_id'] = array(
-    '#type' => 'select',
-    '#options' => listmixer_interaction_load_block_ids(),
-    '#title' => t('Select Target Block'),
-    '#default_value' => $preset['interaction']['block_id'],
-    '#description' => t('The namespace is used in URL\'s. Please only use alphanumeric characters, underscores (_), and hyphens (-) for preset names.'),
-    '#validate' => array('listmixer_element_presetname_validate' => array()),
-  );
 
   return $form;
 }
@@ -227,6 +216,32 @@ function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
   return $form;
 }
 
+/**
+ *
+ */
 function listmixer_ui_preset_export_form_submit($form, &$form_state) {
   $form_state['redirect'] = 'admin/build/listmixer';
+}
+
+
+/**
+ *
+ */
+function listmixer_interaction_form($preset) {
+  // Based on the type of interaction $preset['preset_method'] load data from the table to be used with the interaction form.  
+  $form = array(
+    '#type' => 'fieldset',
+    '#title' => t('Interaction'),
+    '#tree' => TRUE,
+    '#weight' => 8,
+   // '#theme' => 'listmixer_ui_preset_interaction',
+  );
+  
+  // The preset method is stored as the module name for the storage method.
+  $form_load_function = $preset['preset_method'] . '_load_interaction_form';
+  if(function_exists($form_load_function)) {
+    $form['interaction'] = call_user_func($form_load_function, $preset);
+  }
+
+  return $form;
 }

@@ -13,7 +13,10 @@
  */
 function hook_listmixer_storage_register() {
   return array(
-    t('Storage type name'), 
-    'listmixer_storage_module_name',
+    array(
+    'name' => 'Name', 
+    'module' => 'listmixer_storage_module_name',
+    'weight' => '-10', // optional
+    ),
   );
 }
