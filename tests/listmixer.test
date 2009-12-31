@@ -1,0 +1,27 @@
+<?php
+// $Id$
+
+/*
+ *******************************************************************************
+ * @file listmixer.test
+ * Tests for listmixer module
+ *******************************************************************************
+ */
+ 
+class ListMixerTest extends DrupalWebTestCase {
+  public static function getInfo() {
+    return array(
+      'name' => t('ListMixer Test'),
+      'description' => t('Test something'),
+      'group' => t('List Mixer'),
+    );
+  }
+
+  function setUp() {
+    parent::setUp('listmixer');
+  }
+
+} 
+
+
+ 

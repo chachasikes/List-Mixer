@@ -16,14 +16,13 @@
 function listmixer_help($section) {
   switch ($section) {
     case 'admin/help#listmixer':
-  return '<p>'. t('List Mixer helps users of a Drupal website to manage methods
-  of creating and updating lists of content. List Mixer works with fields, views 
-  and taxonomy. 
-  A site administrator can set up any number of interaction presets. The 
-  interaction presets allow associations of content types, fields, views, taxonomy
-  terms, block ids to be connected up to a variety of ajax-tools and data storage
-  methods.') .'</p>';
-      
+    return '<p>'. t('List Mixer helps users of a Drupal website to manage 
+    methods of creating and updating lists of content. List Mixer works with 
+    fields, views and taxonomy. 
+    A site administrator can set up any number of interaction presets. The 
+    interaction presets allow associations of content types, fields, views,
+    taxonomy terms, block ids to be connected up to a variety of ajax-tools 
+    and data storage methods.') .'</p>';
   }
 }
 
@@ -99,7 +98,7 @@ function listmixer_menu() {
   return $items;
 }
 /**
- * Drag List, init 
+ * List Mixer, init 
  *
  */
 function listmixer_init() {
@@ -119,4 +118,22 @@ function listmixer_init() {
   drupal_add_js($path .'/drag_list.js');
   // Add custom style sheet.
   drupal_add_css($path .'/drag_list.css');*/
+}
+
+
+// Theming functions
+
+/**
+ * Implementation of hook_theme().
+ */
+function listmixer_theme() {
+  return array(
+    'listmixer' => array('arguments' => array()),
+  );
+}
+
+/**
+ * Code Extract theme function.
+ */
+function theme_listmixer() {
 }
