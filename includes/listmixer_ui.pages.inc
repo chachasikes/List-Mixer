@@ -10,7 +10,7 @@
  * Create overview
  */ 
 function listmixer_ui_overview() {
-  $header = array(t('Preset Name'), t('Storage'));
+  $header = array(t('Interaction Preset'), t('Storage'), t('Actions'));
   $rows = array();
   // Always clear the preset cache on this display.
   foreach (listmixer_presets(TRUE) as $preset) {
