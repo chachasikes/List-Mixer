@@ -76,40 +76,7 @@ function listmixer_behaviors_load_form_options($preset = NULL, $type) {
   // @TODO: Load admin setting for each type of module.
   // @TODO: The registry will probably need to be a table then.
   // @TODO: It will need to be rebuilt when modules page is updated and when admin settings are changed. And if people add new behaviors.
-  
-  
-  // @TODO: Add this to the listmixer install database schema
-  $admin_setting = TRUE;
-  $listmixer_behaviors_registry = array();
-  
-  $listmixer_behaviors_registry[] = array(
-      'behaviorname' => 'nodereference',
-      'name' => t('Content: Nodereference'),
-      'enabled' => $admin_setting, 
-      'type' => 'push',
-      'include' => 'behaviors/push/content/nodereference/listmixer_push_nodereference.inc',
-  );
-  $listmixer_behaviors_registry[] = array(
-      'behaviorname' => 'link',
-      'name' => t('Content: Link'),
-      'enabled' => $admin_setting, 
-      'type' => 'push',
-      'include' => 'behaviors/push/content/link/listmixer_push_link.inc',
-  );    
-  $listmixer_behaviors_registry[] = array(
-      'behaviorname' => 'button',
-      'name' => t('Button'),
-      'enabled' => $admin_setting, 
-      'type' => 'activate',
-      'include' => 'behaviors/activate/button/listmixer_activate_button.inc',
-  );    
-  $listmixer_behaviors_registry[] = array(
-      'behaviorname' => 'click',
-      'name' => t('Click Links'),
-      'enabled' => $admin_setting, 
-      'type' => 'interact',
-      'include' => 'behaviors/interact/click/listmixer_interact_click.inc',
-  ); 
+
 
 
   // @TODO: Load behaviors from the behavior registry table
@@ -150,12 +117,8 @@ add utlities for behaviors (php,js)
  *(for storing which behavior should be used.)
  */
 function listmixer_behavior_register_load() {
- /*$methods = module_invoke_all('listmixer_behavior_register');
- $behaviors = array();
- foreach ($methods as $method) {
-   $behaviors[$method['module']] = $method['name'];
- }
- return $behaviors;*/
+  // Load and deserialize behavior registry
+  $behaviors = unserialize(variable_get('listmixer_behavior_registry', array('listmixer')));
 }
 
 /**
@@ -171,7 +134,51 @@ function listmixer_behavior_push_load($data) {
  }
  return $behaviors;*/
 }
+//admin/settings/behaviors/update/registry
 
+function listmixer_behaviors_registry_form($form_state, $behavior = array()) {
+  $admin_setting = TRUE;
+  $listmixer_behaviors_registry = array();  
+  $listmixer_behaviors_registry[] = array(
+      'behavior_name' => 'nodereference',
+      'behavior_label' => t('Content: Nodereference'),
+      'behavior_enabled' => $admin_setting, 
+      'behavior_type' => 'push',
+      'behavior_include' => 'behaviors/push/content/link/listmixer_push_nodereference.inc',
+      'behavior_description' => 'Nodereference description',
+  ); 
+  $listmixer_behaviors_registry[] = array(
+      'behavior_name' => 'link',
+      'behavior_label' => t('Content: Link'),
+      'behavior_enabled' => $admin_setting, 
+      'behavior_type' => 'push',
+      'behavior_include' => 'behaviors/push/content/link/listmixer_push_link.inc',
+      'behavior_description' => 'Link description',
+  );    
+  $listmixer_behaviors_registry[] = array(
+      'behavior_name' => 'button',
+      'behavior_label' => t('Button'),
+      'behavior_enabled' => $admin_setting, 
+      'behavior_type' => 'activate',
+      'behavior_include' => 'behaviors/activate/button/listmixer_activate_button.inc',
+      'behavior_description' => 'Activate Button description',
+  );    
+  $listmixer_behaviors_registry[] = array(
+      'behavior_name' => 'click',
+      'behavior_label' => t('Click Links'),
+      'behavior_enabled' => $admin_setting, 
+      'behavior_type' => 'interact',
+      'behavior_include' => 'behaviors/interact/click/listmixer_interact_click.inc',
+      'behavior_description' => 'Click links description',
+  ); 
 
+  // Registry stores a serialized array of all of the registry settings.  
+  $form['listmixer_behavior_registry'] = array(
+    '#type' => 'textarea',
+    '#title' => t('List Mixer Behavior Registry'),
+    '#description' => t('Registered behaviors'),
+    '#default_value' => serialize($listmixer_behaviors_registry),
+  );  
+  return system_settings_form($form);
 
- 
+}

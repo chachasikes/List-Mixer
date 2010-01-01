@@ -55,7 +55,7 @@ function listmixer_help($section) {
 function listmixer_perm() {
   $perms = array('access list mixer');
   foreach (listmixer_presets() as $preset) {
-    $perms[] =  'view listmixer '. $preset['presetname'];
+    $perms[] =  'view listmixer '. $preset['preset_name'];
   }
   return $perms;
 }
@@ -81,11 +81,6 @@ function listmixer_menu() {
     'access arguments' => array('administer list mixer'),
     'file' => 'includes/listmixer.admin.inc',
   );
-
-  // TODO: Add menus and callbacks for any storage functions
-  
-  // TODO: Create callback that handles everything
-  
   return $items;
 }
 /**
@@ -109,7 +104,7 @@ function listmixer_init() {
 
   // Add custom style sheet.
   drupal_add_css($path .'/listmixer.css');
-  
+
   // Add all interaction presets and callback settings to every Drupal page.
   $presets = listmixer_presets();
     
@@ -127,7 +122,7 @@ function listmixer_init() {
   // Build array of settings for Drupal.settings javascript
   $settings = array();
   foreach ($presets as $preset) {
-    $settings[$preset['presetname']] = $preset;
+    $settings[$preset['preset_name']] = $preset;
   }
   drupal_add_js(array('listmixer' => $settings), 'setting');
 }

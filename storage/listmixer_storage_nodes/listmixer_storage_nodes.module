@@ -27,7 +27,7 @@ function listmixer_storage_nodes_listmixer_storage_register() {
 
 function listmixer_storage_nodes_load_interaction_form($preset) {
 
-  $results = db_query("SELECT * FROM {listmixer_storage_nodes}", array($preset['presetid']));
+  $results = db_query("SELECT * FROM {listmixer_storage_nodes}", array($preset['preset_id']));
   while ($interaction = db_fetch_array($results)) {
     // Only get the first result
     // @TODO: look into what kinds of results might happen.
@@ -40,7 +40,7 @@ function listmixer_storage_nodes_load_interaction_form($preset) {
     '#type' => 'value',
     '#value' => $interaction['interactionid'],
   );
-  $form['presetid'] = array(
+  $form['preset_id'] = array(
     '#type' => 'value',
     '#value' => $interaction['interactionid'],
   );

@@ -27,33 +27,57 @@ function listmixer_uninstall() {
 function listmixer_schema() {
     $schema['listmixer_preset'] = array(
     'fields' => array(
-      'presetid' => array(
+      'preset_id' => array(
         'description' => t('The primary identifier for an listmixer_preset.'),
         'type' => 'serial',
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
-      'presetname' => array(
-        'description' => t('The primary identifier for a node.'),
+      'preset_name' => array(
+        'description' => t('The name of a preset.'),
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
       ),
       'preset_description' => array(
-        'description' => t('The primary identifier for a node.'),
+        'description' => t('The description of a preset.'),
         'type' => 'text',
         'length' => 255,
         'not null' => TRUE,
       ),
      'preset_method' => array(
-        'description' => t('The kind of interaction that will be created.'),
+        'description' => t('The storage method for the preset.'),
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
       ),
     ),
-    'primary key' => array('presetid'),
+    'primary key' => array('preset_id'),
   );
- 
+  
+  $schema['listmixer_behavior_interaction_settings'] = array(
+    'fields' => array(
+      'id' => array(
+        'description' => t('The primary identifier of behavior interaction setting.'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'interaction_id' => array(
+        'description' => t('The id of the interaction.'),
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'behavior_id' => array(
+        'description' => t('The id of the behavior.'),
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+    
   return $schema;
 }

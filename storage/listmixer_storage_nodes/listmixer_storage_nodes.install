@@ -32,7 +32,7 @@ function listmixer_storage_nodes_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
-      'presetid' => array(
+      'preset_id' => array(
         'description' => t('The primary identifier for a listmixer preset.'),
         'type' => 'int',
         'unsigned' => TRUE,
@@ -122,7 +122,7 @@ function listmixer_storage_nodes_schema() {
     ),
     'primary key' => array('interactionid'),
     'indexes' => array(
-      'presetid' => array('presetid'),
+      'preset_id' => array('preset_id'),
     ),
   );
   return $schema;

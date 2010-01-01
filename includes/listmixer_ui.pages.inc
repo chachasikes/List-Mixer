@@ -15,24 +15,24 @@ function listmixer_ui_overview() {
   // Always clear the preset cache on this display.
   foreach (listmixer_presets(TRUE) as $preset) {
     $row = array();
-    $row[] = l($preset['presetname'], 'admin/build/listmixer/'. $preset['presetid']);
+    $row[] = l($preset['preset_name'], 'admin/build/listmixer/'. $preset['preset_id']);
     $links = array();
     switch ($preset['storage']) {
       case LISTMIXER_STORAGE_DEFAULT:
         $row[] = t('Default');
-        $links[] = l(t('View'), 'admin/build/listmixer/'. $preset['presetid']);
+        $links[] = l(t('View'), 'admin/build/listmixer/'. $preset['preset_id']);
         break;
       case LISTMIXER_STORAGE_OVERRIDE:
         $row[] = t('Override');
-        $links[] = l(t('Edit'), 'admin/build/listmixer/'. $preset['presetid']);
-        $links[] = l(t('Revert'), 'admin/build/listmixer/'. $preset['presetid'] .'/delete');
-        $links[] = l(t('Export'), 'admin/build/listmixer/'. $preset['presetid'] .'/export' );
+        $links[] = l(t('Edit'), 'admin/build/listmixer/'. $preset['preset_id']);
+        $links[] = l(t('Revert'), 'admin/build/listmixer/'. $preset['preset_id'] .'/delete');
+        $links[] = l(t('Export'), 'admin/build/listmixer/'. $preset['preset_id'] .'/export' );
         break;
       case LISTMIXER_STORAGE_NORMAL:
         $row[] = t('Normal');
-        $links[] = l(t('Edit'), 'admin/build/listmixer/'. $preset['presetid']);
-        $links[] = l(t('Delete'), 'admin/build/listmixer/'. $preset['presetid'] .'/delete');
-        $links[] = l(t('Export'), 'admin/build/listmixer/'. $preset['presetid'] .'/export' );
+        $links[] = l(t('Edit'), 'admin/build/listmixer/'. $preset['preset_id']);
+        $links[] = l(t('Delete'), 'admin/build/listmixer/'. $preset['preset_id'] .'/delete');
+        $links[] = l(t('Export'), 'admin/build/listmixer/'. $preset['preset_id'] .'/export' );
         break;
     }
     $row[] = implode('&nbsp;&nbsp;&nbsp;&nbsp;', $links);
@@ -46,34 +46,34 @@ function listmixer_ui_overview() {
 function listmixer_ui_preset_form($form_state, $preset = array()) {
   $form = array();
 
-  $form['presetid'] = array(
+  $form['preset_id'] = array(
     '#type' => 'value',
-    '#value' => $preset['presetid'],
+    '#value' => $preset['preset_id'],
   );
 
   // Browsers don't submit disabled form values so we've got to put two copies
   // of the name on the form: one for the submit handler and one for the user.
   if ($preset['storage'] === LISTMIXER_STORAGE_DEFAULT) {
-    $form['presetname'] = array(
+    $form['preset_name'] = array(
       '#type' => 'value',
-      '#value' => $preset['presetname'],
+      '#value' => $preset['preset_name'],
     );
-    $form['presetname_display'] = array(
+    $form['preset_name_display'] = array(
       '#type' => 'textfield',
       '#size' => '64',
       '#title' => t('Preset Namespace'),
-      '#default_value' => $preset['presetname'],
+      '#default_value' => $preset['preset_name'],
       '#disabled' => TRUE,
     );
   }
   else {
-    $form['presetname'] = array(
+    $form['preset_name'] = array(
       '#type' => 'textfield',
       '#size' => '64',
       '#title' => t('Preset Namespace'),
-      '#default_value' => $preset['presetname'],
+      '#default_value' => $preset['preset_name'],
       '#description' => t('The namespace is used in URL\'s. Please only use alphanumeric characters, underscores (_), and hyphens (-) for preset names.'),
-      '#validate' => array('listmixer_element_presetname_validate' => array()),
+      '#validate' => array('listmixer_element_preset_name_validate' => array()),
     );
   }
 
@@ -106,7 +106,7 @@ function listmixer_ui_preset_form($form_state, $preset = array()) {
   );
 
   // For new presets don't show the preview or all actions to be added.
-  if (empty($preset['presetid'])) {
+  if (empty($preset['preset_id'])) {
     return $form;
   }
   
@@ -118,34 +118,34 @@ function listmixer_ui_preset_form_validate($form, &$form_state) {
   $values = $form_state['values'];
   // Check for duplicates
   foreach (listmixer_presets() as $preset) {
-    if ($values['presetname'] == $preset['presetname'] && $values['presetid'] != $preset['presetid']) {
-      form_set_error('presetname', t('The preset name you have chosen is already in use.'));
+    if ($values['preset_name'] == $preset['preset_name'] && $values['preset_id'] != $preset['preset_id']) {
+      form_set_error('preset_name', t('The preset name you have chosen is already in use.'));
       break;
     }
   }
 
   // Check for illegal characters in preset names
-  if (preg_match('/[^0-9a-zA-Z_\-]/', $values['presetname'])) {
-    form_set_error('presetname', t('Please only use alphanumeric characters, underscores (_), and hyphens (-) for preset names.'));
+  if (preg_match('/[^0-9a-zA-Z_\-]/', $values['preset_name'])) {
+    form_set_error('preset_name', t('Please only use alphanumeric characters, underscores (_), and hyphens (-) for preset names.'));
   }
 }
 
 function listmixer_ui_preset_form_submit($form, &$form_state) {
-  // Save the preset first to retrieve the presetid when overriding
+  // Save the preset first to retrieve the preset_id when overriding
   $preset = listmixer_preset_save($form_state['values']);
   /*
-  // Populate the presetid as needed for overrides
+  // Populate the preset_id as needed for overrides
   if (isset($form_state['values']['actions'])) {
     foreach($form_state['values']['actions'] as $action) {
-      if (empty($action['presetid'])) {
-        $action['presetid'] = $preset['presetid'];
+      if (empty($action['preset_id'])) {
+        $action['preset_id'] = $preset['preset_id'];
       }
       listmixer_action_save($action);
     }
   }
   */
   // Push back to the preset form
-  $form_state['redirect'] = 'admin/build/listmixer/'. $preset['presetid'];
+  $form_state['redirect'] = 'admin/build/listmixer/'. $preset['preset_id'];
 }
 
 
@@ -157,11 +157,11 @@ function listmixer_ui_preset_delete_form($form_state, $preset = array()) {
   }
 
   $form = array();
-  $form['presetid'] = array('#type' => 'value', '#value' => $preset['presetid']);
+  $form['preset_id'] = array('#type' => 'value', '#value' => $preset['preset_id']);
   return confirm_form(
     $form,
     t('Are you sure you want to delete the preset %preset?',
-      array('%preset' => $preset['presetname'])
+      array('%preset' => $preset['preset_name'])
     ),
     'admin/build/listmixer',
     t('This action cannot be undone.'),
@@ -170,9 +170,9 @@ function listmixer_ui_preset_delete_form($form_state, $preset = array()) {
 }
 
 function listmixer_ui_preset_delete_form_submit($form, &$form_state) {
-  $preset = listmixer_preset($form_state['values']['presetid']);
+  $preset = listmixer_preset($form_state['values']['preset_id']);
   listmixer_preset_delete($preset);
-  drupal_set_message(t('Preset %name (ID: @id) was deleted.', array('%name' => $preset['presetname'], '@id' => $preset['presetid'])));
+  drupal_set_message(t('Preset %name (ID: @id) was deleted.', array('%name' => $preset['preset_name'], '@id' => $preset['preset_id'])));
   $form_state['redirect'] = 'admin/build/listmixer';
 }
 
@@ -185,19 +185,19 @@ function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
     $form_state['redirect'] = 'admin/build/listmixer';
   }
 
-  if (isset($preset['presetid'])) {
-    unset($preset['presetid']);
+  if (isset($preset['preset_id'])) {
+    unset($preset['preset_id']);
   }
   if (isset($preset['storage'])) {
     unset($preset['storage']);
   }
   /*foreach ($preset['actions'] as $id => $action) {
     unset($preset['actions'][$id]['actionid']);
-    unset($preset['actions'][$id]['presetid']);
+    unset($preset['actions'][$id]['preset_id']);
   }*/
   $exported = '$presets = array();';
   $exported .= "\n";
-  $exported .= '$presets[\''. $preset['presetname'] .'\'] = ';
+  $exported .= '$presets[\''. $preset['preset_name'] .'\'] = ';
   $exported .= var_export($preset, TRUE) .';';
   $rows = substr_count($exported, "\n") + 1;
 

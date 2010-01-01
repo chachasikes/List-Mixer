@@ -47,14 +47,14 @@ function listmixer_presets ($reset = FALSE){
   else {
     $normal_presets = array();
 
-    $result = db_query('SELECT * FROM {listmixer_preset} ORDER BY presetname');
+    $result = db_query('SELECT * FROM {listmixer_preset} ORDER BY preset_name');
     while ($preset = db_fetch_array($result)) {
-      $presets[$preset['presetid']] = $preset;
-     // $presets[$preset['presetid']]['actions'] = listmixer_preset_actions($preset);
-      $presets[$preset['presetid']]['storage'] = LISTMIXER_STORAGE_NORMAL;
+      $presets[$preset['preset_id']] = $preset;
+     // $presets[$preset['preset_id']]['actions'] = listmixer_preset_actions($preset);
+      $presets[$preset['preset_id']]['storage'] = LISTMIXER_STORAGE_NORMAL;
 
       // Collect normal preset names so we can skip defaults and mark overrides accordingly
-      $normal_presets[$preset['presetname']] = $preset['presetid'];
+      $normal_presets[$preset['preset_name']] = $preset['preset_id'];
     }
 
     // Collect default presets and allow modules to modify them before they
@@ -65,16 +65,16 @@ function listmixer_presets ($reset = FALSE){
     // Add in default presets if they don't conflict with any normal presets.
     // Mark normal presets that take the same preset namespace as overrides.
     foreach ($default_presets as $preset) {
-      if (!empty($preset['presetname'])) {
-        if (!isset($normal_presets[$preset['presetname']])) {
+      if (!empty($preset['preset_name'])) {
+        if (!isset($normal_presets[$preset['preset_name']])) {
           $preset['storage'] = LISTMIXER_STORAGE_DEFAULT;
           // Use a string preset identifier
-          $preset['presetid'] = $preset['presetname'];
-          $presets[$preset['presetname']] = $preset;
+          $preset['preset_id'] = $preset['preset_name'];
+          $presets[$preset['preset_name']] = $preset;
         }
         else {
-          $presetid = $normal_presets[$preset['presetname']];
-          $presets[$presetid]['storage'] = LISTMIXER_STORAGE_OVERRIDE;
+          $preset_id = $normal_presets[$preset['preset_name']];
+          $presets[$preset_id]['storage'] = LISTMIXER_STORAGE_OVERRIDE;
         }
       }
     }
@@ -90,7 +90,7 @@ function listmixer_presets ($reset = FALSE){
  * @param preset_name
  *
  * @return
- *   preset array( 'presetname' => string, 'presetid' => integer)
+ *   preset array( 'preset_name' => string, 'preset_id' => integer)
  *   empty array if preset_name is an invalid preset
  */
 
@@ -98,7 +98,7 @@ function listmixer_preset_by_name($preset_name) {
   static $presets_by_name = array();
   if (!$presets_by_name &&  $presets = listmixer_presets()) {
     foreach ($presets as $preset) {
-      $presets_by_name[$preset['presetname']] = $preset;
+      $presets_by_name[$preset['preset_name']] = $preset;
     }
   }
   return (isset($presets_by_name[$preset_name])) ? $presets_by_name[$preset_name] : array();
@@ -110,8 +110,8 @@ function listmixer_preset_by_name($preset_name) {
 function listmixer_preset_title_callback($title, $preset = array()) {
   $replacements = array();
   if (!empty($preset)) {
-    $replacements['!presetname'] = $preset['presetname'];
-    $replacements['!presetid'] = $preset['presetid'];
+    $replacements['!preset_name'] = $preset['preset_name'];
+    $replacements['!preset_id'] = $preset['preset_id'];
   }
   if (!empty($action) && !is_array($action)) {
     $replacements['!actionname'] = $action;
@@ -128,11 +128,11 @@ function listmixer_preset_title_callback($title, $preset = array()) {
  * @param preset
  *   an listmixer preset array.
  * @return
- *   a preset array.  In the case of a new preset, 'presetid' will be populated.
+ *   a preset array.  In the case of a new preset, 'preset_id' will be populated.
  */
 function listmixer_preset_save($preset) {
-  if (isset($preset['presetid']) && is_numeric($preset['presetid'])) {
-    drupal_write_record('listmixer_preset', $preset, 'presetid');
+  if (isset($preset['preset_id']) && is_numeric($preset['preset_id'])) {
+    drupal_write_record('listmixer_preset', $preset, 'preset_id');
   }
   else {
     drupal_write_record('listmixer_preset', $preset);
@@ -158,7 +158,7 @@ function listmixer_preset_save($preset) {
  *   boolean
  */
 function listmixer_preset_delete($preset) {
-  db_query('DELETE FROM {listmixer_preset} where presetid = %d', $preset['presetid']);
+  db_query('DELETE FROM {listmixer_preset} where preset_id = %d', $preset['preset_id']);
   listmixer_presets(TRUE);
   return TRUE;
 }
