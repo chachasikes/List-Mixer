@@ -149,6 +149,14 @@ function listmixer_preset_save($preset) {
   return $preset;
 }
 
+/**
+ * Delete a listmixer preset.
+ *
+ * @param preset
+ *   an listmixer preset array.
+ * @return
+ *   boolean
+ */
 function listmixer_preset_delete($preset) {
   db_query('DELETE FROM {listmixer_preset} where presetid = %d', $preset['presetid']);
   listmixer_presets(TRUE);

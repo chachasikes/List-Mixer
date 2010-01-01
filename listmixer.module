@@ -29,7 +29,8 @@ define('LISTMIXER_STORAGE_OVERRIDE', 2);
  */ 
 include('includes/listmixer.presets.inc'); 
 include('includes/listmixer.hooks.inc'); 
-
+include('includes/listmixer.behaviors.inc'); 
+include('includes/listmixer.utilities.inc');
 
 /**
  * Implementation of hook_help().
@@ -90,28 +91,45 @@ function listmixer_menu() {
 /**
  * List Mixer, init 
  *
+ * Add javascript and CSS to every page on a Drupal site.
+ * Add an array of settings for all interactions that should
+ * be listened for on each page.
+ * After settings are set, run through page and add javascript
+ * based on specifications in settings, and if possible, only
+ * if an interaction should be used on a given page.
+ * This might have to happen in a preprocessor function, which
+ * ideally would execute after the module had been initialized.
+ *
  */
 function listmixer_init() {
   // Add the javascript.
   $path = drupal_get_path('module', 'listmixer');
-  
-  
-  listmixer_listmixer_storage_register_load();
-  
- /* 
- // Set Drupal javascript value to the block ID stored in settings.
-  // TODO: move these to interaction presets and load variables from the settings for 
-  // the presets into the right format for the ajax functions
-  drupal_add_js( array(
-    'drag_list' => array(
-      'dragListBlockId' => variable_get('drag_list_allowed_block', 'block-views-drag_list_blocks-block_1'), 
-      ),
-    ),
-   'setting');
   // Add main javascript file.
-  drupal_add_js($path .'/drag_list.js');
+  drupal_add_js($path .'/listmixer.js', 'footer');
+
   // Add custom style sheet.
-  drupal_add_css($path .'/drag_list.css');*/
+  drupal_add_css($path .'/listmixer.css');
+  
+  // Add all interaction presets and callback settings to every Drupal page.
+  $presets = listmixer_presets();
+    
+  // @TODO: listmixer.js will look for presence of the block_id (or whatever it is supposed to, later)
+  // @TODO: presets setup (in listmixer.js) if a block id is found, then the rest of the necessary data is searched for (nid)
+  // @TODO: ideally, if stuff is found, then the javascript file will load some includes. 
+  // @TODO: presets data variable created (here)
+  // @TODO: activate set up (buttons to trigger interactions added)
+  // @TODO: interact set up (buttons/methods to select data)
+  // @TODO: $presets will need a behaviors
+  // @TODO: foreach behavior load appropriate javascript
+  // @TODO: push set up (functions that say what to do if data is collected) (prepare data to be passed to callback function)
+  // @TODO: submit setup (handles executing callback and redirect/refresh)
+  
+  // Build array of settings for Drupal.settings javascript
+  $settings = array();
+  foreach ($presets as $preset) {
+    $settings[$preset['presetname']] = $preset;
+  }
+  drupal_add_js(array('listmixer' => $settings), 'setting');
 }
 
 

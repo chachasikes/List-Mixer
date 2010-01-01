@@ -97,6 +97,7 @@ function listmixer_ui_preset_form($form_state, $preset = array()) {
 
   $form['interaction'] = listmixer_interaction_form($preset);
   
+  $form['behavior'] = listmixer_behaviors_load($preset);
 
   $form['submit'] = array(
     '#type' => 'submit',
