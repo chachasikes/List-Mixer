@@ -97,7 +97,7 @@ function listmixer_ui_preset_form($form_state, $preset = array()) {
 
   $form['interaction'] = listmixer_interaction_form($preset);
   
-  $form['behavior'] = listmixer_behaviors_load($preset);
+  $form['behavior'] = listmixer_behaviors_load_form($preset);
 
   $form['submit'] = array(
     '#type' => 'submit',
@@ -239,10 +239,11 @@ function listmixer_interaction_form($preset) {
   );
   
   // The preset method is stored as the module name for the storage method.
-  $form_load_function = $preset['preset_method'] . '_load_interaction_form';
-  if(function_exists($form_load_function)) {
-    $form['interaction'] = call_user_func($form_load_function, $preset);
+  if(!empty($preset['preset_method'])) {
+    $form_load_function = $preset['preset_method'] . '_load_interaction_form';
+    if(function_exists($form_load_function)) {
+      $form['interaction'] = call_user_func($form_load_function, $preset);
+    }
   }
-
   return $form;
 }
