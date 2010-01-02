@@ -28,6 +28,10 @@ Drupal.behaviors.listmixer = function() {
       this.interact = '<input></input>';
       this.submit = '<button>Save</button>';
       
+      Drupal.behaviors.listmixer.push(this);
+      
+     // Add callbacks
+      
       $('#' + this.interactions.interactions_target_id).append(this.target_form);
 
       $('#' + this.target_form_id).append(this.interact);
@@ -52,13 +56,31 @@ Drupal.behaviors.listmixer = function() {
   });
 }
 
-Drupal.behaviors.listmixer.push = function() {    
-  var callback;
-//  callback = Drupal.settings.basePath + 'admin/drag-list/ajax/store/' + Drupal.settings.drag_list.currentList;
-  var data;
+Drupal.behaviors.listmixer.push = function(preset) {    
+  var preset = preset;
+  var preset_id = preset.preset_id;
+
+  // Load push name from preset settings.
+  var push_name = preset.behaviors.push.behavior_name;
+  // Load data from settings array contained in each behavior.
+  var push_callback = preset.behaviors.push.settings.behavior_callback;
   
-  //$.post(callback, { link_href : $(this).attr('drag_list_value') }, dragListUpdateBlock());
+  // @TODO a callback is called. a menu item figures out who the callback is for, looks up the registry and calls the appropriate function.
+  var data_label = 'data_' + push_name;
+  //$(this).attr('drag_list_value')
+  var data = {data_label : 'test data content'};
+  // load js for push function
+  alert(preset.behaviors.push.settings.behavior_javascript);
+  $.getScript(preset.behaviors.push.settings.behavior_javascript);
+  $.post(push_callback, data , Drupal.behaviors.listmixer.redirect(preset));
 
   // preventing entire page from reloading 
   return false;         
+}
+
+
+Drupal.behaviors.listmixer.redirect = function(preset) {
+  var preset = preset;
+  alert('redirecting');
+  
 }

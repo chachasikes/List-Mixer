@@ -89,9 +89,53 @@ function listmixer_menu() {
     'page arguments' => array('listmixer_behaviors_registry_form'),
     'access arguments' => array('administer list mixer'),
     'file' => 'includes/listmixer.behaviors.inc',
+  );
+   $items['admin/ajax/listmixer/behavior/%/%'] = array(
+    'title' => 'Executing ajax function',
+    'description' => 'loading form callback',
+    'page callback' => 'listmixer_behaviors_callback',
+    'page arguments' => array(4, 5),
+    'access arguments' => array('administer list mixer'),
+    'type' => MENU_CALLBACK,
+  );  
+  $items['admin/ajax/listmixer/redirect/%/%'] = array(
+    'title' => 'Executing ajax redirect function',
+    'description' => 'redirecting form callback',
+    'page callback' => 'listmixer_behaviors_redirect_callback',
+    'page arguments' => array(4, 5),
+    'access arguments' => array('administer list mixer'),
+    'type' => MENU_CALLBACK,
   );  
   return $items;
 }
+/**
+ * Determine which listmixer behavior function should be run based on arguments
+ * @TODO: I think the naming convention is going to break down.
+ * I want to be able to put the includes in whatever folder they need to be in.
+ * The behavior has to have a unique name
+ * The folder should still reflect a very simple name that corresponds to the module/function generating the content
+ * 
+ */
+function listmixer_behaviors_callback($type, $name) {
+
+  // TODO: see if data can be an object here
+  $data_post_value_name = 'data_' . $name;
+  $data = $_POST[$data_post_value_name];
+  // Load function.
+  $function_name = 'listmixer_behaviors_' . $name;
+  if(function_exists($function_name)) {
+    $return = call_user_func($function_name, $data);
+  } 
+  dpm($return);
+}
+/**
+ * Determine which listmixer behavior function should be run based on arguments
+ */
+function listmixer_behaviors_redirect_callback($type, $root) {
+  
+}
+
+
 /**
  * List Mixer, init 
  *

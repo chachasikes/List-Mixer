@@ -98,6 +98,10 @@ function listmixer_behaviors_load($behavior_key = array()) {
       $behaviors[$row['behavior_type']] = $row;
     }  
   }
+  // Add settings for each behavior
+  foreach ($behaviors as &$behavior) {
+    $behavior['settings'] = listmixer_behavior_registry_load($behavior['behavior_name']);
+  }
   return $behaviors;
 }
 
@@ -231,6 +235,7 @@ function listmixer_behavior_registry_load($name = NULL) {
  * Add utlities for behaviors (php,js)
 */
 
+
 /**
  * Create behavior registry
  * Every new behavior must be added to this array. 
@@ -248,22 +253,18 @@ function listmixer_behavior_registry_load($name = NULL) {
  * *Callback name (data is sent via POST variable)
  *
  * Registry can be updated by clicking the button here: admin/settings/behaviors/update/registry
- */
- 
+ */ 
 function listmixer_behaviors_registry_build_behavior($type, $label, $enabled = TRUE, $folder_path, $folder_root, $name, $description) {
-  if(function_exists('dpm')){
-    dpm($listmixer_behaviors_registry);
-  }
-  
+  $path = base_path() . drupal_get_path('module', 'listmixer');  
   $element = array(
     'behavior_name' => $name,
     'behavior_label' => t($label),
     'behavior_enabled' => $enabled, 
     'behavior_type' => $type,
-    'behavior_include' => 'behaviors/' . $type . $folder_path . '/' . $folder_root . '/listmixer_' . $name . '.inc',
-    'behavior_javascript' => 'behaviors/' . $type . $folder_path . '/' . $folder_root . '/listmixer_' . $name . '.inc.js',
-    'behavior_callback' => 'admin/ajax/listmixer/behavior/' . $type . '/' . $folder_root, 
-    'behavior_redirect' => 'admin/ajax/listmixer/redirect/' . $type . '/' . $folder_root, 
+    'behavior_include' => $path . '/behaviors/' . $type . $folder_path . '/' . $folder_root . '/listmixer_' . $name . '.inc',
+    'behavior_javascript' => $path . '/behaviors/' . $type . $folder_path . '/' . $folder_root . '/listmixer_' . $name . '.inc.js',
+    'behavior_callback' => 'admin/ajax/listmixer/behavior/' . $type . '/' . $name, 
+    'behavior_redirect' => 'admin/ajax/listmixer/redirect/' . $type . '/' . $name, 
     'behavior_description' => t($description),  
   );
   return $element;
@@ -278,6 +279,9 @@ function listmixer_behaviors_registry_form($form_state, $behavior = array(), $op
   $enabled = TRUE;
   $listmixer_behaviors_registry = listmixer_behaviors_registry_build(); 
 
+  if(function_exists('dpm')){
+    dpm($listmixer_behaviors_registry);
+  }
 
   // Registry stores a serialized array of all of the registry settings.  
   $form['listmixer_behavior_registry'] = array(
