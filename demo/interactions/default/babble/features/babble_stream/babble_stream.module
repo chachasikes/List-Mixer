@@ -1,0 +1,3 @@
+<?php
+
+include_once('babble_stream.features.inc');
