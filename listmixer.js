@@ -20,11 +20,22 @@ Drupal.behaviors.listmixer = function() {
       
       // @TODO: Look up which behaviors to load/apply to the target
       
-      // Add input button (load js from input button function)
-      $('#' + this.interactions.interactions_target_id).append('input here');
+      // @TODO: So the idea will be to build a library of buttons and things, and then load them based on the behavior settings.
+      
+      this.target_form_class = 'class="listmixer-target-form"';   
+      this.target_form_id = 'listmixer-target-'+ this.preset_name;
+      this.target_form = '<form id="' + this.target_form_id + '" ' + this.target_form_class + '></form>';
+      this.interact = '<input></input>';
+      this.submit = '<button>Save</button>';
+      
+      $('#' + this.interactions.interactions_target_id).append(this.target_form);
+
+      $('#' + this.target_form_id).append(this.interact);
       
       // Add interact button (load js from interact button function)
-      $('#' + this.interactions.interactions_target_id).append('button here');
+      $('#' + this.target_form_id).append(this.submit);
+      
+      // @TODO: connect submit function to push callback and data
       
       // @TODO: add field spec to settings for behaviors
       
@@ -39,4 +50,15 @@ Drupal.behaviors.listmixer = function() {
       // theme preprocess function all nodes add class listmixer-node-#nid
     }
   });
+}
+
+Drupal.behaviors.listmixer.push = function() {    
+  var callback;
+//  callback = Drupal.settings.basePath + 'admin/drag-list/ajax/store/' + Drupal.settings.drag_list.currentList;
+  var data;
+  
+  //$.post(callback, { link_href : $(this).attr('drag_list_value') }, dragListUpdateBlock());
+
+  // preventing entire page from reloading 
+  return false;         
 }
