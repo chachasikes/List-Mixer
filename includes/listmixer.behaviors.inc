@@ -224,86 +224,48 @@ function listmixer_behavior_registry_load($name = NULL) {
  *
  * Registry can be updated by clicking the button here: admin/settings/behaviors/update/registry
  */
+ 
+function listmixer_behaviors_registry_build_behavior($type, $label, $enabled = TRUE, $folder_path, $folder_root, $name, $description) {
+  $element = array(
+    'behavior_name' => $name,
+    'behavior_label' => t($label),
+    'behavior_enabled' => $enabled, 
+    'behavior_type' => $type,
+    'behavior_include' => 'behaviors/' . $type . $folder_path . '/' . $folder_root . '/listmixer_' . $name . '.inc',
+    'behavior_javascript' => 'behaviors/' . $type . $folder_path . '/' . $folder_root . '/listmixer_' . $name . '.inc.js',
+    'behavior_callback' => 'admin/ajax/listmixer/behavior/' . $type . '/' . $folder_root, 
+    'behavior_redirect' => 'admin/ajax/listmixer/redirect/' . $type . '/' . $folder_root, 
+    'behavior_description' => t($description),  
+  );
+  return $element;
+} 
+
+ 
 function listmixer_behaviors_registry_form($form_state, $behavior = array()) {
-  $admin_setting = TRUE;
-  $listmixer_behaviors_registry = array();  
-  $listmixer_behaviors_registry[] = array(
-      'behavior_name' => 'push_nodereference',
-      'behavior_label' => t('Content: Nodereference'),
-      'behavior_enabled' => $admin_setting, 
-      'behavior_type' => 'push',
-      'behavior_include' => 'behaviors/push/content/link/listmixer_push_nodereference.inc',
-      'behavior_javascript' => 'behaviors/push/content/link/listmixer_push_nodereference.inc.js',
-      'behavior_callback' => '/admin/ajax/listmixer/behavior/push/content/nodereference', 
-      'behavior_redirect' => '/admin/ajax/listmixer/redirect/push/content/nodereference', 
-      'behavior_description' => t('Nodereference description'),
-  ); 
-  $listmixer_behaviors_registry[] = array(
-      'behavior_name' => 'push_link',
-      'behavior_label' => t('Content: Link'),
-      'behavior_enabled' => $admin_setting, 
-      'behavior_type' => 'push',
-      'behavior_include' => 'behaviors/push/content/link/listmixer_push_link.inc',
-      'behavior_javascript' => 'behaviors/push/content/link/listmixer_push_link.inc.js',
-      'behavior_callback' => '/admin/ajax/listmixer/behavior/push/content/link', 
-      'behavior_redirect' => '/admin/ajax/listmixer/redirect/push/content/link', 
-      'behavior_description' => t('Link description'),
-  );    
-  $listmixer_behaviors_registry[] = array(
-      'behavior_name' => 'activate_button',
-      'behavior_label' => t('Button'),
-      'behavior_enabled' => $admin_setting, 
-      'behavior_type' => 'activate',
-      'behavior_include' => 'behaviors/activate/button/listmixer_activate_button.inc',
-      'behavior_javascript' => 'behaviors/activate/button/listmixer_activate_button.inc.js',
-      'behavior_callback' => '/admin/ajax/listmixer/behavior/activate/button', 
-      'behavior_redirect' => '/admin/ajax/listmixer/redirect/activate/button', 
-      'behavior_description' => t('Activate Button description'),
-  );
-  $listmixer_behaviors_registry[] = array(
-      'behavior_name' => 'activate_mousedown',
-      'behavior_label' => t('Mousedown'),
-      'behavior_enabled' => $admin_setting, 
-      'behavior_type' => 'activate',
-      'behavior_include' => 'behaviors/activate/mousedown/listmixer_activate_mousedown.inc',
-      'behavior_javascript' => 'behaviors/activate/mousedown/listmixer_activate_mousedown.inc.js',
-      'behavior_callback' => '/admin/ajax/listmixer/behavior/activate/mousedown', 
-      'behavior_redirect' => '/admin/ajax/listmixer/redirect/activate/mousedown', 
-      'behavior_description' => t('Activate Mousedown description'),
-  );
-  $listmixer_behaviors_registry[] = array(
-      'behavior_name' => 'activate_drag',
-      'behavior_label' => t('Drag'),
-      'behavior_enabled' => $admin_setting, 
-      'behavior_type' => 'activate',
-      'behavior_include' => 'behaviors/activate/drag/listmixer_activate_mousedown.inc',
-      'behavior_javascript' => 'behaviors/activate/drag/listmixer_activate_drag.inc.js',
-      'behavior_callback' => '/admin/ajax/listmixer/behavior/activate/drag', 
-      'behavior_redirect' => '/admin/ajax/listmixer/redirect/activate/drag', 
-      'behavior_description' => t('Activate Drag description'),
-  );        
-  $listmixer_behaviors_registry[] = array(
-      'behavior_name' => 'interact_click',
-      'behavior_label' => t('Click Links'),
-      'behavior_enabled' => $admin_setting, 
-      'behavior_type' => 'interact',
-      'behavior_include' => 'behaviors/interact/click/listmixer_interact_click.inc',
-      'behavior_javascript' => 'behaviors/interact/click/listmixer_interact_click.inc.js',
-      'behavior_callback' => '/admin/ajax/listmixer/behavior/interact/click', 
-      'behavior_redirect' => '/admin/ajax/listmixer/redirect/interact/click', 
-      'behavior_description' => t('Click links description'),
-  ); 
-  $listmixer_behaviors_registry[] = array(
-      'behavior_name' => 'interact_checkbox',
-      'behavior_label' => t('Checkbox'),
-      'behavior_enabled' => $admin_setting, 
-      'behavior_type' => 'interact',
-      'behavior_include' => 'behaviors/interact/checkbox/listmixer_interact_checkbox.inc',
-      'behavior_javascript' => 'behaviors/interact/checkbox/listmixer_interact_checkbox.inc.js',
-      'behavior_callback' => '/admin/ajax/listmixer/behavior/interact/checkbox', 
-      'behavior_redirect' => '/admin/ajax/listmixer/redirect/interact/checkbox', 
-      'behavior_description' => t('Checkbox description'),
-  ); 
+  $enabled = TRUE;
+  $listmixer_behaviors_registry = array(); 
+  /* ACTIVATE functions */     
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Button', $enabled, '', 'button', 'activate_button', 'Activate Button');
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'MouseDown', $enabled, '', 'mousedown', 'activate_mousedown', 'Activate Mousedown');
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Drag', $enabled, '', 'drag', 'activate_drag', 'Activate Drag description');
+
+  /* INTERACT functions */    
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('interact', 'Click Links', $enabled, '', 'click', 'interact_click', 'Click interaction');
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('interact', 'Checkbox', $enabled, '', 'checkbox', 'interact_checkbox', 'Checkbox interaction');
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('interact', 'Input', $enabled, '', 'input', 'interact_input', 'Input interaction');
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('interact', 'Select', $enabled, '', 'select', 'interact_select', 'Select interaction');
+
+  /* PUSH functions */
+  /* Content push functions */
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store File', $enabled, '/content', 'filefield', 'push_filefield', 'Store File');
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Link', $enabled, '/content', 'link', 'push_link', 'Store Link');
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Nodereference', $enabled, 'push/content', 'nodereference', 'push_nodereference', 'Store Nodereference');
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Text', $enabled, '/content', 'text', 'push_text', 'Store Text'); 
+  /* Taxonomy push functions */
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Term', $enabled, '/taxonomy', 'term', 'push_taxonomy_term', 'Push Taxonomy Term');
+  if(function_exists('dpm')){
+    dpm($listmixer_behaviors_registry);
+  }
   // Registry stores a serialized array of all of the registry settings.  
   $form['listmixer_behavior_registry'] = array(
     '#type' => 'textarea',
