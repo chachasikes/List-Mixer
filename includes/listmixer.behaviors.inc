@@ -14,12 +14,12 @@ function listmixer_behaviors_form(&$form, &$form_state, $preset = array()) {
   $preset_behaviors['activate'] = listmixer_behavior_load(array('preset_id' => $preset['preset_id'], 'behavior_type' =>'activate'));
   $preset_behaviors['interact'] = listmixer_behavior_load(array('preset_id' => $preset['preset_id'], 'behavior_type' =>'interact'));
   $preset_behaviors['push'] =  listmixer_behavior_load(array('preset_id' => $preset['preset_id'], 'behavior_type' =>'push'));
-
+  $preset_behaviors['submit'] =  listmixer_behavior_load(array('preset_id' => $preset['preset_id'], 'behavior_type' =>'submit'));
   $form['behaviors'] = array(
     '#type' => 'fieldset',
     '#title' => t('Behaviors'),
     '#tree' => TRUE,
-    '#weight' => 9,
+    '#weight' => 7,
   );
  $form['behaviors']['activate'] = array(
     '#type' => 'select',
@@ -53,6 +53,17 @@ function listmixer_behaviors_form(&$form, &$form_state, $preset = array()) {
             . ' interaction-preset-id-' . $preset['preset_id'] . ' interact-name-' . $preset_behaviors['interact']['interact']['behavior_name'],
     'id' => array('#value' => $preset_behaviors['interact']['interact']['id']),
     'behavior_name' => array('#value' => $preset_behaviors['interact']['interact']['behavior_name']),
+  );
+  $form['behaviors']['submit'] = array(
+    '#type' => 'select',
+    '#title' => t('Submit'),
+    '#default_value' => $preset_behaviors['submit']['submit']['behavior_name'],
+    '#options' => listmixer_behaviors_load_form_options($preset, 'submit'),
+    '#description' => t('Choose submit behaviors.'),
+    '#id'=> 'submit-' . $preset_behaviors['submit']['submit']['id'] 
+            . ' submition-preset-id-' . $preset['preset_id'] . ' submit-name-' . $preset_behaviors['submit']['submit']['behavior_name'],
+    'id' => array('#value' => $preset_behaviors['submit']['submit']['id']),
+    'behavior_name' => array('#value' => $preset_behaviors['submit']['submit']['behavior_name']),
   );
   return $form;
 } 
@@ -154,6 +165,21 @@ function listmixer_behavior_save($form, $form_state) {
   else {
    drupal_write_record('listmixer_behaviors', $form_store);
   }
+  
+  // Store submit button.
+  $form_store = array(
+    'id' => $form['behaviors']['submit']['id']['#value'],
+    'preset_id' => $preset_id,
+    'behavior_name' => $form_state['values']['behaviors']['submit'],
+    'behavior_type' => 'submit',
+  );
+  if (!empty($form['behaviors']['submit']['#default_value'])) {
+    // Skip saving id field, just save behaviors
+    drupal_write_record('listmixer_behaviors', $form_store, array('id'));
+  }
+  else {
+   drupal_write_record('listmixer_behaviors', $form_store);
+  }
 }
  
 function listmixer_behavior_delete($preset) {
@@ -168,7 +194,7 @@ function listmixer_behaviors_load_form_options($preset = NULL, $type) {
   // Load behaviors from the behavior registry table
   $behaviors = listmixer_behavior_registry_load();
   
-  // Push behavior information into array
+  // Add behavior information into array
   // Add 'none' value
   // @TODO Should this be NULL, check db structure
   $behaviors_options = array('none' => '--None--');  
@@ -263,6 +289,11 @@ function listmixer_behaviors_registry_form($form_state, $behavior = array()) {
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Text', $enabled, '/content', 'text', 'push_text', 'Store Text'); 
   /* Taxonomy push functions */
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Term', $enabled, '/taxonomy', 'term', 'push_taxonomy_term', 'Push Taxonomy Term');
+  
+  /* SUBMIT functions */
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('submit', 'Submit Button', $enabled, '', 'button', 'submit_button', 'Submit Button');
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('submit', 'Submit Checkbox', $enabled, '', 'checkbox', 'submit_checkbox', 'Submit Checkbox');
+  
   if(function_exists('dpm')){
     dpm($listmixer_behaviors_registry);
   }
