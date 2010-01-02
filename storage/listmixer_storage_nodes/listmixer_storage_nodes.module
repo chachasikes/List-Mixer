@@ -25,24 +25,21 @@ function listmixer_storage_nodes_listmixer_storage_register() {
   );
 }
 
-function listmixer_storage_nodes_load_interaction_form($preset) {
-
-  $results = db_query("SELECT * FROM {listmixer_storage_nodes}", array($preset['preset_id']));
-  while ($interaction = db_fetch_array($results)) {
-    // Only get the first result
-    // @TODO: look into what kinds of results might happen.
-    break;
+function listmixer_storage_nodes_load_interaction_form(&$form, &$form_state, $preset = array()) {
+  $results = db_query("SELECT * FROM {listmixer_storage_nodes} WHERE preset_id = %d", $preset['preset_id']);
+  while ($row = db_fetch_array($results)) {
+    $interaction = $row;
   }
 
   $form = array();
   
-  $form['interactionid'] = array(
+  $form['interaction_id'] = array(
     '#type' => 'value',
-    '#value' => $interaction['interactionid'],
+    '#value' => $interaction['interaction_id'],
   );
   $form['preset_id'] = array(
     '#type' => 'value',
-    '#value' => $interaction['interactionid'],
+    '#value' => $preset['preset_id'],
   );
 
   $form['interaction_target_id'] = array(
@@ -83,3 +80,35 @@ function listmixer_storage_nodes_load_interaction_form($preset) {
   );
   return $form;
 }
+
+
+/**
+ * Save an listmixer preset.
+ *
+ * @param preset
+ *   an listmixer preset array.
+ * @return
+ *   a preset array.  In the case of a new preset, 'preset_id' will be populated.
+ */
+function listmixer_storage_nodes_listmixer_storage_save($form, &$form_state) {
+  $form_store = $form_state['values']['interaction'][0];
+  $form_store['preset_id'] = $form_state['values']['preset_id'];
+  // If an id already exists
+  if (!empty($form['interaction'][0]['interaction_id']['#value'])) {
+    drupal_write_record('listmixer_storage_nodes', $form_store, array('preset_id'));
+  }
+  else {
+    drupal_write_record('listmixer_storage_nodes', $form_store);
+  }
+  return $behavior;
+}
+
+/**
+ * Delete interaction preset.
+ */
+function listmixer_storage_nodes_listmixer_storage_delete($preset) {
+ db_query("DELETE FROM {listmixer_storage_nodes} WHERE preset_id = '%d'", $preset['preset_id']);
+ return TRUE;
+}
+
+ 

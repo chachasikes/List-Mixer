@@ -26,7 +26,7 @@ function listmixer_storage_nodes_uninstall() {
 function listmixer_storage_nodes_schema() {
  $schema['listmixer_storage_nodes'] = array(
     'fields' => array(
-      'interactionid' => array(
+      'interaction_id' => array(
         'description' => t('The primary identifier for an interaction.'),
         'type' => 'serial',
         'unsigned' => TRUE,
@@ -120,7 +120,7 @@ function listmixer_storage_nodes_schema() {
       */
       
     ),
-    'primary key' => array('interactionid'),
+    'primary key' => array('interaction_id'),
     'indexes' => array(
       'preset_id' => array('preset_id'),
     ),

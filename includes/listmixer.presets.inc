@@ -170,10 +170,12 @@ function listmixer_ui_preset_form($form_state, $preset = array()) {
     '#description' => t('Choose the method of how list data should be stored.'),
     '#weight' => 2,
   );
-
-  //$form = listmixer_interactions_form($form, $form_state, $preset); 
-  $form = listmixer_behaviors_form($form, $form_state, $preset);
-
+  if(!empty($preset['preset_id'])){
+    // Add interactions form.
+    $form = listmixer_interactions_form($form, $form_state, $preset); 
+    // Add behaviors form.
+    $form = listmixer_behaviors_form($form, $form_state, $preset);
+  }
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => $preset['storage'] === LISTMIXER_STORAGE_DEFAULT ? t('Override Defaults') : t('Save Preset'),
@@ -211,12 +213,11 @@ function listmixer_ui_preset_form_submit($form, &$form_state) {
   if (isset($form_state['values']['behaviors'])) {
       listmixer_behavior_save($form, &$form_state);
   }
-  
   // Save Interactions
-   if (isset($form_state['values']['interactions'])) {
+  if (isset($form_state['values']['interaction'])) {
       listmixer_interactions_save($form, &$form_state);
   } 
-  // save based on type
+
 
   // Push back to the preset form
   $form_state['redirect'] = 'admin/build/listmixer/'. $preset['preset_id'];
@@ -239,7 +240,7 @@ function listmixer_ui_preset_delete_form($form_state, $preset = array()) {
     'admin/build/listmixer',
     t('This action cannot be undone.'),
     t('Delete'),  t('Cancel')
-  );
+  ); 
 }
 
 function listmixer_ui_preset_delete_form_submit($form, &$form_state) {
@@ -335,6 +336,10 @@ function listmixer_preset_save($preset) {
  */
 function listmixer_preset_delete($preset) {
   db_query('DELETE FROM {listmixer_preset} where preset_id = %d', $preset['preset_id']);
+  
+  listmixer_behavior_delete($preset);
+  listmixer_interactions_delete($preset);
+  
   listmixer_presets(TRUE);
   return TRUE;
 }

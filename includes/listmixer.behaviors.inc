@@ -156,6 +156,11 @@ function listmixer_behavior_save($form, $form_state) {
   }
 }
  
+function listmixer_behavior_delete($preset) {
+  db_query('DELETE FROM {listmixer_behaviors} where preset_id = %d', $preset['preset_id']);
+  return TRUE;
+} 
+ 
 /**
  * Create options list of types of behaviors to select from.
  */
@@ -164,7 +169,7 @@ function listmixer_behaviors_load_form_options($preset = NULL, $type) {
   $behaviors = listmixer_behavior_registry_load();
   
   // Push behavior information into array
-  $behaviors_options = array();  
+  $behaviors_options = array('' => 'None');  
   foreach ($behaviors as $behavior) {
     if($type == $behavior['behavior_type']) {
       $behaviors_options[$behavior['behavior_name']] =  $behavior['behavior_label'];
@@ -185,63 +190,20 @@ function listmixer_behavior_registry_load($name = NULL) {
         return $behavior;
       }
     }
-
   }
   return $behaviors;
 }
 
-/*
-REFERENCE: theme.inc registry functions
-saved to cache, not variable table
 /**
- * Get the theme_registry cache from the database; if it doesn't exist, build
- * it.
- *
- * @param $theme
- *   The loaded $theme object.
- * @param $base_theme
- *   An array of loaded $theme objects representing the ancestor themes in
- *   oldest first order.
- * @param theme_engine
- *   The name of the theme engine.
-
-function _theme_load_registry($theme, $base_theme = NULL, $theme_engine = NULL) {
-  // Check the theme registry cache; if it exists, use it.
-  $cache = cache_get("theme_registry:$theme->name", 'cache');
-  if (isset($cache->data)) {
-    $registry = $cache->data;
-  }
-  else {
-    // If not, build one and cache it.
-    $registry = _theme_build_registry($theme, $base_theme, $theme_engine);
-    _theme_save_registry($theme, $registry);
-  }
-  _theme_set_registry($registry);
-}
- */
-/**
- * Write the theme_registry cache into the database.
-
-function _theme_save_registry($theme, $registry) {
-  cache_set("theme_registry:$theme->name", $registry);
-}
- */
-
-
-
-
-/*
-
-for each allowed behavior (admin/settings/listmixer)
-if module exists, load include for push behavior
-create callback for the push behavior
-inc adds js for the behavior
-javascript contains transformation from data to form
-
-add utlities for behaviors (php,js)
-
-
+ * @TODO
+ * For each allowed behavior (admin/settings/listmixer)
+ * If module exists, load include for push behavior
+ * Create callback for the push behavior
+ * Inc adds js for the behavior
+ * Javascript contains transformation from data to form
+ * Add utlities for behaviors (php,js)
 */
+
 /**
  * Create behavior registry
  * Every new behavior must be added to this array. 
