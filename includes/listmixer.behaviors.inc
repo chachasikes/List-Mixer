@@ -266,6 +266,7 @@ function listmixer_behaviors_registry_build_behavior($type, $label, $enabled = T
     'behavior_type' => $type,
     'behavior_include' => $path . '/behaviors/' . $type . $folder_path . '/' . $folder_root . '/listmixer_' . $name . '.inc',
     'behavior_javascript' => $path . '/behaviors/' . $type . $folder_path . '/' . $folder_root . '/listmixer_' . $name . '.inc.js',
+    'behavior_test_javascript' => $path . '/behaviors/' . $type . $folder_path . '/' . $folder_root . '/listmixer_' . $name . '.test.js',
     'behavior_callback' => 'admin/ajax/listmixer/behavior/' . $type . '/listmixer_' . $name . '/' . $name, 
     'behavior_redirect' => 'admin/ajax/listmixer/redirect/' . $type . '/listmixer_' . $name . '/' . $name, 
     'behavior_description' => t($description),  

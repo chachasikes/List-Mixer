@@ -1,1 +1,5 @@
-alert('push text loaded');
+
+Drupal.behaviors.listmixer.behaviors.test = function(name){
+  var name = name;
+  alert(name);
+}

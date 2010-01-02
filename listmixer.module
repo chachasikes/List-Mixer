@@ -90,7 +90,7 @@ function listmixer_menu() {
     'access arguments' => array('administer list mixer'),
     'file' => 'includes/listmixer.behaviors.inc',
   );
-  //http://localhost:8888/6x/admin/ajax/listmixer/behavior/push/listmixer_push_text
+   // @TODO: There are probably too many arguments here, but it is due to the way the behaviors are named. But this version works for now.
    $items['admin/ajax/listmixer/behavior/%/%/%'] = array(
     'title' => 'Executing ajax function',
     'description' => 'loading form callback',
@@ -118,7 +118,6 @@ function listmixer_menu() {
  * 
  */
 function listmixer_behaviors_callback($type, $name, $root) {
-
   // @TODO: See if data can be an object here
   $data_post_value_name = 'data_' . $name;
   $data = $_POST[$data_post_value_name];
@@ -134,46 +133,29 @@ function listmixer_behaviors_callback($type, $name, $root) {
   if(function_exists($function_name)) {
     $return = call_user_func($function_name, $data);
     if(!empty($return)){
-      return $return;
+      // Return nothing, but set a message.
+      // @TODO: Interactive Growl-like message area? (like in open atrium?)
+      // Redirect will handle how blocks might need to reload.
+      
+      // @TODO Date is added for testing purposes. May become unneccessary
+      drupal_set_message($return . ' ' . date("F j, Y, g:i:s a"), 'status');
     }
     else{
-      return ''; // @TODO: Figure out what should be returned here.
+      drupal_set_message(t('Warning: Data not saved. Source: ' . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');
     }
   } 
   else{
-    // @TODO Figure out the best way to return that there was a problem.
-    return FALSE;
+      drupal_set_message(t('Warning: Data not saved. Source: ' . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');;
   }
 }
+
 /**
  * Determine which listmixer behavior function should be run based on arguments
+ * @TEST: Create test for each callback
+ * @TEST: Check what is returned
  */
 function listmixer_behaviors_redirect_callback($type, $name, $root) {
-  // @TODO: See if data can be an object here
-  $data_post_value_name = 'data_' . $name;
-  $data = $_POST[$data_post_value_name];
-  // Load function.
-  $function_name = 'listmixer_behaviors_redirect_' . $name;
-
-  // Load include from registry.
-  $behavior = listmixer_behavior_registry_load($root);
-  if(file_exists($behavior['behavior_include'])){
-    include($behavior['behavior_include']);
-  }
-    
-  if(function_exists($function_name)) {
-    $return = call_user_func($function_name, $data);
-    if(!empty($return)){
-      return $return;
-    }
-    else{
-      return ''; // @TODO: Figure out what should be returned here.
-    }
-  } 
-  else{
-    // @TODO Figure out the best way to return that there was a problem.
-    return FALSE;
-  }  
+  // @TODO: Fill in. 
 }
 
 
