@@ -217,12 +217,15 @@ function listmixer_behavior_registry_load($name = NULL) {
   $behaviors = unserialize(variable_get('listmixer_behavior_registry', array('listmixer')));
   if(!empty($name)) {
     foreach($behaviors as $key => $behavior) {
-      if ($behavior['behavior_name'] == $name) {
-        return $behavior;
+      if ($behaviors[$key]['behavior_name'] == $name) {
+        $behavior_id = $key;
       }
     }
+    return $behaviors[$behavior_id];
   }
-  return $behaviors;
+  else {
+    return $behaviors;
+  }
 }
 
 /**
@@ -255,7 +258,7 @@ function listmixer_behavior_registry_load($name = NULL) {
  * Registry can be updated by clicking the button here: admin/settings/behaviors/update/registry
  */ 
 function listmixer_behaviors_registry_build_behavior($type, $label, $enabled = TRUE, $folder_path, $folder_root, $name, $description) {
-  $path = base_path() . drupal_get_path('module', 'listmixer');  
+  $path = drupal_get_path('module', 'listmixer');  
   $element = array(
     'behavior_name' => $name,
     'behavior_label' => t($label),
@@ -263,8 +266,8 @@ function listmixer_behaviors_registry_build_behavior($type, $label, $enabled = T
     'behavior_type' => $type,
     'behavior_include' => $path . '/behaviors/' . $type . $folder_path . '/' . $folder_root . '/listmixer_' . $name . '.inc',
     'behavior_javascript' => $path . '/behaviors/' . $type . $folder_path . '/' . $folder_root . '/listmixer_' . $name . '.inc.js',
-    'behavior_callback' => 'admin/ajax/listmixer/behavior/' . $type . '/' . $name, 
-    'behavior_redirect' => 'admin/ajax/listmixer/redirect/' . $type . '/' . $name, 
+    'behavior_callback' => 'admin/ajax/listmixer/behavior/' . $type . '/listmixer_' . $name . '/' . $name, 
+    'behavior_redirect' => 'admin/ajax/listmixer/redirect/' . $type . '/listmixer_' . $name . '/' . $name, 
     'behavior_description' => t($description),  
   );
   return $element;

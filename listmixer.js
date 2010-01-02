@@ -69,18 +69,20 @@ Drupal.behaviors.listmixer.push = function(preset) {
   var data_label = 'data_' + push_name;
   //$(this).attr('drag_list_value')
   var data = {data_label : 'test data content'};
-  // load js for push function
-  alert(preset.behaviors.push.settings.behavior_javascript);
+  // Load javascript include for this behavior.
   $.getScript(preset.behaviors.push.settings.behavior_javascript);
-  $.post(push_callback, data , Drupal.behaviors.listmixer.redirect(preset));
+  // Ajax call to callback for this behavior.
+  // @TODO currently this runs automatically, make push happen after submit behavior is activated.
+  alert(push_callback);
+  
+  $.post(push_callback, data ,Drupal.behaviors.listmixer.redirect(preset));
 
-  // preventing entire page from reloading 
-  return false;         
+  // Prevent entire page from reloading 
+ // return false;         
 }
 
 
 Drupal.behaviors.listmixer.redirect = function(preset) {
   var preset = preset;
-  alert('redirecting');
-  
+  //alert('redirecting'); 
 }
