@@ -251,6 +251,10 @@ function listmixer_behavior_registry_load($name = NULL) {
  */
  
 function listmixer_behaviors_registry_build_behavior($type, $label, $enabled = TRUE, $folder_path, $folder_root, $name, $description) {
+  if(function_exists('dpm')){
+    dpm($listmixer_behaviors_registry);
+  }
+  
   $element = array(
     'behavior_name' => $name,
     'behavior_label' => t($label),
@@ -274,9 +278,7 @@ function listmixer_behaviors_registry_form($form_state, $behavior = array(), $op
   $enabled = TRUE;
   $listmixer_behaviors_registry = listmixer_behaviors_registry_build(); 
 
-  if(function_exists('dpm')){
-    dpm($listmixer_behaviors_registry);
-  }
+
   // Registry stores a serialized array of all of the registry settings.  
   $form['listmixer_behavior_registry'] = array(
     '#type' => 'textarea',
