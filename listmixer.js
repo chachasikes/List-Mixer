@@ -55,32 +55,58 @@ Drupal.behaviors.listmixer = function() {
     }
   });
 }
+// Build functions that load the behaviors.
+Drupal.behaviors.listmixer.activate = function(preset) {    
+  Drupal.behaviors.listmixer.behaviorCreate(preset, 'activate');        
+}
+
+Drupal.behaviors.listmixer.interact = function(preset) {    
+  Drupal.behaviors.listmixer.behaviorCreate(preset, 'interact');        
+}
 
 Drupal.behaviors.listmixer.push = function(preset) {    
-  var preset = preset;
-  var preset_id = preset.preset_id;
+  Drupal.behaviors.listmixer.behaviorCreate(preset, 'push');        
+}
 
-  // Load push name from preset settings.
-  var push_name = preset.behaviors.push.behavior_name;
+Drupal.behaviors.listmixer.submit = function(preset) {    
+  Drupal.behaviors.listmixer.behaviorCreate(preset, 'submit');        
+}
+// Load javascript includes, set up the callbacks for all behaviors.
+Drupal.behaviors.listmixer.behaviorCreate = function(preset, type) {
+  var preset = preset;
+  var type = type;
+  var preset_id = preset.preset_id;
+  var callback;
+  var javascript_include;
+  var behavior_name;
+  // Create an array of the settings for the current behavior.
+  var behavior = preset.behaviors[type];
+  callback = Drupal.settings.basePath + behavior.settings.behavior_callback;
+  javascript_include = behavior.settings.behavior_javascript;
+  behavior_name =  behavior.settings.behavior_name;
+
   // Load data from settings array contained in each behavior.
-  var push_callback = Drupal.settings.basePath + preset.behaviors.push.settings.behavior_callback;
-  
   // @TODO a callback is called. a menu item figures out who the callback is for, looks up the registry and calls the appropriate function.
-  var data_label = 'data_' + push_name;
+  // Grab data from somewhere that's stored somewhere else.
+  // The data might need to be cleaned up if the funciton is used several times before submitting
+  
+  var data_label = 'data_' + behavior_name;
   //$(this).attr('drag_list_value')
   //var data = {data_label : 'test data content'};
   var data = { name: "John", time: "2pm" };
+  
   // Load javascript include for this behavior.
-  $.getScript(preset.behaviors.push.settings.behavior_javascript);
+  if(!empty(javascript_include)) {
+    $.getScript(javascript_include);
+  }
   // Ajax call to callback for this behavior.
   // @TODO currently this runs automatically, make push happen after submit behavior is activated.
 
-  $.post(push_callback, data,  Drupal.behaviors.listmixer.redirect(preset, data));
-
-  // Prevent entire page from reloading 
-  return false;         
+  if(!empty(callback)) {
+    $.post(callback, data, Drupal.behaviors.listmixer.redirect(preset, data));
+  }
+  return false; 
 }
-
 
 Drupal.behaviors.listmixer.redirect = function(preset, data) {
   var preset = preset;

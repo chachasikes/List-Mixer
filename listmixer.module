@@ -190,9 +190,7 @@ function listmixer_init() {
   // @TODO: presets data variable created (here)
   // @TODO: activate set up (buttons to trigger interactions added)
   // @TODO: interact set up (buttons/methods to select data)
-  // @TODO: $presets will need a behaviors
-  // @TODO: foreach behavior load appropriate javascript
-  // @TODO: push set up (functions that say what to do if data is collected) (prepare data to be passed to callback function)
+
   // @TODO: submit setup (handles executing callback and redirect/refresh)
   
   // Build array of settings for Drupal.settings javascript
