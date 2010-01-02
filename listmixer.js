@@ -96,13 +96,13 @@ Drupal.behaviors.listmixer.behaviorCreate = function(preset, type) {
   var data = { name: "John", time: "2pm" };
   
   // Load javascript include for this behavior.
-  if(!empty(javascript_include)) {
+  if(javascript_include != null) {
     $.getScript(javascript_include);
   }
   // Ajax call to callback for this behavior.
   // @TODO currently this runs automatically, make push happen after submit behavior is activated.
 
-  if(!empty(callback)) {
+  if(callback != null) {
     $.post(callback, data, Drupal.behaviors.listmixer.redirect(preset, data));
   }
   return false; 
