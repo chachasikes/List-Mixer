@@ -27,10 +27,11 @@ define('LISTMIXER_STORAGE_OVERRIDE', 2);
 /**
  * Includes
  */ 
-include('includes/listmixer.presets.inc'); 
-include('includes/listmixer.hooks.inc'); 
-include('includes/listmixer.behaviors.inc'); 
 include('includes/listmixer.utilities.inc');
+include('includes/listmixer.hooks.inc'); 
+include('includes/listmixer.presets.inc'); 
+include('includes/listmixer.interactions.inc'); 
+include('includes/listmixer.behaviors.inc'); 
 
 /**
  * Implementation of hook_help().
@@ -81,6 +82,14 @@ function listmixer_menu() {
     'access arguments' => array('administer list mixer'),
     'file' => 'includes/listmixer.admin.inc',
   );
+  $items['admin/settings/behaviors/update/registry'] = array(
+    'title' => 'Update Registry',
+    'description' => 'Update Registry',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('listmixer_behaviors_registry_form'),
+    'access arguments' => array('administer list mixer'),
+    'file' => 'includes/listmixer.behaviors.inc',
+  );  
   return $items;
 }
 /**

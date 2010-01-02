@@ -19,6 +19,13 @@ function listmixer_install() {
  */
 function listmixer_uninstall() {
   drupal_uninstall_schema('listmixer');
+  
+  // Get module variables
+  $results = db_query("SELECT v.name FROM {variable} AS v WHERE v.name LIKE '%s%%'", 'listmixer_');
+  // Remove variables
+  while ($row = db_fetch_array($results)) {
+    variable_del($row['name']);
+  }
 }
 
 /**
@@ -55,7 +62,7 @@ function listmixer_schema() {
     'primary key' => array('preset_id'),
   );
   
-  $schema['listmixer_behavior_interaction_settings'] = array(
+  $schema['listmixer_behaviors'] = array(
     'fields' => array(
       'id' => array(
         'description' => t('The primary identifier of behavior interaction setting.'),
@@ -63,14 +70,20 @@ function listmixer_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
-      'interaction_id' => array(
+      'preset_id' => array(
         'description' => t('The id of the interaction.'),
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
       ),
-      'behavior_id' => array(
-        'description' => t('The id of the behavior.'),
+      'behavior_name' => array(
+        'description' => t('The name of the behavior.'),
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'behavior_type' => array(
+        'description' => t('The type of the behavior.'),
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,

@@ -59,7 +59,7 @@ function listmixer_ui_menu() {
   // TODO: Test: check that add page loads, make sure permissions make sense, check that it adds and redirects properly
   $items['admin/build/listmixer/%listmixer_ui_preset'] = array(
     'title callback' => 'listmixer_preset_title_callback',
-    'title arguments' => array('Edit preset: !presetname', 3),
+    'title arguments' => array('Edit preset: !preset_name', 3),
     'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('listmixer_ui_preset_form', 3),
@@ -69,7 +69,7 @@ function listmixer_ui_menu() {
   // TODO: Test: check what happens if no argument, or bad argument
   $items['admin/build/listmixer/%listmixer_ui_preset/delete'] = array( // TODO: i already hate this naming convention, change it
     'title callback' => 'listmixer_preset_title_callback',
-    'title arguments' => array('Delete interaction preset: !presetname', 3),
+    'title arguments' => array('Delete interaction preset: !preset_name', 3),
     'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('listmixer_ui_preset_delete_form', 3),
@@ -79,7 +79,7 @@ function listmixer_ui_menu() {
   // TODO: Test: create deletion tests
   $items['admin/build/listmixer/%listmixer_ui_preset/export'] = array(
     'title callback' => 'listmixer_preset_title_callback',
-    'title arguments' => array('Export interaction preset: !presetname', 3),
+    'title arguments' => array('Export interaction preset: !preset_name', 3),
     'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('listmixer_ui_preset_export_form', 3),
@@ -90,7 +90,7 @@ function listmixer_ui_menu() {
   /*
   $items['admin/build/listmixer/%listmixer_preset/override'] = array(
     'title callback' => 'listmixer_preset_title_callback',
-    'title arguments' => array('Override interaction preset: !presetname', 3),
+    'title arguments' => array('Override interaction preset: !preset_name', 3),
     'file' => 'imagecache_ui.pages.inc',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('listmixer_preset_override_form'),
