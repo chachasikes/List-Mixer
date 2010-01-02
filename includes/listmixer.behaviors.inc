@@ -169,7 +169,9 @@ function listmixer_behaviors_load_form_options($preset = NULL, $type) {
   $behaviors = listmixer_behavior_registry_load();
   
   // Push behavior information into array
-  $behaviors_options = array('' => 'None');  
+  // Add 'none' value
+  // @TODO Should this be NULL, check db structure
+  $behaviors_options = array('none' => '--None--');  
   foreach ($behaviors as $behavior) {
     if($type == $behavior['behavior_type']) {
       $behaviors_options[$behavior['behavior_name']] =  $behavior['behavior_label'];
