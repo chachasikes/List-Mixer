@@ -16,7 +16,7 @@ Install it:
   (Example, add to the left sidebar of garland theme on all pages.)
 * Install the preset for ListMixer.*
 * Create a new BabbleStream node for yourself. 
-
+* Update behavior registry: Visit admin/settings/behaviors/update/registry @TODO: make it so this isn't necessary
 
 @TODO: Finish export function to export interaction and behavior settings, create a mechanism to import them.
 @TODO: Would be easiest if this worked with features and maybe chaos tools but I need to learn how to do that.

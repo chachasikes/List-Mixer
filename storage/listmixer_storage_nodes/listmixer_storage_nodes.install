@@ -26,7 +26,7 @@ function listmixer_storage_nodes_uninstall() {
 function listmixer_storage_nodes_schema() {
  $schema['listmixer_storage_nodes'] = array(
     'fields' => array(
-      'interaction_id' => array(
+      'id' => array(
         'description' => t('The primary identifier for an interaction.'),
         'type' => 'serial',
         'unsigned' => TRUE,
@@ -61,7 +61,7 @@ function listmixer_storage_nodes_schema() {
          For now, just use the block id.
          
          */
-      'interaction_target_id' => array(
+      'interactions_target_id' => array(
         'description' => t('The name of a views block id to be used as a container for storing list data.'),
         'type' => 'text',
         'length' => 255,
@@ -87,20 +87,20 @@ function listmixer_storage_nodes_schema() {
         should appear normally.
         
       */
-      'interaction_source_content_types' => array(
+      'interactions_source_content_types' => array(
         'description' => t('Select which content types will be allowed to be added to the list content type.'),
         'type' => 'text',
         'length' => 255,
         'not null' => TRUE,
       ),
-      'interaction_restrictions' => array(
+      'interactions_restrictions' => array(
         'description' => '<p>' .t('Provide a newline separated list of markup targets to exclude. Enter in jQuery compatible format, ex div.view-favorites, form#edit-image.
         This will restrict interactions on a page to a container or condition.') . '</p>',
         'type' => 'text',
         'length' => 255,
         'not null' => TRUE,
       ),
-      'interaction_inclusions' => array(
+      'interactions_inclusions' => array(
         'description' => '<p>' .t('Provide a newline separated list of markup targets to exclude. Enter in jQuery compatible format, ex div.view-favorites, form#edit-image.
         This will make interaction available to containers and conditions, especially if they were partly overridden by the restrictions.') . '</p>',
         'type' => 'text',
@@ -120,7 +120,7 @@ function listmixer_storage_nodes_schema() {
       */
       
     ),
-    'primary key' => array('interaction_id'),
+    'primary key' => array('id'),
     'indexes' => array(
       'preset_id' => array('preset_id'),
     ),

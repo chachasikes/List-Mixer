@@ -12,23 +12,39 @@
  */
 function listmixer_interactions_form(&$form, &$form_state, $preset = array()) {
   // Based on the type of interaction $preset['preset_method'] load data from the table to be used with the interaction form.  
-  $form['interaction'] = array(
+  $form['interactions'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Interaction'),
+    '#title' => t('Interactions'),
     '#tree' => TRUE,
     '#weight' => 8,
   );
   
   // The preset method is stored as the module name for the storage method.
   if(!empty($form['preset_method']['#default_value'])) {
-    $form_load_function = $form['preset_method']['#default_value'] . '_load_interaction_form';
+    $form_load_function = $form['preset_method']['#default_value'] . '_load_interactions_form';
     if(function_exists($form_load_function)) {
-      $form['interaction'][] = call_user_func($form_load_function, $form, $form_state, $preset);
+      $form['interactions'][] = call_user_func($form_load_function, $form, $form_state, $preset);
     }
   }
 
   return $form;
 }
+
+/**
+ * Call form save function from module
+ */
+function listmixer_interactions_load($preset) {
+  $interactions = array();
+  // The preset method is stored as the module name for the storage method.
+  if(!empty($preset['preset_method'])) {
+    $form_load_function = $preset['preset_method'] . '_listmixer_storage_load';
+    if(function_exists($form_load_function)) {
+      $interactions = call_user_func($form_load_function, $preset);
+    }
+  }
+  return $interactions;
+}
+
 
 /**
  * Call form save function from module

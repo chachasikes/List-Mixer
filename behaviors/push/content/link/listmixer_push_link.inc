@@ -24,7 +24,7 @@ function listmixer_push_link_listmixer_behavior_register() {
 /** 
  * Load javascript functions for this behavior
  */ 
-function listmixer_push_link_listmixer_behavior_load() {
+function listmixer_push_link_listmixer_behaviors_load() {
 
 }
 

@@ -28,7 +28,7 @@ function listmixer_storage_taxonomy_uninstall() {
 function listmixer_storage_taxonomy_schema() {
  $schema['listmixer_storage_taxonomy'] = array(
     'fields' => array(
-      'interaction_id' => array(
+      'id' => array(
         'description' => t('The primary identifier for an interaction.'),
         'type' => 'serial',
         'unsigned' => TRUE,
@@ -41,14 +41,14 @@ function listmixer_storage_taxonomy_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
-      'interaction_term_name' => array(
+      'interactions_term_name' => array(
         'description' => t('The name of a term.'),
         'type' => 'text',
         'length' => 255,
         'not null' => TRUE,
       ),
     ),
-    'primary key' => array('interaction_id'),
+    'primary key' => array('id'),
     'indexes' => array(
       'preset_id' => array('preset_id'),
     ),

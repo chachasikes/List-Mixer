@@ -115,7 +115,8 @@ function listmixer_init() {
   drupal_add_css($path .'/listmixer.css');
 
   // Add all interaction presets and callback settings to every Drupal page.
-  $presets = listmixer_presets();
+  $presets = listmixer_presets(TRUE);
+dpm($presets);
     
   // @TODO: listmixer.js will look for presence of the block_id (or whatever it is supposed to, later)
   // @TODO: presets setup (in listmixer.js) if a block id is found, then the rest of the necessary data is searched for (nid)

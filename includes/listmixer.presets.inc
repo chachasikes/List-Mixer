@@ -43,15 +43,22 @@ function listmixer_presets($reset = FALSE){
     $normal_presets = array();
 
     $result = db_query('SELECT * FROM {listmixer_preset} ORDER BY preset_name');
+    
+    
     while ($preset = db_fetch_array($result)) {
       $presets[$preset['preset_id']] = $preset;
-     // $presets[$preset['preset_id']]['actions'] = listmixer_preset_actions($preset);
+      $presets[$preset['preset_id']]['behaviors'] = listmixer_behaviors_load(array('preset_id' => $preset['preset_id']));
+      $presets[$preset['preset_id']]['interactions'] = listmixer_interactions_load($preset);
+      
       $presets[$preset['preset_id']]['storage'] = LISTMIXER_STORAGE_NORMAL;
 
       // Collect normal preset names so we can skip defaults and mark overrides accordingly
       $normal_presets[$preset['preset_name']] = $preset['preset_id'];
     }
 
+
+    // @TODO We are not using this
+    
     // Collect default presets and allow modules to modify them before they
     // are cached.
     $default_presets = module_invoke_all('listmixer_default_presets');
@@ -214,7 +221,7 @@ function listmixer_ui_preset_form_submit($form, &$form_state) {
       listmixer_behavior_save($form, &$form_state);
   }
   // Save Interactions
-  if (isset($form_state['values']['interaction'])) {
+  if (isset($form_state['values']['interactions'])) {
       listmixer_interactions_save($form, &$form_state);
   } 
 

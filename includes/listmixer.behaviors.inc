@@ -11,10 +11,10 @@
  */
 function listmixer_behaviors_form(&$form, &$form_state, $preset = array()) {
   $preset_behaviors = array();
-  $preset_behaviors['activate'] = listmixer_behavior_load(array('preset_id' => $preset['preset_id'], 'behavior_type' =>'activate'));
-  $preset_behaviors['interact'] = listmixer_behavior_load(array('preset_id' => $preset['preset_id'], 'behavior_type' =>'interact'));
-  $preset_behaviors['push'] =  listmixer_behavior_load(array('preset_id' => $preset['preset_id'], 'behavior_type' =>'push'));
-  $preset_behaviors['submit'] =  listmixer_behavior_load(array('preset_id' => $preset['preset_id'], 'behavior_type' =>'submit'));
+  $preset_behaviors['activate'] = listmixer_behaviors_load(array('preset_id' => $preset['preset_id'], 'behavior_type' =>'activate'));
+  $preset_behaviors['interact'] = listmixer_behaviors_load(array('preset_id' => $preset['preset_id'], 'behavior_type' =>'interact'));
+  $preset_behaviors['push'] =  listmixer_behaviors_load(array('preset_id' => $preset['preset_id'], 'behavior_type' =>'push'));
+  $preset_behaviors['submit'] =  listmixer_behaviors_load(array('preset_id' => $preset['preset_id'], 'behavior_type' =>'submit'));
   $form['behaviors'] = array(
     '#type' => 'fieldset',
     '#title' => t('Behaviors'),
@@ -75,20 +75,20 @@ function listmixer_behaviors_form(&$form, &$form_state, $preset = array()) {
  * @return
  *   a preset array.  In the case of a new preset, 'preset_id' will be populated.
  */
-function listmixer_behavior_load($behavior_key = array()) {
+function listmixer_behaviors_load($behavior_key = array()) {
  
   if(!empty($behavior_key['id'])) {
     $behaviors = array();
     $result = db_query("SELECT * FROM {listmixer_behaviors} WHERE id = %d", $behavior_key['id']);
     while ($row = db_fetch_array($result)) {
-      $behaviors[$row['id']] = $row;
+      $behaviors[$row['behavior_type']] = $row;
     }
   }
   elseif(!empty($behavior_key['preset_id']) && empty($behavior_key['behavior_type'])) {
     $behaviors = array();
     $result = db_query("SELECT * FROM {listmixer_behaviors} WHERE preset_id = %d", $behavior_key['preset_id']);
     while ($row = db_fetch_array($result)) {
-      $behaviors[$row['id']]= $row;
+      $behaviors[$row['behavior_type']] = $row;
     }
   }
   elseif(!empty($behavior_key['preset_id']) && !empty($behavior_key['behavior_type'])) {
@@ -96,8 +96,7 @@ function listmixer_behavior_load($behavior_key = array()) {
     $result = db_query("SELECT * FROM {listmixer_behaviors} WHERE preset_id = %d AND behavior_type = '%s'",  $behavior_key['preset_id'], $behavior_key['behavior_type']);
     while ($row = db_fetch_array($result)) {
       $behaviors[$row['behavior_type']] = $row;
-    }
-    
+    }  
   }
   return $behaviors;
 }
@@ -266,10 +265,35 @@ function listmixer_behaviors_registry_build_behavior($type, $label, $enabled = T
   return $element;
 } 
 
- 
-function listmixer_behaviors_registry_form($form_state, $behavior = array()) {
+/**
+ * Form for updating the registry
+ * @TODO move this from systems to cache system
+ * @TODO change order of how registry is updated. include manual button, but also a function.
+ */ 
+function listmixer_behaviors_registry_form($form_state, $behavior = array(), $op = NULL) {
   $enabled = TRUE;
+  $listmixer_behaviors_registry = listmixer_behaviors_registry_build(); 
+
+  if(function_exists('dpm')){
+    dpm($listmixer_behaviors_registry);
+  }
+  // Registry stores a serialized array of all of the registry settings.  
+  $form['listmixer_behavior_registry'] = array(
+    '#type' => 'textarea',
+    '#title' => t('List Mixer Behavior Registry'),
+    '#description' => t('Registered behaviors'),
+    '#default_value' => serialize($listmixer_behaviors_registry),
+  ); 
+  
+  return system_settings_form($form);
+}
+
+/**
+ * Build behavior registry array
+ */
+function listmixer_behaviors_registry_build() {
   $listmixer_behaviors_registry = array(); 
+  
   /* ACTIVATE functions */     
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Button', $enabled, '', 'button', 'activate_button', 'Activate Button');
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'MouseDown', $enabled, '', 'mousedown', 'activate_mousedown', 'Activate Mousedown');
@@ -293,17 +317,9 @@ function listmixer_behaviors_registry_form($form_state, $behavior = array()) {
   /* SUBMIT functions */
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('submit', 'Submit Button', $enabled, '', 'button', 'submit_button', 'Submit Button');
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('submit', 'Submit Checkbox', $enabled, '', 'checkbox', 'submit_checkbox', 'Submit Checkbox');
-  
-  if(function_exists('dpm')){
-    dpm($listmixer_behaviors_registry);
-  }
-  // Registry stores a serialized array of all of the registry settings.  
-  $form['listmixer_behavior_registry'] = array(
-    '#type' => 'textarea',
-    '#title' => t('List Mixer Behavior Registry'),
-    '#description' => t('Registered behaviors'),
-    '#default_value' => serialize($listmixer_behaviors_registry),
-  );  
-  return system_settings_form($form);
 
+  // Reset preset cache.
+  $presets = listmixer_presets(TRUE);
+  
+  return $listmixer_behaviors_registry;
 }

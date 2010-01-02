@@ -8,8 +8,6 @@
  *******************************************************************************
  */
  
-include('includes/listmixer_storage_nodes.inc'); 
- 
 /**
  *  listmixer_storage_register hook implementation
  *  Return this type to the list of storage methods available to the preset selector.
@@ -24,28 +22,31 @@ function listmixer_storage_nodes_listmixer_storage_register() {
     ),
   );
 }
-
-function listmixer_storage_nodes_load_interaction_form(&$form, &$form_state, $preset = array()) {
+/**
+ * Create form to update interactions
+ */
+function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $preset = array()) {
+  // @TODO: use interaction preset load function instead
   $results = db_query("SELECT * FROM {listmixer_storage_nodes} WHERE preset_id = %d", $preset['preset_id']);
   while ($row = db_fetch_array($results)) {
-    $interaction = $row;
+    $interactions = $row;
   }
 
   $form = array();
   
-  $form['interaction_id'] = array(
+  $form['id'] = array(
     '#type' => 'value',
-    '#value' => $interaction['interaction_id'],
+    '#value' => $interactions['id'],
   );
   $form['preset_id'] = array(
     '#type' => 'value',
     '#value' => $preset['preset_id'],
   );
 
-  $form['interaction_target_id'] = array(
+  $form['interactions_target_id'] = array(
     '#type' => 'textfield',
     '#title' => t('Interaction Target ID'),
-    '#default_value' => $interaction['interaction_target_id'],
+    '#default_value' => $interactions['interactions_target_id'],
     '#description' => t('The name of a views block id to be used as a container for storing list data.'),
     '#weight' => 1,
   );
@@ -54,33 +55,50 @@ function listmixer_storage_nodes_load_interaction_form(&$form, &$form_state, $pr
   foreach ($all_nodetypes as $item) {
     $all_nodetype_options[$item->type] = $item->name;
   }
-  $form['interaction_source_content_types'] = array(
+  $form['interactions_source_content_types'] = array(
       '#type' => 'select',
       '#title' => t('Content types'),
       '#description' => t('Select which content types will be allowed to be added to the list content type.'),
       '#options' => $all_nodetype_options,
-      '#default_value' => $interaction['interaction_source_content_types'],
+      '#default_value' => $interaction['interactions_source_content_types'],
       '#weight' => 2,
   );
-  $form['interaction_restrictions'] = array(
+  $form['interactions_restrictions'] = array(
       '#type' => 'textarea',
       '#title' => t('Restrict Markup'),
       '#description' => '<p>' .t('Provide a newline separated list of markup targets to exclude. Enter in jQuery compatible format, ex div.view-favorites, form#edit-image.
                          This will restrict interactions on a page to a container or condition.') . '</p>',
-      '#default_value' => $interaction['interaction_restrictions'],
+      '#default_value' => $interaction['interactions_restrictions'],
       '#weight' => 3,
   );
-  $form['interaction_inclusions'] = array(
+  $form['interactions_inclusions'] = array(
       '#type' => 'textarea',
       '#title' => t('Include Markup'),
       '#description' => '<p>' .t('Provide a newline separated list of markup targets to exclude. Enter in jQuery compatible format, ex div.view-favorites, form#edit-image.
                         This will make interaction available to containers and conditions, especially if they were partly overridden by the restrictions.') . '</p>',
-      '#default_value' => $interaction['interaction_inclusions'],
+      '#default_value' => $interaction['interactions_inclusions'],
       '#weight' => 4,
   );
   return $form;
 }
-
+/**
+ * Load a behavior or set of behaviors
+ *
+ * @param preset
+ *   an listmixer preset array.
+ * @return
+ *   a preset array.  In the case of a new preset, 'preset_id' will be populated.
+ */
+function listmixer_storage_nodes_listmixer_storage_load($preset) {
+  $interactions = array();
+  if(!empty($preset['preset_id'])) {
+    $result = db_query("SELECT * FROM {listmixer_storage_nodes} WHERE preset_id = %d", $preset['preset_id']);
+    while ($row = db_fetch_array($result)) {
+      $interactions = $row;
+    }
+  } 
+  return $interactions;
+}
 
 /**
  * Save an listmixer preset.
@@ -91,10 +109,10 @@ function listmixer_storage_nodes_load_interaction_form(&$form, &$form_state, $pr
  *   a preset array.  In the case of a new preset, 'preset_id' will be populated.
  */
 function listmixer_storage_nodes_listmixer_storage_save($form, &$form_state) {
-  $form_store = $form_state['values']['interaction'][0];
+  $form_store = $form_state['values']['interactions'][0];
   $form_store['preset_id'] = $form_state['values']['preset_id'];
   // If an id already exists
-  if (!empty($form['interaction'][0]['interaction_id']['#value'])) {
+  if (!empty($form['interactions'][0]['id']['#value'])) {
     drupal_write_record('listmixer_storage_nodes', $form_store, array('preset_id'));
   }
   else {
@@ -110,5 +128,40 @@ function listmixer_storage_nodes_listmixer_storage_delete($preset) {
  db_query("DELETE FROM {listmixer_storage_nodes} WHERE preset_id = '%d'", $preset['preset_id']);
  return TRUE;
 }
+
+
+
+/**
+
+ * 
+ *
+
+function listmixer_interactions_load_interactions($preset, $reset = FALSE) {
+ static $interactions = array();
+
+  // Clear  caches if $reset is TRUE;
+  if ($reset) {
+     $interactions = array();
+    cache_clear_all('listmixer:interactions', 'cache');
+  }
+  // Return presets if the array is populated.
+  if (!empty($interactions)) {
+    return $interactions ;
+  }
+
+  if (($cache = cache_get('listmixer:interactions', 'cache')) && is_array($cache->data)) {
+    $interactions = $cache->data;
+  }
+  else {
+    $normal_interactions = array();
+    cache_set('listmixer:interactions', $normal_interactions);
+  }
+  return $interactions;
+}
+
+function listmixer_interactions_load_block_ids() {
+
+}
+ */
 
  
