@@ -33,7 +33,6 @@ Drupal.behaviors.listmixer = function() {
         // *********** Set up behaviors.
         Drupal.behaviors.listmixer.interact(this);
         Drupal.behaviors.listmixer.activate(this);     
-        Drupal.behaviors.listmixer.push(this);
         Drupal.behaviors.listmixer.submit(this);
 
         
@@ -127,13 +126,17 @@ Drupal.behaviors.listmixer = function() {
         this.interact = '<input></input>';
         
         // @TODO Move to submit behaviors
-        this.submit = '<button>Save</button>'; 
+        this.submit = '<div class="listmixer-push-submit"><button class="button">Save</button></div>'; 
+
         
-        $('#' + this.target_form_id).append(this.interact);
+        $('form#' + this.target_form_id).append(this.interact);
         
         // Add interact button (load js from interact button function)
-        $('#' + this.target_form_id).append(this.submit);
-        
+        $('form#' + this.target_form_id).append(this.submit);
+  
+        // Find the button (which might not be a button) and add a click function to it.
+        $('form#' + this.target_form_id + ' div.listmixer-push-submit').children(".button").click(function(){Drupal.behaviors.listmixer.push(this)});
+   
         // @TODO: connect submit function to push callback and data
         
         // @TODO: add field spec to settings for behaviors
@@ -170,6 +173,7 @@ Drupal.behaviors.listmixer.activate = function(preset) {
 }
 
 Drupal.behaviors.listmixer.push = function(preset) {    
+  alert('Push function called');
   Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'push'); 
   var Push = new Drupal.behaviors.listmixer.Push();
   Push.init();      
@@ -178,7 +182,8 @@ Drupal.behaviors.listmixer.push = function(preset) {
 Drupal.behaviors.listmixer.submit = function(preset) {    
   Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'submit');
   var Submit = new Drupal.behaviors.listmixer.Submit();
-  Submit.init();         
+  Submit.init();
+      
 }
 
 
