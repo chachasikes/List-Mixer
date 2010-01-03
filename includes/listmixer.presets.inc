@@ -43,8 +43,7 @@ function listmixer_presets($reset = TRUE){
   else {
     $normal_presets = array();
 
-    $result = db_query('SELECT * FROM {listmixer_preset} ORDER BY preset_name');
-    
+    $result = db_query('SELECT * FROM {listmixer_preset} ORDER BY preset_name');    
     
     while ($preset = db_fetch_array($result)) {
       $presets[$preset['preset_id']] = $preset;
@@ -178,6 +177,15 @@ function listmixer_ui_preset_form($form_state, $preset = array()) {
     '#description' => t('Choose the method of how list data should be stored.'),
     '#weight' => 2,
   );
+  
+    $form['preset_enabled'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Disable'),
+    '#default_value' => $preset['preset_enabled'],
+    '#description' => t('Preset enabled.'),
+    '#weight' => 10,
+  );
+  
   if(!empty($preset['preset_id'])){
     // Add interactions form.
     $form = listmixer_interactions_form($form, $form_state, $preset); 

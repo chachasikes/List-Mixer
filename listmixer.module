@@ -222,10 +222,12 @@ function listmixer_init() {
   // Build array of settings for Drupal.settings javascript
   $settings = array();
   foreach ($presets as $preset) {
-    $settings[$preset['preset_name']] = $preset;
+    // Only add presets that are enabled
+    if($preset['preset_enabled']) {
+      $settings[$preset['preset_name']] = $preset;
+    }
   }
   drupal_add_js(array('listmixer' => $settings), 'setting');
-
 }
 
 // Theming functions

@@ -10,7 +10,7 @@
  * Create overview
  */ 
 function listmixer_ui_overview() {
-  $header = array(t('Interaction Preset'), t('Storage'), t('Actions'), t('Description'));
+  $header = array(t('Interaction Preset'), t('Storage'), t('Actions'), t('Description'), t('Enabled'));
   $rows = array();
   // Always clear the preset cache on this display.
   foreach (listmixer_presets(TRUE) as $preset) {
@@ -37,6 +37,8 @@ function listmixer_ui_overview() {
     }
     $row[] = implode('&nbsp;&nbsp;&nbsp;&nbsp;', $links);
     $row[] = $preset['preset_description'];
+    // Display Yes or No dependening on what is set in the database
+    $row[] = ($preset['preset_enabled'] == 1) ? t('Yes') : t('No');
     $rows[] = $row;
   }
   $output = theme('table', $header, $rows);

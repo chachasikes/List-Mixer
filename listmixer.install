@@ -58,6 +58,13 @@ function listmixer_schema() {
         'length' => 255,
         'not null' => TRUE,
       ),
+      'preset_enabled' => array(
+        'description' => t('If the preset is enabled or not.'),
+        'type' => 'int',
+        'length' => 10,
+        'default' => 1,
+        'not null' => TRUE,
+      ),
     ),
     'primary key' => array('preset_id'),
   );
