@@ -133,12 +133,17 @@ function listmixer_behaviors_callback($type, $name, $root) {
   if(function_exists($function_name)) {
     $return = call_user_func($function_name, $data);
     if(!empty($return)){
-      // Return nothing, but set a message.
+
       // @TODO: Interactive Growl-like message area? (like in open atrium?)
-      // Redirect will handle how blocks might need to reload.
+      // @TODO: Redirect will handle how blocks might need to reload.
+
       
+      // Take markup from the array passed back from the function, add that markup to the Drupal javascript object.
+      $set_rendered_markup = drupal_add_js('Drupal.behaviors.listmixer.behaviors.return.' . $behavior['behavior_name'] . '("' . $return['message'] . '");', 'inline');  
+      // dpm($set_rendered_markup);
+      // Return nothing, but set a message.
       // @TODO Date is added for testing purposes. May become unneccessary
-      drupal_set_message($return . ' ' . date("F j, Y, g:i:s a"), 'status');
+      drupal_set_message($return['message'] . ' ' . date("F j, Y, g:i:s a"), 'status');
     }
     else{
       drupal_set_message(t('Warning: Data not saved. Source: ' . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');
@@ -178,6 +183,11 @@ function listmixer_init() {
   // Add main javascript file.
   drupal_add_js($path .'/listmixer.js', 'footer');
 
+  // Add behavior JS libraries
+  drupal_add_js($path .'/behaviors/listmixer_behaviors_activate.js', 'footer');
+  drupal_add_js($path .'/behaviors/listmixer_behaviors_push.js', 'footer');
+  drupal_add_js($path .'/behaviors/listmixer_behaviors_submit.js', 'footer');
+  drupal_add_js($path .'/behaviors/listmixer_behaviors_interact.js', 'footer');
   // Add custom style sheet.
   drupal_add_css($path .'/listmixer.css');
 

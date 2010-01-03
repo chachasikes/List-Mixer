@@ -20,8 +20,12 @@ function listmixer_behaviors_listmixer_push_text($data) {
 
   // @TODO Do something with the data.
 
-  // Make a message available.
-  return t('Text saved.');
+  $markup = '';
+  $return = array(
+    'message' => t('Text saved.'), 
+    'markup' => $markup,
+    );
+  return $return;
 } 
 
 function listmixer_behaviors_redirect_listmixer_push_text($data) {
