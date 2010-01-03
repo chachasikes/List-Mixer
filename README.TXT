@@ -164,10 +164,17 @@ Organization of the module
   comes with some demonstrations of interactions.
   
   Examples:
-  *'Babble' (included, in progress)
+  *'Babble' (included)
     Like DevSeed's 'shoutbox' module, which acts like Yammer - 
     intranet twitter. 
     Demonstrates of text field node saving to a list functionality.  
+  *'Photo set' (almost there)
+    Provides a simple view + image content type that demonstrates adding 
+    a checkbox to nodes and allows for subsets of a gallery view to be created 
+    for many users, many lists. 
+    Similar to Flickr Batch Organizer's functionality for making sets 
+    from collections.  
+    
   *'Front Page Featured List' (not yet created)
     Just a simple list of things people might want on a homepage.
     There are about 10,000 ways to do this in Drupal already.
@@ -175,13 +182,8 @@ Organization of the module
   *'To-Do List' (not yet created)
     Provides a text field for adding items to a to-do list. 
     Provides list <li> and weight rearrangement to store reordered fields.
-  *'Photo set' (not yet created)
-    Provides a simple view + image content type that demonstrates adding 
-    a checkbox to nodes and allows for subsets of a gallery view to be created 
-    for many users, many lists. 
-    Similar to Flickr Batch Organizer's functionality for making sets 
-    from collections.
-    
+
+  * Other ideas...  
         
 *List Mixer listmixer.module and includes (/includes)
   The actual listmixer module sets up the administration interface for list
