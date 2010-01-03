@@ -17,15 +17,7 @@ Drupal.behaviors.listmixer = function() {
         // @TODO: Look up with behaviors to apply to the page
         // @TODO: Look up which behaviors to load/apply to the target
         // @TODO: So the idea will be to build a library of buttons and things, and then load them based on the behavior settings.    
-        this.target_form_class = 'class="listmixer-target-form"';   
-        this.target_form_id = 'listmixer-target-'+ this.preset_name;
-        this.target_form = '<form id="' + this.target_form_id + '" ' + this.target_form_class + '></form>';
-  
-        // @TODO Move to interaction behaviors
-        this.interact = '<input></input>';
-        
-        // @TODO Move to submit behaviors
-        this.submit = '<button>Save</button>';
+
         
         // Call interact function, which will interpret which markup should be created.
         // Then javascript functions to apply the interact markup to the page will run.
@@ -38,7 +30,7 @@ Drupal.behaviors.listmixer = function() {
         
         
         
-        // Set up behaviors.
+        // *********** Set up behaviors.
         Drupal.behaviors.listmixer.interact(this);
         Drupal.behaviors.listmixer.activate(this);     
         Drupal.behaviors.listmixer.push(this);
@@ -48,7 +40,7 @@ Drupal.behaviors.listmixer = function() {
         // Add callbacks
         
         
-        // Variables Set by user (could have errors
+        // ************ Variables Set by user (could have errors
         // Get target node id    
 
         // Make sure that a container is found. 
@@ -56,7 +48,7 @@ Drupal.behaviors.listmixer = function() {
         var interactions_container = $.find(this.interactions.interactions_container);
         // Interaction container not found, do nothing, other wise, proceed.
         if(interactions_container == ''){
-          return FALSE;
+          return false;
         }
 
         var interactions_help = this.interactions.interactions_help;
@@ -78,7 +70,7 @@ Drupal.behaviors.listmixer = function() {
         // Set up target restrictions. Make sure it contains markup.  
         // Set to a default of html (the whole page)      
         if(this.interactions.interactions_restrictions === undefined) {
-            this.interactions.interactions_restrictions = 'html';
+            this.interactions.interactions_restrictions = 'body';
         }
         var interactions_restrictions = $(this.interactions.interactions_restrictions).html();
         try {    
@@ -92,40 +84,51 @@ Drupal.behaviors.listmixer = function() {
         // If they are entered, Make sure it contains markup.        
         // This one shouldn't be as strict, because whatever is being
         // looked for might not always be there.
-        var ignore_inclusions;
+        var ignore_inclusions = false;
         if(this.interactions.interactions_inclusions === undefined) {
-            ignore_inclusions = TRUE;
+            ignore_inclusions = true;
         }
         else{
           // @TODO Test this with a good example
           var interactions_inclusions = $(this.interactions.interactions_inclusions).html();
-          if(ignore_inclusions != TRUE) { 
+          if(ignore_inclusions != true) { 
+            /*
+            @TODO Fix, the boolean values are buggy
             try {   
               interactions_inclusions.length > 0;        
             }
             catch(err) {
               alert('ListMixer Error: Inclusions Edit preset: admin/build/listmixer/' + this.preset_id + '');
-            }
+            }*/
           }
         }      
- 
 
-  
- 
- 
- 
- 
-        
-        //alert(target_id);
-        //alert($('div#block-views-babble-block_1').find('div.views-field-nid span.field-content').html()); 
-        //alert(this.interactions.interactions_target_id);
        
-        //alert(this.interactions.interactions_target_id);
-        // Load user entered jQuery (from form, could have errors)
-        // @TODO add try/catch
-        $(this.interactions.interactions_container).append(this.target_form);
-  
-  
+        // Create interaction form in container (necessary?)
+        this.target_form_class = 'class="listmixer-target-form"';   
+        this.target_form_id = 'listmixer-target-'+ this.preset_name;
+        this.target_form = '<form id="' + this.target_form_id + '" ' + this.target_form_class + '></form>';
+ 
+ 
+      
+ 
+        // @TODO set up push saveing function
+        
+        // @TODO make default mousedown function to activate on click (add/build the form)
+        // cause right now it always adds the form, and i don't think it should.
+        
+        // This is restrictions here. If the user just wants a form field in block,
+        // Then they need to set it to just the block. Default is 'body' so 
+        // if nothing is entered, it will show up at the very bottom of the page.
+        $(this.interactions.interactions_restrictions).append(this.target_form);
+        
+        // Here is where we call various behavior functions: Interact.textInteract etc. 
+        // @TODO Move to interaction behaviors
+        this.interact = '<input></input>';
+        
+        // @TODO Move to submit behaviors
+        this.submit = '<button>Save</button>'; 
+        
         $('#' + this.target_form_id).append(this.interact);
         
         // Add interact button (load js from interact button function)
