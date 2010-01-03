@@ -102,11 +102,34 @@ You will want:
 These are the target and source fields and classes.
 
 /*IN PROGRESS
-target_nid = block id  - could be plaintext jQuery class definition. could be real jquery?
+
+Target ID:
+This is the jQuery string that will lead to finding the node id of the node that should be the receptable of pushed content.
+There are two parts, the location, written as a string of the path to the node id:
+Example:
+Location: div#block_views_block_block_1 div.field-field-nid
+
+Evaluation: 
+html()
+value()
+attr()
+data('blah')
+html().is()
+
+@TODO Test that this will work.
+(set inline)
+
+@TODO - to start, just make one field.
+
+
+
 
 interactive div container = could (should be) a block, but doesn't have to be
 
 sources = apply interact behavior to these classes
+restrict/include   (allow plain jQuery for now)
+
+
 
 push_source = values from interact
 
