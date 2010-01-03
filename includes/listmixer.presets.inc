@@ -157,35 +157,32 @@ function listmixer_ui_preset_form($form_state, $preset = array()) {
       '#default_value' => $preset['preset_name'],
       '#description' => t('The namespace is used in URL\'s. Please only use alphanumeric characters, underscores (_), and hyphens (-) for preset names.'),
       '#validate' => array('listmixer_element_preset_name_validate' => array()),
+      '#weight' => 1,
     );
   }
-
   $form['preset_description'] = array(
     '#type' => 'textarea',
     '#title' => t('Preset Description'),
     '#default_value' => $preset['preset_description'],
     '#description' => t('Provide a description of this interaction preset.'),
     '#rows' => 3,
-    '#weight' => 1,
+    '#weight' => 2,
   );
-
   $form['preset_method'] = array(
     '#type' => 'select',
     '#title' => t('Select the type of storage method for this interaction'),
     '#default_value' => $preset['preset_method'],
     '#options' => listmixer_listmixer_storage_register_load(),
     '#description' => t('Choose the method of how list data should be stored.'),
-    '#weight' => 2,
+    '#weight' => 3,
   );
-  
-    $form['preset_enabled'] = array(
+   $form['preset_enabled'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Disable'),
+    '#title' => t('Enabled'),
     '#default_value' => $preset['preset_enabled'],
-    '#description' => t('Preset enabled.'),
-    '#weight' => 10,
-  );
-  
+    '#description' => t('Uncheck box to disable this preset'),
+    '#weight' => 4,
+  ); 
   if (!empty($preset['preset_id'])) {
     // Add interactions form.
     $form = listmixer_interactions_form($form, $form_state, $preset); 
