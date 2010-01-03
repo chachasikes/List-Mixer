@@ -88,6 +88,8 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
       interaction buttons. <br /><br />
       This is not required, but it could be helpful if you have a bunch of views 
       on a page.<br /><br />
+      Also, if you want to put an input field in a block, make the restriction the 
+      same value as the container.
       The default is \'html\'.
       <em>Example: div#sidebar-left</em>
       ') . '</p>',
