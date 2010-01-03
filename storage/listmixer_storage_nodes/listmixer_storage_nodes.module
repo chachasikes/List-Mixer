@@ -74,7 +74,7 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
       '#description' => '<p>' .t('This is the container that ListMixer will look
       for to apply presets. If this div is not on a page, ListMixer will not 
       get loaded.<br /><br />
-      <em>Example: div#block-views-babble-block_1</em><br />
+      <em>Example: div#block-views-babble-block_1</em><br /><br />
       Links and buttons will *not* be available to this container.
       ') . '</p>',
       '#default_value' => $interactions['interactions_container'],
@@ -87,7 +87,7 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
       form elements that will be the most external container to apply 
       interaction buttons. <br /><br />
       This is not required, but it could be helpful if you have a bunch of views 
-      on a page.
+      on a page.<br /><br />
       <em>Example: div#sidebar-left</em>
       ') . '</p>',
       '#default_value' => $interactions['interactions_restrictions'],
@@ -99,7 +99,7 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
       '#description' => '<p>' .t('Create a jQuery compatible string of divs, 
       form elements that will be reset within the restricted container. 
       <br /><br />
-      <em>Example: a.node-link</em><br />
+      <em>Example: a.node-link</em><br /><br />
       This should help in cases where you are trying to restrict to a bunch of 
       different containers, but in doing so have to override elements. 
       @TODO: Update with a better example.
@@ -111,7 +111,8 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
       '#type' => 'textarea',
       '#title' => t('Target Field'),
       '#description' => '<p>' .t('Enter the machine name of the field that
-       should be saved to. Eventually this will be selection based.') . '</p>',
+       should be saved to. Eventually this will be selection based.<br /><br />
+       <em>Example: field_text_babble</em>') . '</p>',
       '#default_value' => $interactions['interactions_target_field'],
       '#weight' => 5,
   );  
