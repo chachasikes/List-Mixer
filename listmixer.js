@@ -131,15 +131,6 @@ Drupal.behaviors.listmixer.submit = function(preset) {
 // in the settings for the preset - make fields that will contain the jquery that will say where everything should go
 
 // for example: 
-/*
-target_nid = block id  - could be plaintext jQuery class definition. could be real jquery?
-interactive div container = could (should be) a block, but doesn't have to be
-sources = apply interact behavior to these classes
-push_source = values from interact
-push_target = machine name   nid + field name + type (checkbox + select fields like in views)
-interact_source = from sources, interact sources evalutated to be true
-activate button text
-
 
 /**
  * Order of execution

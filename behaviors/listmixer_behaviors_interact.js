@@ -1,6 +1,6 @@
 Drupal.behaviors.listmixer.Interact = function() {
   this.init = function() {
-    alert('Interact Library Loaded');
+   // alert('Interact Library Loaded');
   }
 
   /* Library Functions */ 

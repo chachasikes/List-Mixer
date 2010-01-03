@@ -1,6 +1,6 @@
 Drupal.behaviors.listmixer.Push = function() {
   this.init = function() {
-    alert('Push Library Loaded');
+   // alert('Push Library Loaded');
   }
 
   /* Library Functions */  

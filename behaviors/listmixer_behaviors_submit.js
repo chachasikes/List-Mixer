@@ -1,6 +1,6 @@
 Drupal.behaviors.listmixer.Submit = function() {
   this.init = function() {
-    alert('Submit Library Loaded');
+   // alert('Submit Library Loaded');
   }
 
   /* Library Functions */ 

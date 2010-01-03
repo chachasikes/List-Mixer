@@ -1,6 +1,6 @@
 Drupal.behaviors.listmixer.Activate = function() {
   this.init = function() {
-    alert('Activate Library Loaded');
+   // alert('Activate Library Loaded');
   }
 
   /* Library Functions */  
