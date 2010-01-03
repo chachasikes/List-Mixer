@@ -139,15 +139,16 @@ function listmixer_behaviors_callback($type, $name, $root) {
       // @TODO: Interactive Growl-like message area? (like in open atrium?)
       // @TODO: Redirect will handle how blocks might need to reload.
 
-      
+      // @TODO: Rig this up
       // Take markup from the array passed back from the function.
       // Add that markup to the Drupal javascript object.
       $set_rendered_markup = drupal_add_js('Drupal.behaviors.listmixer.behaviors.return.' 
       . $behavior['behavior_name'] . '("' . $return['message'] . '");', 'inline');  
       // dpm($set_rendered_markup);
+      
       // Return nothing, but set a message.
       // @TODO Date is added for testing purposes. May become unneccessary
-      drupal_set_message($return['message'] . ' ' . date("F j, Y, g:i:s a"), 'status');
+      drupal_set_message($return['message'] . ' ' . date("F j, Y, g:i:s a"), 'status', TRUE);
     }
     else{
       drupal_set_message(t('Warning: Data not saved. Source: ' 

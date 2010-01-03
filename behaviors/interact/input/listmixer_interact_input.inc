@@ -4,7 +4,6 @@
 /**
  * This function is called from an ajax menu item (based on arguments)
  * POST data is passed into the function
- *  // Push just stores stuff.
  */
  
 function listmixer_behaviors_listmixer_interact_input($data) {

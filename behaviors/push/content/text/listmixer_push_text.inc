@@ -8,17 +8,24 @@
  */
  
 function listmixer_behaviors_listmixer_push_text($data) {
+
+  dpm($_POST['input']);
+  
     // Target node id
-  $target_node_id = '1'; // @TODO Remove after done testing
+  $target_nid = '1'; // @TODO Remove after done testing
   // Target field id
   $target_field_name = 'field_text_babble'; // @TODO Remove after done testing
-  // User id
+  // @TODO: User id
   $user = '1'; // @TODO Remove after done testing
-  // Timestamp
-    
-  // dpm('data' . $data);
+  // @TODO: Timestamp
 
-  // @TODO Do something with the data.
+  // ***** Process field
+  // If POST data has been set, save the node
+  if (isset($_POST['target_id']) && isset($_POST['input']) && isset($_POST['target_field'])) {
+    $node = node_load($_POST['target_id']);
+    $node->{$_POST['target_field']}[] = array('value' => $_POST['input']);
+    node_save($node);
+  }
 
   $markup = '';
   $return = array(

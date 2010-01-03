@@ -33,9 +33,7 @@ Drupal.behaviors.listmixer = function() {
         // *********** Set up behaviors.
         
         // Clear data on all page loads
-        this.data = {
-          'input' : ''
-        };
+
         Drupal.behaviors.listmixer.interact(this);
         Drupal.behaviors.listmixer.activate(this);     
         Drupal.behaviors.listmixer.submit(this);
@@ -59,7 +57,9 @@ Drupal.behaviors.listmixer = function() {
         // Append help text to interaction container.
         $(interactions_container).append(interactions_help).wrap('<div></div>');
 
-        
+        var target_field = this.interactions.interactions_target_field;
+        // @TODO Add validation function
+
         // Make sure that the target id is a number  
         try {    
            var target_id = $(this.interactions.interactions_target_id).html();
@@ -108,7 +108,7 @@ Drupal.behaviors.listmixer = function() {
         }      
 
        
-        // Create interaction form in container (necessary?)
+        // Create interaction form
         this.target_form_class = 'class="listmixer-target-form"';   
         this.target_form_id = 'listmixer-target-'+ this.preset_name;
         this.target_form = '<form id="' + this.target_form_id + '" ' + this.target_form_class + '></form>';
@@ -141,7 +141,22 @@ Drupal.behaviors.listmixer = function() {
   
         // Find the button (which might not be a button) and add a click function to it.
         var preset = this;
-        $('form#' + this.target_form_id + ' div.listmixer-push-submit').children(".button").click(function(){Drupal.behaviors.listmixer.push(preset); return false;});
+        
+        // Set up data object on page load.
+        this.data = {
+          'input' : '',
+          'target_id' : target_id,
+          'target_field' : target_field
+          // @TODO Collect other data here if necessary
+        };
+        
+        $('form#' + this.target_form_id + ' div.listmixer-push-submit').children(".button").click(function(){
+        Drupal.behaviors.listmixer.push(preset); 
+        
+        //@TODO make sure target_id is available to push function
+        
+         return false;
+        });
    
         // @TODO: connect submit function to push callback and data
         
@@ -191,7 +206,8 @@ Drupal.behaviors.listmixer.push = function(preset) {
   // get value from interact element // @TODO value should be determined in Interact function 
   var input_value = $('form.listmixer-target-form div.listmixer-interact-input input').val();
   // Store values in data object in preset.
-  preset.data = {'input': input_value};
+  preset.data.input = input_value;
+           
   Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'push'); 
   var Push = new Drupal.behaviors.listmixer.Push();
   Push.init(); 
