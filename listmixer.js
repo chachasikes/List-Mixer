@@ -31,6 +31,11 @@ Drupal.behaviors.listmixer = function() {
         
         
         // *********** Set up behaviors.
+        
+        // Clear data on all page loads
+        this.data = {
+          'input' : ''
+        };
         Drupal.behaviors.listmixer.interact(this);
         Drupal.behaviors.listmixer.activate(this);     
         Drupal.behaviors.listmixer.submit(this);
@@ -123,7 +128,7 @@ Drupal.behaviors.listmixer = function() {
         
         // Here is where we call various behavior functions: Interact.textInteract etc. 
         // @TODO Move to interaction behaviors
-        this.interact = '<input></input>';
+        this.interact = '<div class="listmixer-interact-input"><input></input></div>';
         
         // @TODO Move to submit behaviors
         this.submit = '<div class="listmixer-push-submit"><button class="button">Save</button></div>'; 
@@ -135,7 +140,8 @@ Drupal.behaviors.listmixer = function() {
         $('form#' + this.target_form_id).append(this.submit);
   
         // Find the button (which might not be a button) and add a click function to it.
-        $('form#' + this.target_form_id + ' div.listmixer-push-submit').children(".button").click(function(){Drupal.behaviors.listmixer.push(this)});
+        var preset = this;
+        $('form#' + this.target_form_id + ' div.listmixer-push-submit').children(".button").click(function(){Drupal.behaviors.listmixer.push(preset)});
    
         // @TODO: connect submit function to push callback and data
         
@@ -172,20 +178,24 @@ Drupal.behaviors.listmixer.activate = function(preset) {
   Activate.init();         
 }
 
-Drupal.behaviors.listmixer.push = function(preset) {    
-  alert('Push function called');
-  Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'push'); 
-  var Push = new Drupal.behaviors.listmixer.Push();
-  Push.init();      
-}
-
 Drupal.behaviors.listmixer.submit = function(preset) {    
   Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'submit');
   var Submit = new Drupal.behaviors.listmixer.Submit();
   Submit.init();
       
 }
-
+// Only called when user interacts with submit button
+Drupal.behaviors.listmixer.push = function(preset) {    
+  // alert('Push function called');
+  // get value from interact element // @TODO value should be determined in Interact function 
+  var input_value = $('form.listmixer-target-form div.listmixer-interact-input input').val();
+  // Store values in data object in preset.
+  preset.data = {'input': input_value};
+  Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'push'); 
+  var Push = new Drupal.behaviors.listmixer.Push();
+  Push.init(); 
+  // @TODO Check that the callback isn't reloading the page.   
+}
 
 // Connect behaviors
 
@@ -235,6 +245,7 @@ Drupal.behaviors.listmixer.behaviorBuildCallback = function(preset, type) {
   var behavior_name;
   var behavior_function;
   // Create an array of the settings for the current behavior.
+  alert(preset.data.input);
   var behavior = preset.behaviors[type];
   if(behavior.settings != null){
     callback = behavior.settings.behavior_callback;
@@ -245,15 +256,12 @@ Drupal.behaviors.listmixer.behaviorBuildCallback = function(preset, type) {
     // @TODO a callback is called. a menu item figures out who the callback is for, looks up the registry and calls the appropriate function.
     // Grab data from somewhere that's stored somewhere else.
     // The data might need to be cleaned up if the funciton is used several times before submitting  
-    var data_label = 'data_' + behavior_name;
-    //$(this).attr('drag_list_value')
-    //var data = {data_label : 'test data content'};
-    var data = { name: "John", time: "2pm" };
-       
+
+
     // Ajax call to callback for this behavior.
     // @TODO currently this runs automatically, make push happen after submit behavior is activated.
     if(callback != null) {
-      $.post(callback, data, Drupal.behaviors.listmixer.redirect(preset, data));
+      $.post(callback, preset.data, Drupal.behaviors.listmixer.redirect(preset, preset.data));
     }
   }
   return false; 
@@ -279,15 +287,15 @@ Drupal.behaviors.listmixer.behaviorSubmitCallback = function(preset, type) {
     // @TODO a callback is called. a menu item figures out who the callback is for, looks up the registry and calls the appropriate function.
     // Grab data from somewhere that's stored somewhere else.
     // The data might need to be cleaned up if the funciton is used several times before submitting  
-    var data_label = 'data_' + behavior_name;
+    //var data_label = 'data_' + behavior_name;
     //$(this).attr('drag_list_value')
-    //var data = {data_label : 'test data content'};
-    var data = { name: "John", time: "2pm" };
+    var data = {data_label : 'test data content'};
+
        
     // Ajax call to callback for this behavior.
     // @TODO currently this runs automatically, make push happen after submit behavior is activated.
     if(callback != null) {
-      $.post(callback, data, Drupal.behaviors.listmixer.redirect(preset, data));
+      $.post(callback, data, Drupal.behaviors.listmixer.redirect(preset, preset.data));
     }
   }
   return false; 
