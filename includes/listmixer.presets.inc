@@ -171,7 +171,7 @@ function listmixer_ui_preset_form($form_state, $preset = array()) {
 
   $form['preset_method'] = array(
     '#type' => 'select',
-    '#title' => t('Select the type of storage method for this interaction.'),
+    '#title' => t('Select the type of storage method for this interaction'),
     '#default_value' => $preset['preset_method'],
     '#options' => listmixer_listmixer_storage_register_load(),
     '#description' => t('Choose the method of how list data should be stored.'),
