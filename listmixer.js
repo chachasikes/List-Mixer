@@ -7,7 +7,6 @@
 
 Drupal.behaviors.listmixer = function(){
   Drupal.behaviors.listmixer_init();
-  Drupal.behaviors.listmixer.listmixer_push_text();
 }
 
 Drupal.behaviors.listmixer_init = function() {
@@ -44,14 +43,13 @@ Drupal.behaviors.listmixer_init = function() {
       // But if the interaction type was checkboxes, then the markup would be applied
       // to the content source (input). So, for example, if we were allowing links
       // on a page to become clickable, it would apply the interaction to the whole page.
-      // Still thinking out the details.
-      
-      Drupal.behaviors.listmixer.interact(this);
-      
-      Drupal.behaviors.listmixer.push(this);
-      
-   
+      // Still thinking out the details.   
         
+      Drupal.behaviors.listmixer.interact(this);
+      Drupal.behaviors.listmixer.activate(this);     
+      Drupal.behaviors.listmixer.push(this);
+     // Drupal.behaviors.listmixer.submit(this);
+      
       // Drupal.behaviors.listmixer.submit(this);
       
       // Add callbacks
@@ -86,24 +84,29 @@ Drupal.behaviors.listmixer_init = function() {
  
  
 // Build functions that load the behaviors.
-Drupal.behaviors.listmixer.activate = function(preset) {    
-  Drupal.behaviors.listmixer.behaviorCreate(preset, 'activate');        
+// Load javascript behavior libraries.
+Drupal.behaviors.listmixer.interact = function(preset) {    
+  Drupal.behaviors.listmixer.behaviorCreate(preset, 'interact');
+  var Interact = new Drupal.behaviors.listmixer.Interact();
+  Interact.init();        
 }
 
-Drupal.behaviors.listmixer.interact = function(preset) {    
-  Drupal.behaviors.listmixer.behaviorCreate(preset, 'interact');        
+Drupal.behaviors.listmixer.activate = function(preset) {    
+  Drupal.behaviors.listmixer.behaviorCreate(preset, 'activate');
+  var Activate = new Drupal.behaviors.listmixer.Activate();
+  Activate.init();         
 }
 
 Drupal.behaviors.listmixer.push = function(preset) {    
   Drupal.behaviors.listmixer.behaviorCreate(preset, 'push'); 
- 
- // Load javascript behavior for this behavior.
   var Push = new Drupal.behaviors.listmixer.Push();
   Push.init();      
 }
 
 Drupal.behaviors.listmixer.submit = function(preset) {    
-  Drupal.behaviors.listmixer.behaviorCreate(preset, 'submit');        
+  Drupal.behaviors.listmixer.behaviorCreate(preset, 'submit');
+  var Submit = new Drupal.behaviors.listmixer.Submit();
+  Submit.init();         
 }
 // Load javascript includes, set up the callbacks for all behaviors.
 Drupal.behaviors.listmixer.behaviorCreate = function(preset, type) {
@@ -111,34 +114,31 @@ Drupal.behaviors.listmixer.behaviorCreate = function(preset, type) {
   var type = type;
   var preset_id = preset.preset_id;
   var callback;
-  var javascript_include;
   var behavior_name;
+  var behavior_function;
   // Create an array of the settings for the current behavior.
   var behavior = preset.behaviors[type];
-  callback = Drupal.settings.basePath + behavior.settings.behavior_callback;
-  javascript_include = behavior.settings.behavior_javascript;
-  behavior_name =  behavior.settings.behavior_name;
+  if(behavior.settings != null){
+    callback = Drupal.settings.basePath + behavior.settings.behavior_callback;
+    behavior_function = behavior.settings.behavior_function;
+    behavior_name =  behavior.settings.behavior_name;
+ 
 
-  // Load data from settings array contained in each behavior.
-  // @TODO a callback is called. a menu item figures out who the callback is for, looks up the registry and calls the appropriate function.
-  // Grab data from somewhere that's stored somewhere else.
-  // The data might need to be cleaned up if the funciton is used several times before submitting
-  
-  var data_label = 'data_' + behavior_name;
-  //$(this).attr('drag_list_value')
-  //var data = {data_label : 'test data content'};
-  var data = { name: "John", time: "2pm" };
 
-  
-  /*if(javascript_include != null) {
-    $.getScript(javascript_include, function(){ Drupal.behaviors.listmixer() });
-  }*/
-     
-  // Ajax call to callback for this behavior.
-  // @TODO currently this runs automatically, make push happen after submit behavior is activated.
-
-  if(callback != null) {
-    $.post(callback, data, Drupal.behaviors.listmixer.redirect(preset, data));
+    // Load data from settings array contained in each behavior.
+    // @TODO a callback is called. a menu item figures out who the callback is for, looks up the registry and calls the appropriate function.
+    // Grab data from somewhere that's stored somewhere else.
+    // The data might need to be cleaned up if the funciton is used several times before submitting  
+    var data_label = 'data_' + behavior_name;
+    //$(this).attr('drag_list_value')
+    //var data = {data_label : 'test data content'};
+    var data = { name: "John", time: "2pm" };
+       
+    // Ajax call to callback for this behavior.
+    // @TODO currently this runs automatically, make push happen after submit behavior is activated.
+    if(callback != null) {
+      $.post(callback, data, Drupal.behaviors.listmixer.redirect(preset, data));
+    }
   }
   return false; 
 }
