@@ -4,22 +4,9 @@
 /**
  * This function is called from an ajax menu item (based on arguments)
  * POST data is passed into the function
- *  // Push just stores stuff.
  */
  
 function listmixer_behaviors_listmixer_push_text($data) {
-
-  dpm($_POST['input']);
-  
-    // Target node id
-  $target_nid = '1'; // @TODO Remove after done testing
-  // Target field id
-  $target_field_name = 'field_text_babble'; // @TODO Remove after done testing
-  // @TODO: User id
-  $user = '1'; // @TODO Remove after done testing
-  // @TODO: Timestamp
-
-  // ***** Process field
   // If POST data has been set, save the node
   if (isset($_POST['target_id']) && isset($_POST['input']) && isset($_POST['target_field'])) {
     $node = node_load($_POST['target_id']);

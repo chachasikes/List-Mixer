@@ -128,13 +128,13 @@ function listmixer_behaviors_callback($type, $name, $root) {
 
   // Load include from registry.
   $behavior = listmixer_behavior_registry_load($root);
-  if(file_exists($behavior['behavior_include'])){
+  if (file_exists($behavior['behavior_include'])) {
     include($behavior['behavior_include']);
   }
     
-  if(function_exists($function_name)) {
+  if (function_exists($function_name)) {
     $return = call_user_func($function_name, $data);
-    if(!empty($return)){
+    if (!empty($return)) {
 
       // @TODO: Interactive Growl-like message area? (like in open atrium?)
       // @TODO: Redirect will handle how blocks might need to reload.
@@ -150,19 +150,19 @@ function listmixer_behaviors_callback($type, $name, $root) {
       // @TODO Date is added for testing purposes. May become unneccessary
       // If debugging messages allowed, set message every time a behavior callback is executed.
       // @TODO actually, only 1 message is set, it seems, not several as one might expect.
-      if(variable_get('listmixer_debugging', '1')) {
+      if (variable_get('listmixer_debugging', '1')) {
         drupal_set_message($return['message'] . ' ' . date("F j, Y, g:i:s a"), 'status', TRUE);
       }
     }
     else{
-      if(variable_get('listmixer_debugging', '1')) {
+      if (variable_get('listmixer_debugging', '1')) {
         drupal_set_message(t('Warning: Data not saved. Source: ' 
         . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');
       }
     }
   } 
   else{
-      if(variable_get('listmixer_debugging', '1')) {
+      if (variable_get('listmixer_debugging', '1')) {
         drupal_set_message(t('Warning: Data not saved. Source: ' 
         . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');
       }
@@ -203,6 +203,7 @@ function listmixer_init() {
   drupal_add_js($path .'/behaviors/listmixer_behaviors_push.js', 'footer');
   drupal_add_js($path .'/behaviors/listmixer_behaviors_submit.js', 'footer');
   drupal_add_js($path .'/behaviors/listmixer_behaviors_interact.js', 'footer');
+  
   // Add custom style sheet.
   drupal_add_css($path .'/listmixer.css');
 
@@ -223,7 +224,7 @@ function listmixer_init() {
   $settings = array();
   foreach ($presets as $preset) {
     // Only add presets that are enabled
-    if($preset['preset_enabled']) {
+    if ($preset['preset_enabled']) {
       $settings[$preset['preset_name']] = $preset;
     }
   }

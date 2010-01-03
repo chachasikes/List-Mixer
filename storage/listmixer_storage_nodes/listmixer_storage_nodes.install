@@ -46,33 +46,33 @@ function listmixer_storage_nodes_schema() {
         'not null' => TRUE,
       ),
       'interactions_restrictions' => array(
-        'description' => '<p>' .t('Provide a newline separated list of markup targets to exclude. Enter in jQuery compatible format, ex div.view-favorites, form#edit-image.
+        'description' => '<p>' . t('Provide a newline separated list of markup targets to exclude. Enter in jQuery compatible format, ex div.view-favorites, form#edit-image.
         This will restrict interactions on a page to a container or condition.') . '</p>',
         'type' => 'text',
         'length' => 0,
         'not null' => TRUE,
       ),
       'interactions_inclusions' => array(
-        'description' => '<p>' .t('Provide a newline separated list of markup targets to exclude. Enter in jQuery compatible format, ex div.view-favorites, form#edit-image.
+        'description' => '<p>' . t('Provide a newline separated list of markup targets to exclude. Enter in jQuery compatible format, ex div.view-favorites, form#edit-image.
         This will make interaction available to containers and conditions, especially if they were partly overridden by the restrictions.') . '</p>',
         'type' => 'text',
         'length' => 0,
         'not null' => TRUE,
       ),
       'interactions_container' => array(
-        'description' => '<p>' .t('Container text.') . '</p>',
+        'description' => '<p>' . t('Container text.') . '</p>',
         'type' => 'text',
         'length' => 0,
         'not null' => TRUE,
       ),
       'interactions_target_field' => array(
-        'description' => '<p>' .t('Target Field.') . '</p>',
+        'description' => '<p>' . t('Target Field.') . '</p>',
         'type' => 'text',
         'length' => 0,
         'not null' => TRUE,
       ),     
       'interactions_help' => array(
-        'description' => '<p>' .t('Help text.') . '</p>',
+        'description' => '<p>' . t('Help text.') . '</p>',
         'type' => 'text',
         'length' => 0,
         'not null' => TRUE,

@@ -22,7 +22,7 @@ function listmixer_preset($preset_id, $reset = FALSE) {
  * Load list of all presets
  * @TODO: Cache needs to be updated when the edit page is loaded
  */
-function listmixer_presets($reset = TRUE){
+function listmixer_presets($reset = TRUE) {
   static $presets = array();
 
   // Clear  caches if $reset is TRUE;
@@ -186,7 +186,7 @@ function listmixer_ui_preset_form($form_state, $preset = array()) {
     '#weight' => 10,
   );
   
-  if(!empty($preset['preset_id'])){
+  if (!empty($preset['preset_id'])) {
     // Add interactions form.
     $form = listmixer_interactions_form($form, $form_state, $preset); 
     // Add behaviors form.

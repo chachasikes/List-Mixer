@@ -11,10 +11,10 @@
  */
 function listmixer_behaviors_form(&$form, &$form_state, $preset = array()) {
   $preset_behaviors = array();
-  $preset_behaviors['activate'] = listmixer_behaviors_load(array('preset_id' => $preset['preset_id'], 'behavior_type' =>'activate'));
-  $preset_behaviors['interact'] = listmixer_behaviors_load(array('preset_id' => $preset['preset_id'], 'behavior_type' =>'interact'));
-  $preset_behaviors['push'] =  listmixer_behaviors_load(array('preset_id' => $preset['preset_id'], 'behavior_type' =>'push'));
-  $preset_behaviors['submit'] =  listmixer_behaviors_load(array('preset_id' => $preset['preset_id'], 'behavior_type' =>'submit'));
+  $preset_behaviors['activate'] = listmixer_behaviors_load( array('preset_id' => $preset['preset_id'], 'behavior_type' => 'activate'));
+  $preset_behaviors['interact'] = listmixer_behaviors_load( array('preset_id' => $preset['preset_id'], 'behavior_type' => 'interact'));
+  $preset_behaviors['push'] =  listmixer_behaviors_load( array('preset_id' => $preset['preset_id'], 'behavior_type' => 'push'));
+  $preset_behaviors['submit'] =  listmixer_behaviors_load( array('preset_id' => $preset['preset_id'], 'behavior_type' => 'submit'));
   $form['behaviors'] = array(
     '#type' => 'fieldset',
     '#title' => t('Behaviors'),
@@ -27,8 +27,7 @@ function listmixer_behaviors_form(&$form, &$form_state, $preset = array()) {
     '#default_value' => $preset_behaviors['activate']['activate']['behavior_name'],
     '#options' => listmixer_behaviors_load_form_options($preset, 'activate'),
     '#description' => t('Choose activate behaviors.'),
-    '#id'=> 'activate-' . $preset_behaviors['activate']['activate']['id'] 
-            . ' interaction-preset-id-' . $preset['preset_id'] . ' activate-name-' . $preset_behaviors['activate']['activate']['behavior_name'],
+    '#id' => 'activate-' . $preset_behaviors['activate']['activate']['id'] . ' interaction-preset-id-' . $preset['preset_id'] . ' activate-name-' . $preset_behaviors['activate']['activate']['behavior_name'], 
     'id' => array('#value' => $preset_behaviors['activate']['activate']['id']),
     'behavior_name' => array('#value' => $preset_behaviors['activate']['activate']['behavior_name']),
   );
@@ -38,7 +37,7 @@ function listmixer_behaviors_form(&$form, &$form_state, $preset = array()) {
     '#default_value' => $preset_behaviors['push']['push']['behavior_name'],
     '#options' => listmixer_behaviors_load_form_options($preset, 'push'),
     '#description' => t('Choose push behaviors.'),
-    '#id'=> 'push-' . $preset_behaviors['push']['push']['id'] 
+    '#id' => 'push-' . $preset_behaviors['push']['push']['id'] 
             . ' interaction-preset-id-' . $preset['preset_id'] . ' push-name-' . $preset_behaviors['push']['push']['behavior_name'],
     'id' => array('#value' => $preset_behaviors['push']['push']['id']),
     'behavior_name' => array('#value' => $preset_behaviors['push']['push']['behavior_name']),
@@ -49,7 +48,7 @@ function listmixer_behaviors_form(&$form, &$form_state, $preset = array()) {
     '#default_value' => $preset_behaviors['interact']['interact']['behavior_name'],
     '#options' => listmixer_behaviors_load_form_options($preset, 'interact'),
     '#description' => t('Choose interact behaviors.'),
-    '#id'=> 'interact-' . $preset_behaviors['interact']['interact']['id'] 
+    '#id' => 'interact-' . $preset_behaviors['interact']['interact']['id'] 
             . ' interaction-preset-id-' . $preset['preset_id'] . ' interact-name-' . $preset_behaviors['interact']['interact']['behavior_name'],
     'id' => array('#value' => $preset_behaviors['interact']['interact']['id']),
     'behavior_name' => array('#value' => $preset_behaviors['interact']['interact']['behavior_name']),
@@ -60,7 +59,7 @@ function listmixer_behaviors_form(&$form, &$form_state, $preset = array()) {
     '#default_value' => $preset_behaviors['submit']['submit']['behavior_name'],
     '#options' => listmixer_behaviors_load_form_options($preset, 'submit'),
     '#description' => t('Choose submit behaviors.'),
-    '#id'=> 'submit-' . $preset_behaviors['submit']['submit']['id'] 
+    '#id' => 'submit-' . $preset_behaviors['submit']['submit']['id'] 
             . ' submition-preset-id-' . $preset['preset_id'] . ' submit-name-' . $preset_behaviors['submit']['submit']['behavior_name'],
     'id' => array('#value' => $preset_behaviors['submit']['submit']['id']),
     'behavior_name' => array('#value' => $preset_behaviors['submit']['submit']['behavior_name']),
@@ -77,21 +76,21 @@ function listmixer_behaviors_form(&$form, &$form_state, $preset = array()) {
  */
 function listmixer_behaviors_load($behavior_key = array()) {
  
-  if(!empty($behavior_key['id'])) {
+  if (!empty($behavior_key['id'])) {
     $behaviors = array();
     $result = db_query("SELECT * FROM {listmixer_behaviors} WHERE id = %d", $behavior_key['id']);
     while ($row = db_fetch_array($result)) {
       $behaviors[$row['behavior_type']] = $row;
     }
   }
-  elseif(!empty($behavior_key['preset_id']) && empty($behavior_key['behavior_type'])) {
+  elseif (!empty($behavior_key['preset_id']) && empty($behavior_key['behavior_type'])) {
     $behaviors = array();
     $result = db_query("SELECT * FROM {listmixer_behaviors} WHERE preset_id = %d", $behavior_key['preset_id']);
     while ($row = db_fetch_array($result)) {
       $behaviors[$row['behavior_type']] = $row;
     }
   }
-  elseif(!empty($behavior_key['preset_id']) && !empty($behavior_key['behavior_type'])) {
+  elseif (!empty($behavior_key['preset_id']) && !empty($behavior_key['behavior_type'])) {
     $behaviors = array();
     $result = db_query("SELECT * FROM {listmixer_behaviors} WHERE preset_id = %d AND behavior_type = '%s'",  $behavior_key['preset_id'], $behavior_key['behavior_type']);
     while ($row = db_fetch_array($result)) {
@@ -202,7 +201,7 @@ function listmixer_behaviors_load_form_options($preset = NULL, $type) {
   // @TODO Should this be NULL, check db structure
   $behaviors_options = array('none' => '--None--');  
   foreach ($behaviors as $behavior) {
-    if($type == $behavior['behavior_type']) {
+    if ($type == $behavior['behavior_type']) {
       $behaviors_options[$behavior['behavior_name']] =  $behavior['behavior_label'];
     }
   }
@@ -215,8 +214,8 @@ function listmixer_behaviors_load_form_options($preset = NULL, $type) {
 function listmixer_behavior_registry_load($name = NULL) {
   // Load and deserialize behavior registry
   $behaviors = unserialize(variable_get('listmixer_behavior_registry', array('listmixer')));
-  if(!empty($name)) {
-    foreach($behaviors as $key => $behavior) {
+  if (!empty($name)) {
+    foreach ($behaviors as $key => $behavior) {
       if ($behaviors[$key]['behavior_name'] == $name) {
         $behavior_id = $key;
       }
@@ -282,7 +281,7 @@ function listmixer_behaviors_registry_form($form_state, $behavior = array(), $op
   $enabled = TRUE;
   $listmixer_behaviors_registry = listmixer_behaviors_registry_build(); 
 
-  if(function_exists('dpm')){
+  if (function_exists('dpm')) {
     dpm($listmixer_behaviors_registry);
   }
 
