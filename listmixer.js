@@ -115,8 +115,8 @@ Drupal.behaviors.listmixer = function() {
         // Create interaction form
         this.target_form_class = 'class="listmixer-target-form"';   
         this.target_form_id = 'listmixer-target-'+ this.preset_name;
-       // this.target_form = '<form id="' + this.target_form_id + '" ' + this.target_form_class + '></form>';
-        this.target_form = '<div ' + this.target_form_class + '>DIV</div>';
+        this.target_form = '<form id="' + this.target_form_id + '" ' + this.target_form_class + '></form>';
+        // this.target_form = '<div ' + this.target_form_class + '>DIV</div>';
   
         var form = this.target_form;
         var container = this.interactions.interactions_container;
