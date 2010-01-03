@@ -216,39 +216,7 @@ function listmixer_init() {
     $settings[$preset['preset_name']] = $preset;
   }
   drupal_add_js(array('listmixer' => $settings), 'setting');
-  listmixer_set_javascript_variables($presets);
-}
-/** 
- * Set up jQuery
- * Load the preset id. Load the stored interaction data.
- * Read each of the storage fields 
- * (@TODO make a hook for nodes storage)
 
- * Load field data
- * Process it if necessary, add more jQuery for partially entered fields.
- * @TODO Make an alert if it causes a JS error?
-
- * Put the jquery into a real jQuery container, and set it inline.
- * In some cases, run the jQuery enough to set a variable and make
- * the variable availabel to javascript.
- * 
- * @TODO This can be moved to node storage and returned with the interaction
- */
-function listmixer_set_javascript_variables($presets) {
-  
-  foreach($presets as $preset) {
-
-    
-    $interaction = $preset['interactions'];
-    dpm($interaction);
-    //interactions_target_id
-  }
-  
-  
-  //$set_rendered_markup = drupal_add_js('Drupal.behaviors.listmixer.behaviors.return.' 
-  //. $behavior['behavior_name'] . '("' . $return['message'] . '");', 'inline');  
-  
-  //dpm($set_rendered_markup);
 }
 
 // Theming functions
