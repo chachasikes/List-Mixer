@@ -27,3 +27,5 @@ function listmixer_admin_settings() {
 
 
 // @TODO: get list of allowed behaviors, all selected by default, able to turn unwanted ones off
+
+// @TODO: add controls to show hide debugging messages

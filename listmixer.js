@@ -151,11 +151,14 @@ Drupal.behaviors.listmixer = function() {
         };
         
         $('form#' + this.target_form_id + ' div.listmixer-push-submit').children(".button").click(function(){
-        Drupal.behaviors.listmixer.push(preset); 
+          Drupal.behaviors.listmixer.push(preset); 
         
-        //@TODO make sure target_id is available to push function
-        
-         return false;
+          //@TODO make sure target_id is available to push function
+          // If page stayed loaded, clear out the data array
+          preset.data = {};
+          $('form.listmixer-target-form div.listmixer-interact-input input').val('');
+          
+          return false;
         });
    
         // @TODO: connect submit function to push callback and data
