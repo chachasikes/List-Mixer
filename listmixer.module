@@ -148,16 +148,24 @@ function listmixer_behaviors_callback($type, $name, $root) {
       
       // Return nothing, but set a message.
       // @TODO Date is added for testing purposes. May become unneccessary
-      drupal_set_message($return['message'] . ' ' . date("F j, Y, g:i:s a"), 'status', TRUE);
+      // If debugging messages allowed, set message every time a behavior callback is executed.
+      // @TODO actually, only 1 message is set, it seems, not several as one might expect.
+      if(variable_get('listmixer_debugging', '1')) {
+        drupal_set_message($return['message'] . ' ' . date("F j, Y, g:i:s a"), 'status', TRUE);
+      }
     }
     else{
-      drupal_set_message(t('Warning: Data not saved. Source: ' 
-      . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');
+      if(variable_get('listmixer_debugging', '1')) {
+        drupal_set_message(t('Warning: Data not saved. Source: ' 
+        . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');
+      }
     }
   } 
   else{
-      drupal_set_message(t('Warning: Data not saved. Source: ' 
-      . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');;
+      if(variable_get('listmixer_debugging', '1')) {
+        drupal_set_message(t('Warning: Data not saved. Source: ' 
+        . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');
+      }
   }
 }
 
