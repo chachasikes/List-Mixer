@@ -31,7 +31,6 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
   while ($row = db_fetch_array($results)) {
     $interactions = $row;
   }
-
   $form = array();
   
   $form['id'] = array(
@@ -44,32 +43,33 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
   );
 
   $form['interactions_target_id'] = array(
-    '#type' => 'textfield',
+    '#type' => 'textarea',
     '#title' => t('Interaction Target ID'),
     '#default_value' => $interactions['interactions_target_id'],
     '#description' => t('The name of a views block id to be used as a container for storing list data.'),
     '#weight' => 1,
   );
+ 
   $all_nodetypes = node_get_types();
   $all_nodetype_options = array();
   foreach ($all_nodetypes as $item) {
     $all_nodetype_options[$item->type] = $item->name;
   }
-  /*$form['interactions_source_content_types'] = array(
+  $form['interactions_source_content_types'] = array(
       '#type' => 'select',
       '#title' => t('Content types'),
       '#description' => t('Select which content types will be allowed to be added to the list content type. This won\'t do much just yet, but might help with permissions'),
       '#options' => $all_nodetype_options,
-      '#default_value' => $interaction['interactions_source_content_types'],
+      '#default_value' => $interactions['interactions_source_content_types'],
       '#weight' => 2,
   );
-  */
+
   $form['interactions_restrictions'] = array(
       '#type' => 'textarea',
       '#title' => t('Restrict Markup'),
       '#description' => '<p>' .t('Provide a newline separated list of markup targets to exclude. Enter in jQuery compatible format, ex div.view-favorites, form#edit-image.
                          This will restrict interactions on a page to a container or condition.') . '</p>',
-      '#default_value' => $interaction['interactions_restrictions'],
+      '#default_value' => $interactions['interactions_restrictions'],
       '#weight' => 3,
   );
   $form['interactions_inclusions'] = array(
@@ -77,21 +77,21 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
       '#title' => t('Include Markup'),
       '#description' => '<p>' .t('Provide a newline separated list of markup targets to exclude. Enter in jQuery compatible format, ex div.view-favorites, form#edit-image.
                         This will make interaction available to containers and conditions, especially if they were partly overridden by the restrictions.') . '</p>',
-      '#default_value' => $interaction['interactions_inclusions'],
+      '#default_value' => $interactions['interactions_inclusions'],
       '#weight' => 4,
   );
   $form['interactions_container'] = array(
       '#type' => 'textarea',
       '#title' => t('Container'),
       '#description' => '<p>' .t('Description') . '</p>',
-      '#default_value' => $interaction['interactions_inclusions'],
+      '#default_value' => $interactions['interactions_container'],
       '#weight' => 0,
   );
   $form['interactions_help'] = array(
       '#type' => 'textarea',
       '#title' => t('Help Text'),
       '#description' => '<p>' .t('Help text.') . '</p>',
-      '#default_value' => $interaction['interactions_inclusions'],
+      '#default_value' => $interactions['interactions_help'],
       '#weight' => 10,
   );
   return $form;
