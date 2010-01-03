@@ -141,7 +141,7 @@ Drupal.behaviors.listmixer = function() {
   
         // Find the button (which might not be a button) and add a click function to it.
         var preset = this;
-        $('form#' + this.target_form_id + ' div.listmixer-push-submit').children(".button").click(function(){Drupal.behaviors.listmixer.push(preset)});
+        $('form#' + this.target_form_id + ' div.listmixer-push-submit').children(".button").click(function(){Drupal.behaviors.listmixer.push(preset); return false;});
    
         // @TODO: connect submit function to push callback and data
         
@@ -156,6 +156,7 @@ Drupal.behaviors.listmixer = function() {
         // semantic view
         // make user add markup with node id -- this ensure they have ultimate control * (definite option)
         // theme preprocess function all nodes add class listmixer-node-#nid
+        return false;
       }
     });
   }
@@ -194,7 +195,8 @@ Drupal.behaviors.listmixer.push = function(preset) {
   Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'push'); 
   var Push = new Drupal.behaviors.listmixer.Push();
   Push.init(); 
-  // @TODO Check that the callback isn't reloading the page.   
+  // @TODO Check that the callback isn't reloading the page. 
+  return false;  
 }
 
 // Connect behaviors
@@ -245,7 +247,7 @@ Drupal.behaviors.listmixer.behaviorBuildCallback = function(preset, type) {
   var behavior_name;
   var behavior_function;
   // Create an array of the settings for the current behavior.
-  alert(preset.data.input);
+  //alert(preset.data.input);
   var behavior = preset.behaviors[type];
   if(behavior.settings != null){
     callback = behavior.settings.behavior_callback;
@@ -262,9 +264,10 @@ Drupal.behaviors.listmixer.behaviorBuildCallback = function(preset, type) {
     // @TODO currently this runs automatically, make push happen after submit behavior is activated.
     if(callback != null) {
       $.post(callback, preset.data, Drupal.behaviors.listmixer.redirect(preset, preset.data));
+      return false;
     }
   }
-  return false; 
+  return false;
 }
 // Load javascript includes, set up the callbacks for all behaviors.
 Drupal.behaviors.listmixer.behaviorSubmitCallback = function(preset, type) {
@@ -305,6 +308,7 @@ Drupal.behaviors.listmixer.Behavior = function(){
   var Behavior = new Behavior();
   //Behavior.init();
   //return Behavior;
+  return false;
 }
 
 Drupal.behaviors.listmixer.redirect = function(preset, data) {
