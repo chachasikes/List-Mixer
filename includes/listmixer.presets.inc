@@ -20,8 +20,9 @@ function listmixer_preset($preset_id, $reset = FALSE) {
 
 /*
  * Load list of all presets
+ * @TODO: Cache needs to be updated when the edit page is loaded
  */
-function listmixer_presets($reset = FALSE){
+function listmixer_presets($reset = TRUE){
   static $presets = array();
 
   // Clear  caches if $reset is TRUE;

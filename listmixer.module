@@ -90,7 +90,8 @@ function listmixer_menu() {
     'access arguments' => array('administer list mixer'),
     'file' => 'includes/listmixer.behaviors.inc',
   );
-   // @TODO: There are probably too many arguments here, but it is due to the way the behaviors are named. But this version works for now.
+   // @TODO: There are probably too many arguments here, but it is due to the
+   // way the behaviors are named. But this version works for now.
    $items['admin/ajax/listmixer/behavior/%/%/%'] = array(
     'title' => 'Executing ajax function',
     'description' => 'loading form callback',
@@ -114,7 +115,8 @@ function listmixer_menu() {
  * @TODO: I think the naming convention is going to break down.
  * I want to be able to put the includes in whatever folder they need to be in.
  * The behavior has to have a unique name
- * The folder should still reflect a very simple name that corresponds to the module/function generating the content
+ * The folder should still reflect a very simple name that corresponds 
+ * to the module/function generating the content
  * 
  */
 function listmixer_behaviors_callback($type, $name, $root) {
@@ -138,19 +140,23 @@ function listmixer_behaviors_callback($type, $name, $root) {
       // @TODO: Redirect will handle how blocks might need to reload.
 
       
-      // Take markup from the array passed back from the function, add that markup to the Drupal javascript object.
-      $set_rendered_markup = drupal_add_js('Drupal.behaviors.listmixer.behaviors.return.' . $behavior['behavior_name'] . '("' . $return['message'] . '");', 'inline');  
+      // Take markup from the array passed back from the function.
+      // Add that markup to the Drupal javascript object.
+      $set_rendered_markup = drupal_add_js('Drupal.behaviors.listmixer.behaviors.return.' 
+      . $behavior['behavior_name'] . '("' . $return['message'] . '");', 'inline');  
       // dpm($set_rendered_markup);
       // Return nothing, but set a message.
       // @TODO Date is added for testing purposes. May become unneccessary
       drupal_set_message($return['message'] . ' ' . date("F j, Y, g:i:s a"), 'status');
     }
     else{
-      drupal_set_message(t('Warning: Data not saved. Source: ' . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');
+      drupal_set_message(t('Warning: Data not saved. Source: ' 
+      . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');
     }
   } 
   else{
-      drupal_set_message(t('Warning: Data not saved. Source: ' . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');;
+      drupal_set_message(t('Warning: Data not saved. Source: ' 
+      . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');;
   }
 }
 
@@ -195,7 +201,8 @@ function listmixer_init() {
   $presets = listmixer_presets(TRUE);
     
   // @TODO: listmixer.js will look for presence of the block_id (or whatever it is supposed to, later)
-  // @TODO: presets setup (in listmixer.js) if a block id is found, then the rest of the necessary data is searched for (nid)
+  // @TODO: presets setup (in listmixer.js) if a block id is found, 
+  //        then the rest of the necessary data is searched for (nid)
   // @TODO: ideally, if stuff is found, then the javascript file will load some includes. 
   // @TODO: presets data variable created (here)
   // @TODO: activate set up (buttons to trigger interactions added)
@@ -209,8 +216,40 @@ function listmixer_init() {
     $settings[$preset['preset_name']] = $preset;
   }
   drupal_add_js(array('listmixer' => $settings), 'setting');
+  listmixer_set_javascript_variables($presets);
 }
+/** 
+ * Set up jQuery
+ * Load the preset id. Load the stored interaction data.
+ * Read each of the storage fields 
+ * (@TODO make a hook for nodes storage)
 
+ * Load field data
+ * Process it if necessary, add more jQuery for partially entered fields.
+ * @TODO Make an alert if it causes a JS error?
+
+ * Put the jquery into a real jQuery container, and set it inline.
+ * In some cases, run the jQuery enough to set a variable and make
+ * the variable availabel to javascript.
+ * 
+ * @TODO This can be moved to node storage and returned with the interaction
+ */
+function listmixer_set_javascript_variables($presets) {
+  
+  foreach($presets as $preset) {
+
+    
+    $interaction = $preset['interactions'];
+    dpm($interaction);
+    //interactions_target_id
+  }
+  
+  
+  //$set_rendered_markup = drupal_add_js('Drupal.behaviors.listmixer.behaviors.return.' 
+  //. $behavior['behavior_name'] . '("' . $return['message'] . '");', 'inline');  
+  
+  //dpm($set_rendered_markup);
+}
 
 // Theming functions
 

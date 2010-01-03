@@ -55,11 +55,11 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
     '#default_value' => $interactions['interactions_target_id'],
     '#description' => '<p>' . t('Define a jQuery command that will
     extract the target node id from the rendered Drupal page.') . '</p><p>' . t('
-    You will need to supply this in your markup. This is easy if you
-    are using a views block with fields, just add an nid field. 
-    If you add .hide() to the end of your command it will hide the nid.') . '</p><p>' . t('
+    You will need to supply this in your markup. The html of the 
+    target should contain only the numeric node id. ListMixer
+    will hide it for you. ') . '</p><p>' . t('
     
-    Example: ') . '<code>$(\'div#block-views-babble-block_1\').find(\'div.views-field-nid span.field-content\').html().hide(); </code>' . '<p>' . t('
+    Example: ') . '<code>$(\'div#block-views-babble-block_1 div.views-field-nid span.field-content\'); </code>' . '<p>' . t('
     @TODO Check this function, adapted it from somewhere else so it may have errors.') . '</p><p>' . t('
     Since you selected the \'Nodes\' storage
     type, this means that data will be stored to nodes or fields 
@@ -88,6 +88,7 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
       interaction buttons. <br /><br />
       This is not required, but it could be helpful if you have a bunch of views 
       on a page.<br /><br />
+      The default is \'html\'.
       <em>Example: div#sidebar-left</em>
       ') . '</p>',
       '#default_value' => $interactions['interactions_restrictions'],
