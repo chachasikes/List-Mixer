@@ -48,6 +48,10 @@ Drupal.behaviors.listmixer = function() {
         // Make sure that a container is found. 
         // This should be done first, as nothing else will happen if there is no container on the page.
         var interactions_container = $.find(this.interactions.interactions_container);
+       
+        // @TODO If the interactions container isn't found, that would be a good thing, but it's hard to debug
+        // It's the most important part though...
+        
         // Interaction container not found, do nothing, other wise, proceed.
         if(interactions_container == ''){
           return false;
@@ -111,20 +115,35 @@ Drupal.behaviors.listmixer = function() {
         // Create interaction form
         this.target_form_class = 'class="listmixer-target-form"';   
         this.target_form_id = 'listmixer-target-'+ this.preset_name;
-        this.target_form = '<form id="' + this.target_form_id + '" ' + this.target_form_class + '></form>';
- 
- 
-      
- 
-        // @TODO set up push saveing function
-        
+       // this.target_form = '<form id="' + this.target_form_id + '" ' + this.target_form_class + '></form>';
+        this.target_form = '<div ' + this.target_form_class + '>DIV</div>';
+  
+        var form = this.target_form;
+        var container = this.interactions.interactions_container;
+        // @TODO set up push saving function       
         // @TODO make default mousedown function to activate on click (add/build the form)
         // cause right now it always adds the form, and i don't think it should.
         
         // This is restrictions here. If the user just wants a form field in block,
         // Then they need to set it to just the block. Default is 'body' so 
         // if nothing is entered, it will show up at the very bottom of the page.
-        $(this.interactions.interactions_restrictions).append(this.target_form);
+        
+        if(this.interactions.interactions_container == this.interactions.interactions_restrictions){
+          $(this.interactions.interactions_restrictions).append(this.target_form);
+        }
+        else{
+            // Only one form is allowed, if the form should be applied to the restrictions container, but not
+            // the container if the container is a child of the restrictions container.
+            try{
+              var form_container = this.interactions.interactions_restrictions + ':has(' + this.interactions.interactions_container + ')';
+              $(form_container).length > 0;
+              $(form_container).append(form);
+            }
+            catch(err){
+              alert('ListMixer Error: Restrictions and Container conflict: admin/build/listmixer/' + this.preset_id + '');
+            }
+        }
+        
         
         // Here is where we call various behavior functions: Interact.textInteract etc. 
         // @TODO Move to interaction behaviors

@@ -127,6 +127,8 @@ function listmixer_preset_title_callback($title, $preset = array()) {
  * Main form for presets
  */
 function listmixer_ui_preset_form($form_state, $preset = array()) {
+  // Clear presets cache
+  cache_clear_all('listmixer:presets', 'cache');
   $form = array();
 
   $form['preset_id'] = array(
