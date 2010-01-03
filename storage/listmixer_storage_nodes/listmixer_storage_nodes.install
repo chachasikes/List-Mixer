@@ -65,6 +65,12 @@ function listmixer_storage_nodes_schema() {
         'length' => 0,
         'not null' => TRUE,
       ),
+      'interactions_source_id' => array(
+        'description' => '<p>' . t('Selector for id of source.') . '</p>',
+        'type' => 'text',
+        'length' => 0,
+        'not null' => TRUE,
+      ),
       'interactions_target_field' => array(
         'description' => '<p>' . t('Target Field.') . '</p>',
         'type' => 'text',

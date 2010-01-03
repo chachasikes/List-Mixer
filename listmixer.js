@@ -97,9 +97,9 @@ Drupal.behaviors.listmixer = function() {
             ignore_inclusions = true;
         }
         else{
-          // @TODO Test this with a good example
-          var interactions_inclusions = $(this.interactions.interactions_inclusions).html();
-          if(ignore_inclusions != true) { 
+          if(ignore_inclusions != true) {
+            // [nid] is the 'fake token' that will be searched for for the nodereference type. (This should move to Interact type
+             
             /*
             @TODO Fix, the boolean values are buggy
             try {   
@@ -136,8 +136,39 @@ Drupal.behaviors.listmixer = function() {
             // the container if the container is a child of the restrictions container.
             try{
               var form_container = this.interactions.interactions_restrictions + ':has(' + this.interactions.interactions_container + ')';
+              var source_id_selector = this.interactions.interactions_source_id;
               $(form_container).length > 0;
               $(form_container).append(form);
+              
+              try{
+                // Inclusions are the elements that will receive interactions
+                // Find all of the items that should act as a source of interaction
+                // EXAMPLE: div.views-field-field-photo-fid  a:regex(class, ^gallery-photo-)
+                
+
+                // inclusions should be children of the restrictions
+                // the source selector needs to be a child of the element
+                // @TODO make the form into textfields and rearrange and rewrite the help
+                            
+                $.each($(this.interactions.interactions_restrictions + ' ' + this.interactions.interactions_inclusions), function(){
+                  // @TODO: Apply interaction to each of these elements.
+                  // @TODO check source_id is numeric
+                  // If there is content (@TODO: or maybe even a value to store...)
+                  var source_id = $(this).find(source_id_selector).html();
+                  // Hide the source selector. (@TODO, make this an option)
+                  $(this).find(source_id_selector).hide();
+                  // @TODO change to the type
+                  if(source_id != null){
+                    $(this).prepend('<input type="checkbox" value=' + source_id + ' />' + 'add');                   
+                  }
+                });
+              }
+              catch(err){
+                alert('ListMixer Error: Inclusion & input validation problem. Edit preset: admin/build/listmixer/' + this.preset_id + '');
+              }
+              
+              
+              
             }
             catch(err){
               alert('ListMixer Error: Restrictions and Container conflict: admin/build/listmixer/' + this.preset_id + '');
@@ -357,4 +388,18 @@ Drupal.behaviors.listmixer.redirect = function(preset, data) {
   // @TODO: maybe - Calling the redirect function, which returns $output?
 
   return false;  
+}
+
+// http://james.padolsey.com/javascript/regex-selector-for-jquery/
+jQuery.expr[':'].regex = function(elem, index, match) {
+    var matchParams = match[3].split(','),
+        validLabels = /^(data|css):/,
+        attr = {
+            method: matchParams[0].match(validLabels) ? 
+                        matchParams[0].split(':')[0] : 'attr',
+            property: matchParams.shift().replace(validLabels,'')
+        },
+        regexFlags = 'ig',
+        regex = new RegExp(matchParams.join('').replace(/^\s+|\s+$/g,''), regexFlags);
+    return regex.test(jQuery(elem)[attr.method](attr.property));
 }

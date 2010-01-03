@@ -118,7 +118,14 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
        <em>Example: field_text_babble</em>') . '</p>',
       '#default_value' => $interactions['interactions_target_field'],
       '#weight' => 5,
-  );  
+  );
+  $form['interactions_source_id'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Source Selector'),
+      '#description' => '<p>' . t('Source selector<br /><br />'). '</p>',
+      '#default_value' => $interactions['interactions_source_id'],
+      '#weight' => 5,
+  );   
   $all_nodetypes = node_get_types();
   $all_nodetype_options = array();
   foreach ($all_nodetypes as $item) {
