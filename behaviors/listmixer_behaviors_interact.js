@@ -1,3 +1,5 @@
+// $Id$
+
 Drupal.behaviors.listmixer.Interact = function() {
   this.init = function() {
    // alert('Interact Library Loaded');

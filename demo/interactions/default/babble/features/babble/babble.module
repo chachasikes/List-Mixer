@@ -1,3 +1,8 @@
 <?php
+// $Id$
+
+/**
+ * @file
+ */
 
 include_once('babble.features.inc');

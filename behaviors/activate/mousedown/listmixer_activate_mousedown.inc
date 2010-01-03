@@ -1,5 +1,9 @@
 <?php
-// $ Id$
+// $Id$
+
+/**
+ * @file
+ */
  
 function listmixer_behaviors_listmixer_activate_mousedown($data) {
   $markup = '';

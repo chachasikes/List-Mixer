@@ -1,5 +1,9 @@
 <?php
-// $ Id$
+// $Id$
+
+/**
+ * @file
+ */
  
 function listmixer_behaviors_listmixer_submit_button($data) {
   $markup = '';

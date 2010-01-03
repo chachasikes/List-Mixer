@@ -1,5 +1,9 @@
 <?php
-// $ Id$
+// $Id$
+
+/**
+ * @file
+ */
 
 /**
  * This function is called from an ajax menu item (based on arguments)

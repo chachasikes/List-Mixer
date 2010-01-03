@@ -1,5 +1,9 @@
 <?php
+// $Id$
 
+/**
+ * @file
+ */
 /**
  * Helper to implementation of hook_content_default_fields().
  */

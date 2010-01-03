@@ -1,3 +1,5 @@
+// $Id$
+
 Drupal.behaviors.listmixer.Submit = function() {
   this.init = function() {
    // alert('Submit Library Loaded');
