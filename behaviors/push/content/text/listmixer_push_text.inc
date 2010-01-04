@@ -12,10 +12,10 @@
  
 function listmixer_behaviors_listmixer_push_text($data) {
   // If POST data has been set, save the node
-  dpm($_POST);
+  // dpm($_POST);
   if (isset($_POST['target_id']) && isset($_POST['input']) && isset($_POST['target_field'])) {
     $node = node_load($_POST['target_id']);
-    dpm($_POST['input']);
+    // dpm($_POST['input']);
     $node->{$_POST['target_field']}[] = array('value' => $_POST['input']);
     node_save($node);
   }

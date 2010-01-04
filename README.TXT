@@ -21,49 +21,101 @@ Maintainer
 Chach Sikes, chachasikes
 http://drupal.org/user/50674
 
+(Since 12/30/2009)
 
-(This module is under active development - 12/30/2009)
+DEVELOPMENT VERSION, for demonstration purposes.
 
-About the module
-----------------
-List Mixer helps users of a Drupal website to manage methods of creating and 
-updating lists of content. 
-
-List Mixer works with fields, views and taxonomy. A site administrator can set
-up any number of interaction presets. The interaction presets allow associations
-of content types, fields, views, taxonomy terms, block ids and more to be 
-connected up to a variety of ajax tools and storage methods.
-
+* NOTE: I am trying to apply for a Drupal CVS account with this module
+to contribute it to drupal.org
 
 How to Use ListMixer
 --------------------
 
-ListMixer is a module that allows you to set up a Drupal website in a way that lets you 
-store data from a rendered drupal page into nodes. The intended use is to make lists of 
-content, but there are probably some unique uses of ListMixer that will emerge.
+ListMixer lets you create 'interaction presets' that help a user
+save data from a Drupal page into nodes.
 
-ListMixer lets you create interaction presets. You supply the classes from a Drupal page
-for a few different regions. 
-
-You supply:
-*An 'interaction div' - a container for your interaction controls and feedback.
-*'source' - markup that will receive interaction behaviors
-*'target' - will be a node id for a node that acts as the container for saved data.
-*'target field' - where in a node data should be saved
-*'behavior settings' - you can specify 'activate' 'interact' 'push' and 'submit' behaviors.
-  *activate - a way that a page will become interactive (ex. a button)
-  *interact - how your user can choose which data should be saved to the list (example. an input field that will store to a text field)
-  *push - what format the data should be saved in (ex. name of a field)
-  *submit - how your user can save data (ex. a 'submit button')
-  
 ListMixer requires
 *a site with content
 *you probably will want CCK, Views, Taxonomy installed
-*you will probably want to have FireBug loaded into FireBug to figure out which data you are scraping.
+*you will probably want to have FireBug loaded into FireBug to 
+figure out which data you are scraping.
 *knowledge of jQuery very helpful for targeting complex data
+*javascript
 
+An example:
+The module is sort of abstract, so here is a description 
+of what you can do with the module. When I finish a few
+more features I will make a screencast of how to use it.
+
+
+Babble:
+So, you want to make an input box that lives on every page
+of a Drupal site. Typing text into the box will save it
+to a text field.
+
+You can make this interaction without any more code than
+a few jQuery class definitions. 
+
+Demos
+-----
+
+In the /demos folder there are two demostrations that
+work with the available behaviors. 
+
+Babble and Photoset maker.
+
+
+
+Brief overview of what you can do with the module
+-------------------------------------------------
+
+To create this, install and configure ListMixer.
+Create a new ListMixer setting.
+
+You then can choose different behaviors: 
+Activate
+Interact
+Push
+Submit
+
+
+These behavior settings are used to connect markup
+on a rendered Drupal page (you will probably not
+be on the node edit page.) 
+
+
+You then look at the page that is supposed to have 
+the interactive text box, and find the #id of the block.
+List Mixer lets you provide class definitions
+that will connect parts of the page.
+
+@TODO: Rename these containers to words that make sense.
+
+They are:
+Container: Where the submit button and help text 
+should go
+
+Target interaction id: jQuery compatible class
+definition that will point to html containing the
+nid of the node where the content should be stored.
+
+Inclusions id: selectors that will receive interactive
+elements (example, td in a views grid, or the container
+if the interaction should be in the container.)
+
+Source id: selector that will provide the node id or
+other value information that should be saved. You 
+will need to make sure that data is compatible with
+the field you are trying to save it to.
+
+Known issues and Bugs
+---------------------
+This module is very new. It works well if you only
+have one enabled preset. Debugging the javascript
+to allow multiple interactions on a given page.
 
 Planned Features
+----------------
 *push: select field from a list (like in views) which will automatically store the field name and field type
 *delete | edit: these are more dangerous and complicated so we'll be dealing with this later
 *weight: make <ul> markup into re-weightable interactive. (like draggable views) (though, maybe if you have a view that is draggable, it will work anyways)
@@ -71,8 +123,12 @@ Planned Features
 *timestamp: a way of storing and accessing interaction history. probably just a watchdog setting with some sort of filter
 
 Dangers
-*Test your interactions well before installing on a production site.
+-------
+*This is a development version of the site. Not recommended for 
+production sites.
 
+
+**************
 Example
 
 A good example of List Mixer in action is 'Babble' (see /demos)
@@ -101,56 +157,9 @@ You will want:
 
 These are the target and source fields and classes.
 
-/*IN PROGRESS
-
-Target ID:
-This is the jQuery string that will lead to finding the node id of the node that should be the receptable of pushed content.
-There are two parts, the location, written as a string of the path to the node id:
-Example:
-Location: div#block_views_block_block_1 div.field-field-nid
-
-Evaluation: 
-html()
-value()
-attr()
-data('blah')
-html().is()
-
-@TODO Test that this will work.
-(set inline)
-
-@TODO - to start, just make one field.
 
 
-
-
-interactive div container = could (should be) a block, but doesn't have to be
-
-sources = apply interact behavior to these classes
-restrict/include   (allow plain jQuery for now)
-
-
-
-push_source = values from interact
-
-push_target = machine name   nid + field name + type (checkbox + select fields like in views)
-
-interact_source = from sources, interact sources evalutated to be true
-
-activate button text
-
-instructions
-
-('taxonomy storage - it's not really storage, it's more about settings of how the interaction should work
-so 'interaction storage is still sort of a correct term)
-
-list-makin term = presetname + tokens -- if set, then invert the way that terms ar assigned,
-instead of many to 1, it's 1 term to nodes or fields containing content that should be listed
-
-preset delete -- will it delete the terms?
-*/
-
-
+@TODO Updated 12-30-09
 
 Organization of the module
 --------------------------
