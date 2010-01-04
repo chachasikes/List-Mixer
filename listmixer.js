@@ -144,22 +144,18 @@ Drupal.behaviors.listmixer = function() {
               // @TODO: Apply interaction to each of these elements.
               // @TODO check source_id is numeric
               // If there is content (@TODO: or maybe even a value to store...)
+              // @TODO if selector is empty?
               var source_id = $(this).find(source_id_selector).html();
               // Hide the source selector. (@TODO, make this an option)
               $(this).find(source_id_selector).hide();
-              // @TODO change to the type
+              // @TODO If source id is null, user might not have entered anything, which works well for the input field.
+              var Interact = new Drupal.behaviors.listmixer.Interact();
+              Interact.init();
+              var interactFunction = preset.behaviors.interact.settings.behavior_function;
+              $(this).prepend(Interact.markup[interactFunction]);
+              
               if (source_id != null) {
-                // var input_markup = preset.behaviors.interact.settings.behavior_function;
-
-                var Interact = new Drupal.behaviors.listmixer.Interact();
-                Interact.init();
-                var interactFunction = preset.behaviors.interact.settings.behavior_function;
-
-                // Add input data (type could prob just be from settings and not a function?
-                
-                $(this).prepend(Interact.markup[interactFunction]);
                 $(this).find('input').val(source_id);
-                // alert($(this).find('input').val());                           
               }
             });
           }
@@ -182,6 +178,7 @@ Drupal.behaviors.listmixer = function() {
         
         // Set up data object on page load.
         this.data = {
+          'inputArray' : [],
           'input' : '',
           'target_id' : target_id,
           'target_field' : target_field
@@ -195,12 +192,13 @@ Drupal.behaviors.listmixer = function() {
           
           // If page stayed loaded, clear out the data array.
           preset.data = {};
-          $('form.listmixer-target-form div.listmixer-interact-input input').val('');
+          
+          // @TODO Change input val clearing.
+          // $('form.listmixer-target-form div.listmixer-interact-input input').val('');
           
           // Do not reload page.
           return false;
         });
-        return false;
       }
     });
   }
@@ -224,15 +222,23 @@ Drupal.behaviors.listmixer.submit = function(preset) {
   Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'submit');
 }
 // Push is called when user interacts with submit button
-Drupal.behaviors.listmixer.push = function(preset) {    
-  // Get value from interact element 
-  var input_value = $('form.listmixer-target-form div.listmixer-interact-input input').val();
-  // Store values in data object in preset.
-  preset.data.input = input_value;
-           
-  Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'push'); 
+Drupal.behaviors.listmixer.push = function(preset) { 
   var Push = new Drupal.behaviors.listmixer.Push();
   Push.init(); 
+  // Load data for interact button validation  
+  var Interact = new Drupal.behaviors.listmixer.Interact();
+  Interact.init();
+  var interactFunction = preset.behaviors.interact.settings.behavior_function;  
+ 
+  // Get value from interact element 
+  // @TODO Add validators :checked, not empty... what else?
+  $.each($(preset.interactions.interactions_restrictions + ' ' + Interact.validation[interactFunction]), function(){
+    // Collect the value from each of the interactive elements.
+    // Store values in data object in preset.
+    preset.data.inputArray.push($(this).val());
+  });  
+  Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'push'); 
+
   // @TODO Check that the callback isn't reloading the page. 
   return false;  
 }
@@ -258,7 +264,17 @@ Drupal.behaviors.listmixer.behaviorBuildCallback = function(preset, type) {
     // Ajax call to callback for this behavior.
     // @TODO currently this runs automatically, make push happen after submit behavior is activated.
     if (callback != null) {
-      $.post(callback, preset.data, Drupal.behaviors.listmixer.redirect(preset, preset.data));
+      if (type == 'push') {
+        if (preset.data.inputArray.length > 0) {
+          preset.data.input = preset.data.inputArray.toString();
+        }
+      }
+      $.ajax({
+        type: "POST",
+        url: callback,
+        data: preset.data,
+        complete: Drupal.behaviors.listmixer.redirect(preset, preset.data),
+      });
       return false;
     }
   }
@@ -305,7 +321,6 @@ Drupal.behaviors.listmixer.Behavior = function() {
 Drupal.behaviors.listmixer.redirect = function(preset, data) {
   var preset = preset;
   var data = data;  
-  
   // Get the returned javascript from the function and apply it wherever it is supposed to go
   // @TODO: maybe - Calling the redirect function, which returns $output?
 

@@ -17,6 +17,6 @@ Drupal.behaviors.listmixer.Submit = function() {
   this.markup = { 
     // @TODO checkboxSubmit not quite figured out yet.
     checkboxSubmit : '<div class="listmixer-push-submit"><button class="button">Save</button></div>',
-    buttonSubmit : '<div class="listmixer-push-submit"><button class="button">Save</button></div>',
+    buttonSubmit : '<div class="listmixer-push-submit"><button class="button">Save</button></div>'
   };
 }

@@ -317,7 +317,7 @@ function listmixer_behaviors_registry_build() {
   /* Content push functions */
   // $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store File', $enabled, '/content', 'filefield', 'push_filefield', 'Store File', 'filefieldPush');
   // $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Link', $enabled, '/content', 'link', 'push_link', 'Store Link', 'linkPush');
-  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Nodereference', $enabled, 'push/content', 'nodereference', 'push_nodereference', 'Store Nodereference', 'nodereferencePush');
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Nodereference', $enabled, '/content', 'nodereference', 'push_nodereference', 'Store Nodereference', 'nodereferencePush');
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Text', $enabled, '/content', 'text', 'push_text', 'Store Text', 'textPush'); 
   /* Taxonomy push functions */
   // $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Term', $enabled, '/taxonomy', 'term', 'push_taxonomy_term', 'Push Taxonomy Term', 'termPush');

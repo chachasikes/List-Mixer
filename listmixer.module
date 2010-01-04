@@ -127,11 +127,11 @@ function listmixer_behaviors_callback($type, $name, $root) {
   $function_name = 'listmixer_behaviors_' . $name;
 
   // Load include from registry.
+  
   $behavior = listmixer_behavior_registry_load($root);
   if (file_exists($behavior['behavior_include'])) {
     include($behavior['behavior_include']);
-  }
-    
+  }  
   if (function_exists($function_name)) {
     $return = call_user_func($function_name, $data);
     if (!empty($return)) {
