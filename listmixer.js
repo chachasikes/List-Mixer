@@ -225,8 +225,7 @@ Drupal.behaviors.listmixer.submit = function(preset) {
 }
 // Push is called when user interacts with submit button
 Drupal.behaviors.listmixer.push = function(preset) {    
-  // get value from interact element 
-  // @TODO value should be determined in Interact function 
+  // Get value from interact element 
   var input_value = $('form.listmixer-target-form div.listmixer-interact-input input').val();
   // Store values in data object in preset.
   preset.data.input = input_value;
