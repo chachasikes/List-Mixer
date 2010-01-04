@@ -274,19 +274,12 @@ function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
     $form_state['redirect'] = 'admin/build/listmixer';
   }
 
-  if (isset($preset['preset_id'])) {
-    unset($preset['preset_id']);
-  }
-  if (isset($preset['storage'])) {
-    unset($preset['storage']);
-  }
-  /*foreach ($preset['actions'] as $id => $action) {
-    unset($preset['actions'][$id]['actionid']);
-    unset($preset['actions'][$id]['preset_id']);
-  }*/
+  $preset = listmixer_presets($preset['preset_id']);
+
   $exported = '$presets = array();';
   $exported .= "\n";
   $exported .= '$presets[\''. $preset['preset_name'] .'\'] = ';
+  
   $exported .= var_export($preset, TRUE) .';';
   $rows = substr_count($exported, "\n") + 1;
 
