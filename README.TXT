@@ -4,8 +4,13 @@ List Mixer
 --------------------------------------------------------------------------------
 Make presets for interactions that allow users to push Drupal data into a list.
 
+Version
+-------
+listmixer-0.1-dev
+DEVELOPMENT VERSION, for demonstration purposes.
+
 Installation
-____________
+------------
 To install place the entire listmixer module in your modules directory.
 Go to Administer -> Site building -> Modules and enable the List Mixer module.
 
@@ -22,8 +27,6 @@ Chach Sikes, chachasikes
 http://drupal.org/user/50674
 
 (Since 12/30/2009)
-
-DEVELOPMENT VERSION, for demonstration purposes.
 
 * NOTE: I am trying to apply for a Drupal CVS account with this module
 to contribute it to drupal.org
@@ -128,9 +131,8 @@ Dangers
 production sites.
 
 
-**************
 Example
-
+-------
 A good example of List Mixer in action is 'Babble' (see /demos)
 
 Babble acts like Twitter, or DevelopmentSeeds 'Shoutbox' module. 
@@ -159,7 +161,7 @@ These are the target and source fields and classes.
 
 
 
-@TODO Updated 12-30-09
+Updated 12-30-09
 
 Organization of the module
 --------------------------
@@ -273,7 +275,7 @@ Organization of the module
  
  
 Support and Development plan
-------------
+----------------------------
 *This module requires Javascript. 
 
 *Firefox 3.5+, Safari 4+, Internet Explorer 7+ will be supported.
