@@ -1,0 +1,103 @@
+$presets = array();
+$presets[''] = array (
+  1 => 
+  array (
+    'preset_id' => '1',
+    'preset_name' => 'babble',
+    'preset_description' => 'Babble description.',
+    'preset_method' => 'listmixer_storage_nodes',
+    'preset_enabled' => '0',
+    'behaviors' => 
+    array (
+      'activate' => 
+      array (
+        'id' => '1',
+        'preset_id' => '1',
+        'behavior_name' => 'activate_mousedown',
+        'behavior_type' => 'activate',
+        'settings' => 
+        array (
+          'behavior_name' => 'activate_mousedown',
+          'behavior_label' => 'MouseDown',
+          'behavior_enabled' => NULL,
+          'behavior_type' => 'activate',
+          'behavior_include' => 'sites/all/modules/custom/listmixer/behaviors/activate/mousedown/listmixer_activate_mousedown.inc',
+          'behavior_function' => 'mouseDownActivate',
+          'behavior_callback' => '/6x/admin/ajax/listmixer/behavior/activate/listmixer_activate_mousedown/activate_mousedown',
+          'behavior_redirect' => '/6x/admin/ajax/listmixer/redirect/activate/listmixer_activate_mousedown/activate_mousedown',
+          'behavior_description' => 'Activate Mousedown',
+        ),
+      ),
+      'interact' => 
+      array (
+        'id' => '2',
+        'preset_id' => '1',
+        'behavior_name' => 'interact_input',
+        'behavior_type' => 'interact',
+        'settings' => 
+        array (
+          'behavior_name' => 'interact_input',
+          'behavior_label' => 'Input',
+          'behavior_enabled' => NULL,
+          'behavior_type' => 'interact',
+          'behavior_include' => 'sites/all/modules/custom/listmixer/behaviors/interact/input/listmixer_interact_input.inc',
+          'behavior_function' => 'inputInteract',
+          'behavior_callback' => '/6x/admin/ajax/listmixer/behavior/interact/listmixer_interact_input/interact_input',
+          'behavior_redirect' => '/6x/admin/ajax/listmixer/redirect/interact/listmixer_interact_input/interact_input',
+          'behavior_description' => 'Input interaction',
+        ),
+      ),
+      'push' => 
+      array (
+        'id' => '3',
+        'preset_id' => '1',
+        'behavior_name' => 'push_text',
+        'behavior_type' => 'push',
+        'settings' => 
+        array (
+          'behavior_name' => 'push_text',
+          'behavior_label' => 'Store Text',
+          'behavior_enabled' => NULL,
+          'behavior_type' => 'push',
+          'behavior_include' => 'sites/all/modules/custom/listmixer/behaviors/push/content/text/listmixer_push_text.inc',
+          'behavior_function' => 'textPush',
+          'behavior_callback' => '/6x/admin/ajax/listmixer/behavior/push/listmixer_push_text/push_text',
+          'behavior_redirect' => '/6x/admin/ajax/listmixer/redirect/push/listmixer_push_text/push_text',
+          'behavior_description' => 'Store Text',
+        ),
+      ),
+      'submit' => 
+      array (
+        'id' => '4',
+        'preset_id' => '1',
+        'behavior_name' => 'submit_button',
+        'behavior_type' => 'submit',
+        'settings' => 
+        array (
+          'behavior_name' => 'submit_button',
+          'behavior_label' => 'Submit Button',
+          'behavior_enabled' => NULL,
+          'behavior_type' => 'submit',
+          'behavior_include' => 'sites/all/modules/custom/listmixer/behaviors/submit/button/listmixer_submit_button.inc',
+          'behavior_function' => 'buttonSubmit',
+          'behavior_callback' => '/6x/admin/ajax/listmixer/behavior/submit/listmixer_submit_button/submit_button',
+          'behavior_redirect' => '/6x/admin/ajax/listmixer/redirect/submit/listmixer_submit_button/submit_button',
+          'behavior_description' => 'Submit Button',
+        ),
+      ),
+    ),
+    'interactions' => 
+    array (
+      'id' => '1',
+      'preset_id' => '1',
+      'interactions_target_id' => 'div#block-views-babble-block_1 div.views-field-nid span.field-content',
+      'interactions_restrictions' => 'div#block-views-babble-block_1',
+      'interactions_inclusions' => '',
+      'interactions_help' => 'This is the help text explanation',
+      'interactions_container' => 'div#block-views-babble-block_1',
+      'interactions_target_field' => 'field_text_babble',
+      'interactions_source_id' => '',
+    ),
+    'storage' => 0,
+  ),
+);

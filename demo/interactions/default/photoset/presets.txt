@@ -1,0 +1,103 @@
+$presets = array();
+$presets[''] = array (
+  2 => 
+  array (
+    'preset_id' => '2',
+    'preset_name' => 'Photoset_maker',
+    'preset_description' => 'This connects the node ids from a gallery view to a view attachment.',
+    'preset_method' => 'listmixer_storage_nodes',
+    'preset_enabled' => '1',
+    'behaviors' => 
+    array (
+      'activate' => 
+      array (
+        'id' => '5',
+        'preset_id' => '2',
+        'behavior_name' => 'activate_mousedown',
+        'behavior_type' => 'activate',
+        'settings' => 
+        array (
+          'behavior_name' => 'activate_mousedown',
+          'behavior_label' => 'MouseDown',
+          'behavior_enabled' => NULL,
+          'behavior_type' => 'activate',
+          'behavior_include' => 'sites/all/modules/custom/listmixer/behaviors/activate/mousedown/listmixer_activate_mousedown.inc',
+          'behavior_function' => 'mouseDownActivate',
+          'behavior_callback' => '/6x/admin/ajax/listmixer/behavior/activate/listmixer_activate_mousedown/activate_mousedown',
+          'behavior_redirect' => '/6x/admin/ajax/listmixer/redirect/activate/listmixer_activate_mousedown/activate_mousedown',
+          'behavior_description' => 'Activate Mousedown',
+        ),
+      ),
+      'interact' => 
+      array (
+        'id' => '6',
+        'preset_id' => '2',
+        'behavior_name' => 'interact_checkbox',
+        'behavior_type' => 'interact',
+        'settings' => 
+        array (
+          'behavior_name' => 'interact_checkbox',
+          'behavior_label' => 'Checkbox',
+          'behavior_enabled' => NULL,
+          'behavior_type' => 'interact',
+          'behavior_include' => 'sites/all/modules/custom/listmixer/behaviors/interact/checkbox/listmixer_interact_checkbox.inc',
+          'behavior_function' => 'checkboxInteract',
+          'behavior_callback' => '/6x/admin/ajax/listmixer/behavior/interact/listmixer_interact_checkbox/interact_checkbox',
+          'behavior_redirect' => '/6x/admin/ajax/listmixer/redirect/interact/listmixer_interact_checkbox/interact_checkbox',
+          'behavior_description' => 'Checkbox interaction',
+        ),
+      ),
+      'push' => 
+      array (
+        'id' => '7',
+        'preset_id' => '2',
+        'behavior_name' => 'push_nodereference',
+        'behavior_type' => 'push',
+        'settings' => 
+        array (
+          'behavior_name' => 'push_nodereference',
+          'behavior_label' => 'Store Nodereference',
+          'behavior_enabled' => NULL,
+          'behavior_type' => 'push',
+          'behavior_include' => 'sites/all/modules/custom/listmixer/behaviors/push/content/nodereference/listmixer_push_nodereference.inc',
+          'behavior_function' => 'nodereferencePush',
+          'behavior_callback' => '/6x/admin/ajax/listmixer/behavior/push/listmixer_push_nodereference/push_nodereference',
+          'behavior_redirect' => '/6x/admin/ajax/listmixer/redirect/push/listmixer_push_nodereference/push_nodereference',
+          'behavior_description' => 'Store Nodereference',
+        ),
+      ),
+      'submit' => 
+      array (
+        'id' => '8',
+        'preset_id' => '2',
+        'behavior_name' => 'submit_button',
+        'behavior_type' => 'submit',
+        'settings' => 
+        array (
+          'behavior_name' => 'submit_button',
+          'behavior_label' => 'Submit Button',
+          'behavior_enabled' => NULL,
+          'behavior_type' => 'submit',
+          'behavior_include' => 'sites/all/modules/custom/listmixer/behaviors/submit/button/listmixer_submit_button.inc',
+          'behavior_function' => 'buttonSubmit',
+          'behavior_callback' => '/6x/admin/ajax/listmixer/behavior/submit/listmixer_submit_button/submit_button',
+          'behavior_redirect' => '/6x/admin/ajax/listmixer/redirect/submit/listmixer_submit_button/submit_button',
+          'behavior_description' => 'Submit Button',
+        ),
+      ),
+    ),
+    'interactions' => 
+    array (
+      'id' => '2',
+      'preset_id' => '2',
+      'interactions_target_id' => 'div.view-photo-gallery div.attachment div.views-field-nid span.field-content',
+      'interactions_restrictions' => 'div.view-photo-gallery',
+      'interactions_inclusions' => 'table.views-view-grid td',
+      'interactions_help' => 'Click the checkboxes to add items to your photoset',
+      'interactions_container' => 'div.attachment div.view-display-id-attachment_1 div.view-content',
+      'interactions_target_field' => 'field_reference_photo',
+      'interactions_source_id' => 'div.views-field-nid span.field-content',
+    ),
+    'storage' => 0,
+  ),
+);
