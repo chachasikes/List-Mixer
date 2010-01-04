@@ -7,12 +7,16 @@ Drupal.behaviors.listmixer.Submit = function() {
 
   /* Library Functions */ 
   
-  this.buttonSubmit= function() {
+  this.buttonSubmit = function() {
     alert('submit button');
   }
    
-  this.checkboxSubmit= function() {
+  this.checkboxSubmit = function() {
     alert('submit checkbox');
   }
-
+  this.markup = { 
+    // @TODO checkboxSubmit not quite figured out yet.
+    checkboxSubmit : '<div class="listmixer-push-submit"><button class="button">Save</button></div>',
+    buttonSubmit : '<div class="listmixer-push-submit"><button class="button">Save</button></div>',
+  };
 }
