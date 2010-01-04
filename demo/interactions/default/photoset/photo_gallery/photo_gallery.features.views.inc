@@ -1,9 +1,4 @@
 <?php
-// $Id$
-
-/**
- * @file
- */
 
 /**
  * Helper to implementation of hook_views_default_views().
@@ -47,7 +42,7 @@ function _photo_gallery_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 0,
-      'exclude' => 1,
+      'exclude' => 0,
       'id' => 'nid',
       'table' => 'node',
       'field' => 'nid',
@@ -120,7 +115,13 @@ function _photo_gallery_views_default_views() {
   $handler->override_option('header_format', '1');
   $handler->override_option('header_empty', 0);
   $handler->override_option('empty_format', '1');
-  $handler->override_option('items_per_page', 1);
+  $handler->override_option('items_per_page', 5);
+  $handler->override_option('style_plugin', 'grid');
+  $handler->override_option('style_options', array(
+    'grouping' => '',
+    'columns' => '4',
+    'alignment' => 'horizontal',
+  ));
   $handler->override_option('row_options', array(
     'inline' => array(),
     'separator' => '',
@@ -170,7 +171,7 @@ function _photo_gallery_views_default_views() {
       'relationship' => 'none',
     ),
     'nid' => array(
-      'label' => 'Nid',
+      'label' => '',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -244,6 +245,8 @@ function _photo_gallery_views_default_views() {
   $handler->override_option('header', 'Your photo set');
   $handler->override_option('empty', 'You have not created a photo set. 
 <a href="node/add/photo-set">Make one</a>');
+  $handler->override_option('style_plugin', 'default');
+  $handler->override_option('style_options', array());
   $handler->override_option('attachment_position', 'before');
   $handler->override_option('inherit_arguments', TRUE);
   $handler->override_option('inherit_exposed_filters', FALSE);

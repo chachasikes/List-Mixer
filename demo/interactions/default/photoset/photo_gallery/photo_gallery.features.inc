@@ -1,9 +1,5 @@
 <?php
-// $Id$
 
-/**
- * @file
- */
 /**
  * Implementation of hook_views_default_views().
  */
