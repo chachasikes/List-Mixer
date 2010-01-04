@@ -141,22 +141,26 @@ Drupal.behaviors.listmixer = function() {
             // @TODO make the form into textfields and rearrange and rewrite the help.
                         
             $.each($(this.interactions.interactions_restrictions + ' ' + this.interactions.interactions_inclusions), function() {
-              // @TODO: Apply interaction to each of these elements.
-              // @TODO check source_id is numeric
-              // If there is content (@TODO: or maybe even a value to store...)
-              // @TODO if selector is empty?
-              var source_id = $(this).find(source_id_selector).html();
-              // Hide the source selector. (@TODO, make this an option)
-              $(this).find(source_id_selector).hide();
-              // @TODO If source id is null, user might not have entered anything, which works well for the input field.
               var Interact = new Drupal.behaviors.listmixer.Interact();
               Interact.init();
               var interactFunction = preset.behaviors.interact.settings.behavior_function;
-              $(this).prepend(Interact.markup[interactFunction]);
-              
-              if (source_id != null) {
-                $(this).find('input').val(source_id);
+              // @TODO check source_id is numeric
+              // The selector might be empty if user enters nothing, if so, just use the default input.
+              if(source_id_selector != '') {
+                // Get each source id
+                var source_id = $(this).find(source_id_selector).html();
+                // Hide the source selector. (@TODO, make this an option)
+                $(this).find(source_id_selector).hide();
+                if(source_id != null) {
+                  // Only add interactive elements if a valid value is present.
+                  $(this).prepend(Interact.markup[interactFunction]);
+                }
               }
+              else{
+                $(this).prepend(Interact.markup[interactFunction]);
+              }  
+              // Add value to input field after input is created
+              $(this).find('input').val(source_id);       
             });
           }
           catch(err) {
@@ -191,13 +195,18 @@ Drupal.behaviors.listmixer = function() {
           //@TODO make sure target_id is available to push function
           
           // If page stayed loaded, clear out the data array.
-          preset.data = {};
-          
+          preset.data = {
+          'inputArray' : [],
+          'input' : '',
+          'target_id' : target_id,
+          'target_field' : target_field
+          }          
           // @TODO Change input val clearing.
           // $('form.listmixer-target-form div.listmixer-interact-input input').val('');
           
           // Do not reload page.
-          return false;
+          // @TODO... actually the reloading can be nice. 
+          // return false;
         });
       }
     });

@@ -12,11 +12,14 @@
  
 function listmixer_behaviors_listmixer_push_nodereference($data) {
   // If POST data has been set, save the node
-  dpm($_POST);
+  // dpm($_POST);
   if (isset($_POST['target_id']) && isset($_POST['input']) && isset($_POST['target_field'])) {
     $node = node_load($_POST['target_id']);
-    $node->{$_POST['target_field']}[] = array('nid' => $_POST['input']);
-    //          array_unshift($node->{$field}, array( 'nid' => $link_value ));
+    
+    foreach (split(',', $_POST['input']) as $value) {
+      $node->{$_POST['target_field']}[] = array('nid' => $value);    
+    }
+
     node_save($node);
   }
 
