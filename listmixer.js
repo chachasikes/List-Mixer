@@ -181,8 +181,8 @@ Drupal.behaviors.listmixer = function() {
           // Append help text to interaction container.
           // *********** Handle interaction label
           var interactions_label = this.interactions.interactions_label;
+          $(interactions_container).prepend(interactions_help).wrap('<div></div>').addClass('listmixer-interaction-help');
           $(interactions_container).prepend(interactions_label).wrap('<div></div>').addClass('listmixer-interaction-label');
-          $(interactions_container).append(interactions_help).wrap('<div></div>').addClass('listmixer-interaction-help');
           // ********* Find the button (which might not be a button) and add a click function to it.
           
           // Set up data object on page load.

@@ -60,7 +60,7 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
   $form['interactions_container'] = array(
       '#type' => 'textfield',
       '#size' => 90,
-      '#title' => t('Interaction Container'),
+      '#title' => t('Selector: Interaction Container'),
       '#description' => '<p>This is the container that ListMixer will look
       for to apply presets. If this html element is not on a page, ListMixer will not 
       get load the preset.</p>
@@ -92,7 +92,7 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
   $form['interactions_restrictions'] = array(
       '#type' => 'textfield',
       '#size' => 90,
-      '#title' => t('Interactive region'),
+      '#title' => t('Selector: Interactive Region'),
       '#description' => '<p>Define selector for an html element of a page
       that will contain the interactive widgets. This could be the same as the
       target container, or it could be another region of the page.</p>',
@@ -102,7 +102,7 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
   $form['interactions_inclusions'] = array(
       '#type' => 'textfield',
       '#size' => 90,
-      '#title' => t('Interactive element receivers'),
+      '#title' => t('Selector: Interactive Element Receivers'),
       '#description' => '<p>Define a selector that will locate
       the html elements that should receive interactive widgets.</p>
       <p>The element receivers should exist inside the interactive
@@ -114,7 +114,7 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
   $form['interactions_source_id'] = array(
       '#type' => 'textfield',
       '#size' => 90,
-      '#title' => t('Source Value Selector'),
+      '#title' => t('Selector: Source Value Selector'),
       '#description' => '<p>Define a selector that will contain
       the value that should be passed to the target node.</p>
       <p>The source value selector should exist inside the markup
@@ -142,7 +142,7 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
   $form['interactions_target_field'] = array(
       '#type' => 'textfield',
       '#size' => 90,
-      '#title' => t('Target Field'),
+      '#title' => t('Fieldname: Target Field'),
       '#description' => t('<p>Enter the machine name of the field that
        should be saved to.</p>
        <p>This should match the widget "Push" type you selected above.
