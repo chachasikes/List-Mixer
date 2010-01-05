@@ -157,7 +157,7 @@ function listmixer_ui_preset_form($form_state, $preset = array()) {
       '#size' => '64',
       '#title' => t('Preset Namespace'),
       '#default_value' => $preset['preset_name'],
-      '#description' => t('The namespace is used in URL\'s. Please only use alphanumeric characters, underscores (_), and hyphens (-) for preset names.'),
+      '#description' => t('This is the machine name of the preset, used by Drupal. Please only use alphanumeric characters, underscores (_), and hyphens (-) for preset names.'),
       '#validate' => array('listmixer_element_preset_name_validate' => array()),
       '#weight' => 1,
     );
@@ -175,13 +175,13 @@ function listmixer_ui_preset_form($form_state, $preset = array()) {
     '#title' => t('Select the type of storage method for this interaction'),
     '#default_value' => $preset['preset_method'],
     '#options' => listmixer_listmixer_storage_register_load(),
-    '#description' => t('Choose the method of how list data should be stored.'),
+    '#description' => t('Choose the method of how list data should be stored. (Currently just \'Nodes\', which must be enabled.)'),
     '#weight' => 3,
   );
    $form['preset_enabled'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enabled'),
-    '#default_value' => $preset['preset_enabled'],
+    '#default_value' => $preset['preset_enabled'] ? $preset['preset_enabled'] : 1,
     '#description' => t('Uncheck box to disable this preset'),
     '#weight' => 4,
   ); 

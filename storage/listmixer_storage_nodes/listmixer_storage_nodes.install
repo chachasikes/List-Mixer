@@ -77,6 +77,12 @@ function listmixer_storage_nodes_schema() {
         'length' => 0,
         'not null' => TRUE,
       ),     
+      'interactions_label' => array(
+        'description' => '<p>' . t('Label text.') . '</p>',
+        'type' => 'text',
+        'length' => 0,
+        'not null' => TRUE,
+      ),
       'interactions_help' => array(
         'description' => '<p>' . t('Help text.') . '</p>',
         'type' => 'text',
