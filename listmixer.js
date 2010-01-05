@@ -63,151 +63,154 @@ Drupal.behaviors.listmixer = function() {
         var interactions_container = $.find(this.interactions.interactions_container);
         // Interaction container not found, do nothing, other wise, proceed.
         if (interactions_container == '') {
-          return false;
+          // No container found, do nothing. Go find the next preset.
+          // @TODO return false was escaping the each() loop completely.
         }
-        // *********** Handle help text
-        var interactions_help = this.interactions.interactions_help;
-        // Append help text to interaction container.
-        $(interactions_container).append(interactions_help).wrap('<div></div>');
-        // *********** Set up target field (for node save function)
-        // @TODO Add validation function if necessary
-        var target_field = this.interactions.interactions_target_field;
-        // *********** Set up the target id
-        // Make sure that the target id is a number  
-        try {    
-           var target_id = $(this.interactions.interactions_target_id).html();
-           target_id.length > 0;
-           $(this.interactions.interactions_target_id).hide();
-        }
-        catch(err) {
-          alert('ListMixer Error: Target ID not a number or could not be found. Edit preset: admin/build/listmixer/' + this.preset_id + '');
-        }
-        
-        // *********** Set up target restrictions. 
-        // Make sure it contains markup.  
-        // If undefined, set to a default of 'html' (the whole page)      
-        if (this.interactions.interactions_restrictions === undefined) {
-            this.interactions.interactions_restrictions = 'body';
-        }
-        var interactions_restrictions = $(this.interactions.interactions_restrictions).html();
-        try {    
-           interactions_restrictions.length > 0;     
-        }
-        catch(err) {
-          alert('ListMixer Error: Restrictions Edit preset: admin/build/listmixer/' + this.preset_id + '');
-        }
-       
-        // *********** Create interaction form and target classes
-        this.target_form_class = 'class="listmixer-target-form"';   
-        this.target_form_id = 'listmixer-target-'+ this.preset_name;
-        // @TODO Should form be a 'wrap()' function?
-        this.target_form = '<form id="' + this.target_form_id + '" ' + this.target_form_class + '></form>';
-        var form = this.target_form;
-        var container = this.interactions.interactions_container;
-        
-        // *********** Set up interactivity
-        // This is restrictions here. If the user just wants a form field in block,
-        // Then they need to set it to just the block. Default is 'body' so 
-        // if nothing is entered, it will show up at the very bottom of the page.
-                
-
-        // Only one form is allowed, if the form should be applied to the restrictions container, but not
-        // the container if the container is a child of the restrictions container.
-        try {
-          // Create the pointer to the container for where the form should be added.
-          var form_container;
-          if (this.interactions.interactions_container == this.interactions.interactions_restrictions) {
-            form_container = this.interactions.interactions_container;
-          }
-          else{
-            form_container = this.interactions.interactions_restrictions + ':has(' + this.interactions.interactions_container + ')';
-          }
-
-          // Make sure that the form container is valid.
-          $(form_container).length > 0;
-          $(form_container).append(form);
-          
-          // Set up selector for the source_id (for input values)
-          var source_id_selector = this.interactions.interactions_source_id;
-          
-          try {
-            // Inclusions are the elements that will receive interactions.
-            // Find all of the items that should act as a source of interaction.
-            // EXAMPLE: div.views-field-field-photo-fid  a:regex(class, ^gallery-photo-)
-            
-
-            // Inclusions should be children of the restrictions.
-            // The source selector needs to be a child of the element.
-            // @TODO make the form into textfields and rearrange and rewrite the help.
-                        
-            $.each($(this.interactions.interactions_restrictions + ' ' + this.interactions.interactions_inclusions), function() {
-              var Interact = new Drupal.behaviors.listmixer.Interact();
-              Interact.init();
-              var interactFunction = preset.behaviors.interact.settings.behavior_function;
-              // @TODO check source_id is numeric
-              // The selector might be empty if user enters nothing, if so, just use the default input.
-              if(source_id_selector != '') {
-                // Get each source id
-                var source_id = $(this).find(source_id_selector).html();
-                // Hide the source selector. (@TODO, make this an option)
-                $(this).find(source_id_selector).hide();
-                if(source_id != null) {
-                  // Only add interactive elements if a valid value is present.
-                  $(this).prepend(Interact.markup[interactFunction]);
-                }
-              }
-              else{
-                $(this).prepend(Interact.markup[interactFunction]);
-              }  
-              // Add value to input field after input is created
-              $(this).find('input').val(source_id);       
-            });
+        else {
+          // *********** Handle help text
+          var interactions_help = this.interactions.interactions_help;
+          // Append help text to interaction container.
+          $(interactions_container).append(interactions_help).wrap('<div></div>');
+          // *********** Set up target field (for node save function)
+          // @TODO Add validation function if necessary
+          var target_field = this.interactions.interactions_target_field;
+          // *********** Set up the target id
+          // Make sure that the target id is a number  
+          try {    
+             var target_id = $(this.interactions.interactions_target_id).html();
+             target_id.length > 0;
+             $(this.interactions.interactions_target_id).hide();
           }
           catch(err) {
-            alert('ListMixer Error: Inclusion & input validation problem. Edit preset: admin/build/listmixer/' + this.preset_id + '');
-          }      
-        }
-        catch(err) {
-          alert('ListMixer Error: Restrictions and Container conflict: admin/build/listmixer/' + this.preset_id + '');
-        }
-        // ********* Set up Submit button
-        var Submit = new Drupal.behaviors.listmixer.Submit();
-        Submit.init();
-        var submitFunction = preset.behaviors.submit.settings.behavior_function;
-        this.submit = Submit.markup[submitFunction];         
-        // Add button to form/containter
-        $('form#' + this.target_form_id).append(this.submit);
-
-        // ********* Find the button (which might not be a button) and add a click function to it.
-        
-        // Set up data object on page load.
-        this.data = {
-          'inputArray' : [],
-          'input' : '',
-          'target_id' : target_id,
-          'target_field' : target_field
-          // @TODO Collect other data here if necessary
-        };
-        // Activate push callback
-        $('form#' + this.target_form_id + ' div.listmixer-push-submit').children(".button").click(function() {
-          Drupal.behaviors.listmixer.push(preset); 
-        
-          //@TODO make sure target_id is available to push function
+            alert('ListMixer Error: Target ID not a number or could not be found. Edit preset: admin/build/listmixer/' + this.preset_id + '');
+          }
           
-          // If page stayed loaded, clear out the data array.
-          preset.data = {
-          'inputArray' : [],
-          'input' : '',
-          'target_id' : target_id,
-          'target_field' : target_field
-          }          
-          // @TODO Change input val clearing.
-          // $('form.listmixer-target-form div.listmixer-interact-input input').val('');
+          // *********** Set up target restrictions. 
+          // Make sure it contains markup.  
+          // If undefined, set to a default of 'html' (the whole page)      
+          if (this.interactions.interactions_restrictions === undefined) {
+              this.interactions.interactions_restrictions = 'body';
+          }
+          var interactions_restrictions = $(this.interactions.interactions_restrictions).html();
+          try {    
+             interactions_restrictions.length > 0;     
+          }
+          catch(err) {
+            alert('ListMixer Error: Restrictions Edit preset: admin/build/listmixer/' + this.preset_id + '');
+          }
+         
+          // *********** Create interaction form and target classes
+          this.target_form_class = 'class="listmixer-target-form"';   
+          this.target_form_id = 'listmixer-target-'+ this.preset_name;
+          // @TODO Should form be a 'wrap()' function?
+          this.target_form = '<form id="' + this.target_form_id + '" ' + this.target_form_class + '></form>';
+          var form = this.target_form;
+          var container = this.interactions.interactions_container;
           
-          // Do not reload page.
-          // @TODO... actually the reloading can be nice. 
-          // return false;
-        });
+          // *********** Set up interactivity
+          // This is restrictions here. If the user just wants a form field in block,
+          // Then they need to set it to just the block. Default is 'body' so 
+          // if nothing is entered, it will show up at the very bottom of the page.
+                  
+  
+          // Only one form is allowed, if the form should be applied to the restrictions container, but not
+          // the container if the container is a child of the restrictions container.
+          try {
+            // Create the pointer to the container for where the form should be added.
+            var form_container;
+            if (this.interactions.interactions_container == this.interactions.interactions_restrictions) {
+              form_container = this.interactions.interactions_container;
+            }
+            else{
+              form_container = this.interactions.interactions_restrictions + ':has(' + this.interactions.interactions_container + ')';
+            }
+  
+            // Make sure that the form container is valid.
+            $(form_container).length > 0;
+            $(form_container).append(form);
+            
+            // Set up selector for the source_id (for input values)
+            var source_id_selector = this.interactions.interactions_source_id;
+            
+            try {
+              // Inclusions are the elements that will receive interactions.
+              // Find all of the items that should act as a source of interaction.
+              // EXAMPLE: div.views-field-field-photo-fid  a:regex(class, ^gallery-photo-)
+              
+  
+              // Inclusions should be children of the restrictions.
+              // The source selector needs to be a child of the element.
+              // @TODO make the form into textfields and rearrange and rewrite the help.
+                          
+              $.each($(this.interactions.interactions_restrictions + ' ' + this.interactions.interactions_inclusions), function() {
+                var Interact = new Drupal.behaviors.listmixer.Interact();
+                Interact.init();
+                var interactFunction = preset.behaviors.interact.settings.behavior_function;
+                // @TODO check source_id is numeric
+                // The selector might be empty if user enters nothing, if so, just use the default input.
+                if(source_id_selector != '') {
+                  // Get each source id
+                  var source_id = $(this).find(source_id_selector).html();
+                  // Hide the source selector. (@TODO, make this an option)
+                  $(this).find(source_id_selector).hide();
+                  if(source_id != null) {
+                    // Only add interactive elements if a valid value is present.
+                    $(this).prepend(Interact.markup[interactFunction]);
+                  }
+                }
+                else{
+                  $(this).prepend(Interact.markup[interactFunction]);
+                }  
+                // Add value to input field after input is created
+                $(this).find('input').val(source_id);       
+              });
+            }
+            catch(err) {
+              alert('ListMixer Error: Inclusion & input validation problem. Edit preset: admin/build/listmixer/' + this.preset_id + '');
+            }      
+          }
+          catch(err) {
+            alert('ListMixer Error: Restrictions and Container conflict: admin/build/listmixer/' + this.preset_id + '');
+          }
+          // ********* Set up Submit button
+          var Submit = new Drupal.behaviors.listmixer.Submit();
+          Submit.init();
+          var submitFunction = preset.behaviors.submit.settings.behavior_function;
+          this.submit = Submit.markup[submitFunction];         
+          // Add button to form/containter
+          $('form#' + this.target_form_id).append(this.submit);
+  
+          // ********* Find the button (which might not be a button) and add a click function to it.
+          
+          // Set up data object on page load.
+          this.data = {
+            'inputArray' : [],
+            'input' : '',
+            'target_id' : target_id,
+            'target_field' : target_field
+            // @TODO Collect other data here if necessary
+          };
+          // Activate push callback
+          $('form#' + this.target_form_id + ' div.listmixer-push-submit').children(".button").click(function() {
+            Drupal.behaviors.listmixer.push(preset); 
+          
+            //@TODO make sure target_id is available to push function
+            
+            // If page stayed loaded, clear out the data array.
+            preset.data = {
+            'inputArray' : [],
+            'input' : '',
+            'target_id' : target_id,
+            'target_field' : target_field
+            }          
+            // @TODO Change input val clearing.
+            // $('form.listmixer-target-form div.listmixer-interact-input input').val('');
+            
+            // Do not reload page.
+            // @TODO... actually the reloading can be nice. 
+            // return false;
+          });
+        } // else
       }
     });
   }

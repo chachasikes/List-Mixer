@@ -197,9 +197,9 @@ function listmixer_behaviors_load_form_options($preset = NULL, $type) {
   $behaviors = listmixer_behavior_registry_load();
   
   // Add behavior information into array
-  // Add 'none' value
-  // @TODO Should this be NULL, check db structure
-  $behaviors_options = array('none' => '--None--');  
+  // @TODO Maybe this should never be allowed to be null
+  // $behaviors_options = array('none' => '--None--');
+  $behaviors_options = array();  
   foreach ($behaviors as $behavior) {
     if ($type == $behavior['behavior_type']) {
       $behaviors_options[$behavior['behavior_name']] =  $behavior['behavior_label'];
@@ -212,8 +212,12 @@ function listmixer_behaviors_load_form_options($preset = NULL, $type) {
  * Load registered behaviors
  */
 function listmixer_behavior_registry_load($name = NULL) {
+  // Load behavior registry
+  $behaviors = listmixer_behaviors_registry_build();
+  // @TODO Figure out the best system for building the registry, if it should be cached or not:
+  // an extra db call may be unneccessary.
   // Load and deserialize behavior registry
-  $behaviors = unserialize(variable_get('listmixer_behavior_registry', array('listmixer')));
+  // $behaviors = unserialize(variable_get('listmixer_behavior_registry', array()));
   if (!empty($name)) {
     foreach ($behaviors as $key => $behavior) {
       if ($behaviors[$key]['behavior_name'] == $name) {
@@ -276,6 +280,7 @@ function listmixer_behaviors_registry_build_behavior($type, $label, $enabled = T
  * Form for updating the registry
  * @TODO move this from systems to cache system
  * @TODO change order of how registry is updated. include manual button, but also a function.
+ * Update: I don't think we'll need this, but will keep the page to see what behaviors are available.
  */ 
 function listmixer_behaviors_registry_form($form_state, $behavior = array(), $op = NULL) {
   $enabled = TRUE;
@@ -327,7 +332,7 @@ function listmixer_behaviors_registry_build() {
   // $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('submit', 'Submit Checkbox', $enabled, '', 'checkbox', 'submit_checkbox', 'Submit Checkbox', 'checkboxSubmit');
 
   // Reset preset cache.
-  $presets = listmixer_presets(TRUE);
+  // $presets = listmixer_presets(TRUE);
   
   return $listmixer_behaviors_registry;
 }

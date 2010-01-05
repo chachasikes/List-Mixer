@@ -5,21 +5,22 @@
  *******************************************************************************
  * @file listmixer.module
  * Main module file for List Mixer module
+ * (Preset storing methods inspired by Imagecache)
  *******************************************************************************
  */
  
 /**
- * Imagecache preset storage constant for user-defined presets in the DB.
+ * ListMixer preset storage constant for user-defined presets in the DB.
  */
 define('LISTMIXER_STORAGE_NORMAL', 0);
 
 /**
- * Imagecache preset storage constant for module-defined presets in code.
+ * ListMixer preset storage constant for module-defined presets in code.
  */
 define('LISTMIXER_STORAGE_DEFAULT', 1);
 
 /**
- * Imagecache preset storage constant for user-defined presets that override
+ * ListMixer preset storage constant for user-defined presets that override
  * module-defined presets.
  */
 define('LISTMIXER_STORAGE_OVERRIDE', 2); 
@@ -38,7 +39,6 @@ include('includes/listmixer.behaviors.inc');
  */
 function listmixer_help($section) {
   switch ($section) {
-    // TODO: Should this be one line or in lines of 80 characters?
     case 'admin/help#listmixer':
     return '<p>'. t('List Mixer helps users of a Drupal website to manage 
     methods of creating and updating lists of content. List Mixer works with 
@@ -54,18 +54,12 @@ function listmixer_help($section) {
  * Implementation of hook_perm().
  */
 function listmixer_perm() {
-  $perms = array('access list mixer');
-  foreach (listmixer_presets() as $preset) {
+  $perms = array('administer list mixer', 'access list mixer');
+  /* @TODO re-enable when permissions hooked up to preset building function.
+    foreach (listmixer_presets() as $preset) {
     $perms[] =  'view listmixer '. $preset['preset_name'];
-  }
+  }*/
   return $perms;
-}
-
-/**
- * Clear imagecache presets cache on admin/build/modules form.
- */
-function listmixer_form_system_modules_alter(&$form, $form_state) {
-  listmixer_presets(TRUE);
 }
 
 /**
@@ -112,39 +106,34 @@ function listmixer_menu() {
 }
 /**
  * Determine which listmixer behavior function should be run based on arguments
- * @TODO: I think the naming convention is going to break down.
- * I want to be able to put the includes in whatever folder they need to be in.
- * The behavior has to have a unique name
- * The folder should still reflect a very simple name that corresponds 
- * to the module/function generating the content
  * 
  */
 function listmixer_behaviors_callback($type, $name, $root) {
-  // @TODO: See if data can be an object here
   $data_post_value_name = 'data_' . $name;
   $data = $_POST[$data_post_value_name];
-  // Load function.
+  // Load callback function.
   $function_name = 'listmixer_behaviors_' . $name;
 
-  // Load include from registry.
+  // Load include (path stored with behavior library)
+  // @TODO The library might get consolidated to not be all includes,
+  // but not until most of the library is actually built.
   
+  // Get the registered behaviors.
   $behavior = listmixer_behavior_registry_load($root);
+  // Load include file.
   if (file_exists($behavior['behavior_include'])) {
     include($behavior['behavior_include']);
   }  
+  // Call function for handling callback.
   if (function_exists($function_name)) {
     $return = call_user_func($function_name, $data);
     if (!empty($return)) {
-
-      // @TODO: Interactive Growl-like message area? (like in open atrium?)
-      // @TODO: Redirect will handle how blocks might need to reload.
-
-      // @TODO: Rig this up
-      // Take markup from the array passed back from the function.
-      // Add that markup to the Drupal javascript object.
+      /*
+      If we need to add more javascript to the page here, use this function.
       $set_rendered_markup = drupal_add_js('Drupal.behaviors.listmixer.behaviors.return.' 
       . $behavior['behavior_name'] . '("' . $return['message'] . '");', 'inline');  
       // dpm($set_rendered_markup);
+      */
       
       // Return nothing, but set a message.
       // @TODO Date is added for testing purposes. May become unneccessary
@@ -175,7 +164,7 @@ function listmixer_behaviors_callback($type, $name, $root) {
  * @TEST: Check what is returned
  */
 function listmixer_behaviors_redirect_callback($type, $name, $root) {
-  // @TODO: Fill in. 
+  // @TODO: Fill in if necessary.
 }
 
 
@@ -186,14 +175,9 @@ function listmixer_behaviors_redirect_callback($type, $name, $root) {
  * Add an array of settings for all interactions that should
  * be listened for on each page.
  * After settings are set, run through page and add javascript
- * based on specifications in settings, and if possible, only
- * if an interaction should be used on a given page.
- * This might have to happen in a preprocessor function, which
- * ideally would execute after the module had been initialized.
- *
+ * based on specifications in settings.
  */
 function listmixer_init() {
-  // Add the javascript.
   $path = drupal_get_path('module', 'listmixer');
   // Add main javascript file.
   drupal_add_js($path .'/listmixer.js', 'footer');
@@ -205,30 +189,31 @@ function listmixer_init() {
   drupal_add_js($path .'/behaviors/listmixer_behaviors_interact.js', 'footer');
   
   // Add custom style sheet.
-  drupal_add_css($path .'/listmixer.css');
+  // @TODO Set up if necessary
+  // drupal_add_css($path .'/listmixer.css');
 
   // Add all interaction presets and callback settings to every Drupal page.
+  // This array includes only presets that should always be available.
   $presets = listmixer_presets(TRUE);
-    
-  // @TODO: listmixer.js will look for presence of the block_id (or whatever it is supposed to, later)
-  // @TODO: presets setup (in listmixer.js) if a block id is found, 
-  //        then the rest of the necessary data is searched for (nid)
-  // @TODO: ideally, if stuff is found, then the javascript file will load some includes. 
-  // @TODO: presets data variable created (here)
-  // @TODO: activate set up (buttons to trigger interactions added)
-  // @TODO: interact set up (buttons/methods to select data)
-
-  // @TODO: submit setup (handles executing callback and redirect/refresh)
   
   // Build array of settings for Drupal.settings javascript
   $settings = array();
   foreach ($presets as $preset) {
     // Only add presets that are enabled
+    // @TODO Add user permissions here - view blah preset
     if ($preset['preset_enabled']) {
       $settings[$preset['preset_name']] = $preset;
     }
   }
   drupal_add_js(array('listmixer' => $settings), 'setting');
+}
+
+/**
+ * Rebuild listmixer presets cache on admin/build/modules form.
+ * @TODO: Test that this actually works.
+ */
+function listmixer_form_system_modules_alter(&$form, $form_state) {
+  listmixer_presets(TRUE);
 }
 
 // Theming functions

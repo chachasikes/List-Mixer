@@ -85,7 +85,7 @@ function drag_list_ajax_store_value_link($target_nid, $link_value, $field) {
         node_save($node);
         return 'Node saved.';
     }
-    // TODO: What happens if invalid code is passed into the node?
+    // @TODO: What happens if invalid code is passed into the node?
     else{
       return 'Node not saved because value already exists.';
     }

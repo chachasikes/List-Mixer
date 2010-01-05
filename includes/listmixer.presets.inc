@@ -37,9 +37,9 @@ function listmixer_presets($reset = TRUE) {
 
   // Grab from cache or build the array. To ensure that the Drupal 5 upgrade
   // path works, we also check whether the presets list is an array.
-  if (($cache = cache_get('listmixer:presets', 'cache')) && is_array($cache->data)) {
+  /*if (($cache = cache_get('listmixer:presets', 'cache')) && is_array($cache->data)) {
     $presets = $cache->data;
-  }
+  }*/
   else {
     $normal_presets = array();
 
@@ -80,8 +80,8 @@ function listmixer_presets($reset = TRUE) {
         }
       }
     }
-
-    cache_set('listmixer:presets', $presets);
+    // Set the cache for the complete preset object.
+    // cache_set('listmixer:presets', $presets);
   }
   return $presets;
 }
@@ -274,7 +274,7 @@ function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
     $form_state['redirect'] = 'admin/build/listmixer';
   }
 
-  $preset = listmixer_presets($preset['preset_id']);
+  $preset = listmixer_presets(TRUE);
 
   $exported = '$presets = array();';
   $exported .= "\n";
@@ -305,6 +305,19 @@ function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
 function listmixer_ui_preset_export_form_submit($form, &$form_state) {
   $form_state['redirect'] = 'admin/build/listmixer';
 }
+
+/**
+ * Import preset by cutting and pasting preset array (1 at a time)
+ */
+ 
+/**
+ * Use hook that creates a preset (stored in a module)
+ * hook_listmixer_preset_default
+ */
+
+/**
+ * Override default preset
+ */
 
 
 /**

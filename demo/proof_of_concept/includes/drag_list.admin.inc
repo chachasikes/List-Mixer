@@ -35,7 +35,7 @@ function drag_list_admin_settings() {
     '#default_value' => variable_get('drag_list_allowed_block', 'block-views-drag_list_blocks-block_1'),
   );        
   // Content type for Drag List
-  // TODO: This may be unnecessary.
+  // @TODO: This may be unnecessary.
   $all_nodetypes = node_get_types();
   $all_nt = array();
   foreach ($all_nodetypes as $item) {

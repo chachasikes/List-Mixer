@@ -3,3 +3,4 @@ name = List Mixer Storage Type: Nodes
 description = Allow data to be stored to list-type nodes dynamically
 package = List Mixer
 core = 6.x
+dependencies[] = listmixer

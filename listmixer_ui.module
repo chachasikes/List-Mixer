@@ -13,7 +13,7 @@
  */
 function listmixer_ui_help($section) {
   switch ($section) {
-    // TODO: Should this be one line or in lines of 80 characters?
+    // @TODO: Should this be one line or in lines of 80 characters?
     case 'admin/help#listmixer_ui':
     return '<p>'. t('How do use List Mixer to create interaction presets.') .'</p>';
     /*case 'admin/build/listmixer/%listmixer_preset/export':
@@ -33,7 +33,7 @@ function listmixer_ui_perm() {
  */
 function listmixer_ui_menu() { 
   $items = array();
-  // TODO: Test: Check that settings load, test any settings created
+  // @TODO: Test: Check that settings load, test any settings created
   $items['admin/build/listmixer'] = array(
     'title' => 'List Mixer',
     'description' => 'Administer List Mixer',
@@ -41,13 +41,13 @@ function listmixer_ui_menu() {
     'access arguments' => array('administer list mixer'),
     'file' => 'includes/listmixer_ui.pages.inc',
   );
-  // TODO: Test: Check that overview page loads and has the right content
+  // @TODO: Test: Check that overview page loads and has the right content
   $items['admin/build/listmixer/list'] = array(
     'title' => 'List Mixer Interactions',
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => -10,
   );
-  // TODO: Test: check that presets are loaded, that the page makes sense, that it shows 'no lists' create one, and also and pre-installed default presets
+  // @TODO: Test: check that presets are loaded, that the page makes sense, that it shows 'no lists' create one, and also and pre-installed default presets
   $items['admin/build/listmixer/add'] = array(
     'title' => 'Add new interaction preset',
     'file' => 'includes/listmixer_ui.pages.inc',
@@ -56,7 +56,7 @@ function listmixer_ui_menu() {
     'access arguments' => array('administer list mixer'),
     'type' => MENU_LOCAL_TASK,
   );
-  // TODO: Test: check that add page loads, make sure permissions make sense, check that it adds and redirects properly
+  // @TODO: Test: check that add page loads, make sure permissions make sense, check that it adds and redirects properly
   $items['admin/build/listmixer/%listmixer_ui_preset'] = array(
     'title callback' => 'listmixer_preset_title_callback',
     'title arguments' => array('Edit preset: !preset_name', 3),
@@ -66,8 +66,8 @@ function listmixer_ui_menu() {
     'access arguments' => array('administer list mixer'),
     'type' => MENU_CALLBACK,
   );
-  // TODO: Test: check what happens if no argument, or bad argument
-  $items['admin/build/listmixer/%listmixer_ui_preset/delete'] = array( // TODO: i already hate this naming convention, change it
+  // @TODO: Test: check what happens if no argument, or bad argument
+  $items['admin/build/listmixer/%listmixer_ui_preset/delete'] = array( 
     'title callback' => 'listmixer_preset_title_callback',
     'title arguments' => array('Delete interaction preset: !preset_name', 3),
     'file' => 'includes/listmixer_ui.pages.inc',
@@ -76,7 +76,7 @@ function listmixer_ui_menu() {
     'access arguments' => array('administer list mixer'),
     'type' => MENU_CALLBACK,
   );
-  // TODO: Test: create deletion tests
+  // @TODO: Test: create deletion tests
   $items['admin/build/listmixer/%listmixer_ui_preset/export'] = array(
     'title callback' => 'listmixer_preset_title_callback',
     'title arguments' => array('Export interaction preset: !preset_name', 3),
@@ -86,19 +86,17 @@ function listmixer_ui_menu() {
     'access arguments' => array('administer list mixer'),
     'type' => MENU_CALLBACK,
   );
-  // TODO: Test: create export tests
-  /*
-  $items['admin/build/listmixer/%listmixer_preset/override'] = array(
+  // @TODO Test this function with default preset when hook_listmixer_preset_default is set up.
+  $items['admin/build/listmixer/%listmixer_ui_preset/override'] = array(
     'title callback' => 'listmixer_preset_title_callback',
-    'title arguments' => array('Override interaction preset: !preset_name', 3),
-    'file' => 'imagecache_ui.pages.inc',
+    'title arguments' => array('Export interaction preset: !preset_name', 3),
+    'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('listmixer_preset_override_form'),
+    'page arguments' => array('listmixer_ui_preset_form', 3),
     'access arguments' => array('administer list mixer'),
     'type' => MENU_CALLBACK,
   );
-  // TODO: Test: create override tests
-  */
+  // @TODO: Test: create export tests
   return $items;
 }
 /**

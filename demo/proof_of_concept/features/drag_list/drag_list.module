@@ -34,7 +34,7 @@
  *  They can click
  * links, and the path will be stored in a list in a node. 
  
- * TODO: Currently, the module does not actually support 'dragging' links into
+ * @TODO: Currently, the module does not actually support 'dragging' links into
  * a box. Dragging is not very accessible, so the default mode is to click
  * an 'Activate' button, which then highlights all links on the page. The
  * user can click the links they would like to store. 
@@ -173,7 +173,7 @@ function drag_list_ajax_store_value_nodereference($target_nid, $link_value, $fie
     // See if the value has already been set for the field.
     foreach ($node->{$field} as $key => $value) {
       $nid_exists = FALSE;
-      // TODO: require link/nodereference modules
+      // @TODO: require link/nodereference modules
       if ($node->{$field}[$key]['nid'] == $link_value) {
         $nid_exists = TRUE;
         break; 
@@ -218,7 +218,7 @@ function drag_list_ajax_store_value_link($target_nid, $link_value, $field) {
         node_save($node);
         return 'Node saved.';
     }
-    // TODO: What happens if invalid code is passed into the node?
+    // @TODO: What happens if invalid code is passed into the node?
     else{
       return 'Node not saved because value already exists.';
     }
