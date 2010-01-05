@@ -139,19 +139,19 @@ function listmixer_behaviors_callback($type, $name, $root) {
       // @TODO Date is added for testing purposes. May become unneccessary
       // If debugging messages allowed, set message every time a behavior callback is executed.
       // @TODO actually, only 1 message is set, it seems, not several as one might expect.
-      if (variable_get('listmixer_debugging', '1')) {
+      if (variable_get('listmixer_debugging', 0)) {
         drupal_set_message($return['message'] . ' ' . date("F j, Y, g:i:s a"), 'status', TRUE);
       }
     }
     else{
-      if (variable_get('listmixer_debugging', '1')) {
+      if (variable_get('listmixer_debugging', 0)) {
         drupal_set_message(t('Warning: Data not saved. Source: ' 
         . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');
       }
     }
   } 
   else{
-      if (variable_get('listmixer_debugging', '1')) {
+      if (variable_get('listmixer_debugging', 0)) {
         drupal_set_message(t('Warning: Data not saved. Source: ' 
         . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');
       }
@@ -189,8 +189,7 @@ function listmixer_init() {
   drupal_add_js($path .'/behaviors/listmixer_behaviors_interact.js', 'footer');
   
   // Add custom style sheet.
-  // @TODO Set up if necessary
-  // drupal_add_css($path .'/listmixer.css');
+  drupal_add_css($path .'/listmixer.css');
 
   // Add all interaction presets and callback settings to every Drupal page.
   // This array includes only presets that should always be available.

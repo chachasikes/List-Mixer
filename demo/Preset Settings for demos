@@ -1,7 +1,5 @@
-Settings to build photoset maker 
---------------------------------
-You also have to install the features exports of the views, cck types.
-You will probably need to set up imagecache settings and add some test photo content.
+
+Settings to build photoset maker (you also have to install the view, cck types, imagecache settings and add photo content)
 
 
 Preset Namespace: photoset_maker
@@ -9,10 +7,14 @@ Preset Description: This connects the node ids from a gallery view to a view att
 Select the type of storage method for this interaction: Nodes
 Enabled: checked
 
-Activate: MouseDown
-Push: Nodereference
-Interact: Checkbox
-Submit: Button
+Activate:
+MouseDown
+Push:
+Nodereference
+Interact:
+Checkbox
+Submit:
+Button
 
 
 Label for interaction: Make a photoset
@@ -20,6 +22,5 @@ Help Text for Drupal User: You are making a photoset. Click the checkboxes to se
 Selector: Interaction Container: div.attachment div.view-display-id-attachment_1 div.view-content
 Selector: Target Node ID: div.view-photo-gallery div.attachment div.views-field-nid span.field-content
 Selector: Interactive Region: div.view-photo-gallery
-Selector: Interactive Element Receivers: table.views-view-grid td
 Selector: Source Value Selector: div.views-field-nid span.field-content
 Fieldname: Target Field: field_reference_photo

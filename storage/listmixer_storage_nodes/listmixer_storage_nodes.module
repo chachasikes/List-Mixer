@@ -107,7 +107,12 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
       the html elements that should receive interactive widgets.</p>
       <p>The element receivers should exist inside the interactive
       region</p>
-      <p>Example: table.views-view-grid td</p>',
+      <p>Example: table.views-view-grid td</p>
+      <ul>
+      <li>Tip: If you want an element to show up in the form generated
+       by listmixer, enter this: form#listmixer-target-babble 
+       (but replace "babble" with the name of your interaction setting</li>
+      </ul>',
       '#default_value' => $interactions['interactions_inclusions'],
       '#weight' => 4,
   );

@@ -1,9 +1,4 @@
 <?php
-// $Id$
-
-/**
- * @file
- */
 
 /**
  * Helper to implementation of hook_content_default_fields().
@@ -19,7 +14,7 @@ function _photo_content_default_fields() {
       'weight' => '-3',
       'parent' => '',
       'label' => array(
-        'format' => 'above',
+        'format' => 'hidden',
       ),
       'teaser' => array(
         'format' => 'photo_gallery_linked',

@@ -116,6 +116,7 @@ function _photo_gallery_views_default_views() {
   $handler->override_option('header_empty', 0);
   $handler->override_option('empty_format', '1');
   $handler->override_option('items_per_page', 5);
+  $handler->override_option('distinct', 1);
   $handler->override_option('style_plugin', 'grid');
   $handler->override_option('style_options', array(
     'grouping' => '',
@@ -242,9 +243,10 @@ function _photo_gallery_views_default_views() {
       'relationship' => 'none',
     ),
   ));
-  $handler->override_option('header', 'Your photo set');
+  $handler->override_option('header', 'This is a list of photos in your photo set.');
   $handler->override_option('empty', 'You have not created a photo set. 
 <a href="node/add/photo-set">Make one</a>');
+  $handler->override_option('items_per_page', 1);
   $handler->override_option('style_plugin', 'default');
   $handler->override_option('style_options', array());
   $handler->override_option('attachment_position', 'before');

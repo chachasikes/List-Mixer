@@ -1,9 +1,5 @@
 <?php
-// $Id$
 
-/**
- * @file
- */
 /**
  * Helper to implementation of hook_node_info().
  */

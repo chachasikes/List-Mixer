@@ -123,7 +123,11 @@ Drupal.behaviors.listmixer = function() {
   
             // Make sure that the form container is valid.
             $(form_container).length > 0;
-            $(form_container).append(form);
+            $(form_container).prepend(form);
+            
+            // If the interaction container matches the restriction container, make interactive elements live in the form. 
+            // (looks better)
+            
             
             // Set up selector for the source_id (for input values)
             var source_id_selector = this.interactions.interactions_source_id;
@@ -181,8 +185,8 @@ Drupal.behaviors.listmixer = function() {
           // Append help text to interaction container.
           // *********** Handle interaction label
           var interactions_label = this.interactions.interactions_label;
-          $(interactions_container).prepend(interactions_help).wrap('<div></div>').addClass('listmixer-interaction-help');
-          $(interactions_container).prepend(interactions_label).wrap('<div></div>').addClass('listmixer-interaction-label');
+          $('form#' + this.target_form_id).prepend('<div class="listmixer-interaction-help">' + interactions_help + '</div>');
+          $('form#' + this.target_form_id).prepend('<div class="listmixer-interaction-label">' + interactions_label + '</div>');
           // ********* Find the button (which might not be a button) and add a click function to it.
           
           // Set up data object on page load.

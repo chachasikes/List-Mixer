@@ -1,9 +1,5 @@
 <?php
-// $Id$
 
-/**
- * @file
- */
 /**
  * Helper to implementation of hook_content_default_fields().
  */
@@ -15,16 +11,17 @@ function _photo_set_content_default_fields() {
     'field_name' => 'field_reference_photo',
     'type_name' => 'photo_set',
     'display_settings' => array(
+      'weight' => '-3',
+      'parent' => '',
       'label' => array(
         'format' => 'above',
-        'exclude' => 0,
       ),
       'teaser' => array(
-        'format' => 'default',
+        'format' => 'teaser',
         'exclude' => 0,
       ),
       'full' => array(
-        'format' => 'default',
+        'format' => 'teaser',
         'exclude' => 0,
       ),
       '4' => array(
