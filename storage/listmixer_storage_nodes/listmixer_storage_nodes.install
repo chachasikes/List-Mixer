@@ -89,6 +89,30 @@ function listmixer_storage_nodes_schema() {
         'length' => 0,
         'not null' => TRUE,
       ),
+      'interactions_push_label' => array(
+        'description' => '<p>' . t('Label.') . '</p>',
+        'type' => 'text',
+        'length' => 0,
+        'not null' => TRUE,
+      ),
+      'interactions_submit_label' => array(
+        'description' => '<p>' . t('Label.') . '</p>',
+        'type' => 'text',
+        'length' => 0,
+        'not null' => TRUE,
+      ),
+      'interactions_activate_label' => array(
+        'description' => '<p>' . t('Label.') . '</p>',
+        'type' => 'text',
+        'length' => 0,
+        'not null' => TRUE,
+      ),
+      'interactions_interact_label' => array(
+        'description' => '<p>' . t('Label.') . '</p>',
+        'type' => 'text',
+        'length' => 0,
+        'not null' => TRUE,
+      ),
       'interactions_source_content_types' => array(
         'description' => t('Select which content types will be allowed to be added to the list content type.'),
         'type' => 'text',

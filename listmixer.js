@@ -67,10 +67,6 @@ Drupal.behaviors.listmixer = function() {
           // @TODO return false was escaping the each() loop completely.
         }
         else {
-          // *********** Handle help text
-          var interactions_help = this.interactions.interactions_help;
-          // Append help text to interaction container.
-          $(interactions_container).append(interactions_help).wrap('<div></div>');
           // *********** Set up target field (for node save function)
           // @TODO Add validation function if necessary
           var target_field = this.interactions.interactions_target_field;
@@ -179,7 +175,14 @@ Drupal.behaviors.listmixer = function() {
           this.submit = Submit.markup[submitFunction];         
           // Add button to form/containter
           $('form#' + this.target_form_id).append(this.submit);
-  
+          
+          // *********** Handle help text
+          var interactions_help = this.interactions.interactions_help;
+          // Append help text to interaction container.
+          // *********** Handle interaction label
+          var interactions_label = this.interactions.interactions_label;
+          $(interactions_container).prepend(interactions_label).wrap('<div></div>').addClass('listmixer-interaction-label');
+          $(interactions_container).append(interactions_help).wrap('<div></div>').addClass('listmixer-interaction-help');
           // ********* Find the button (which might not be a button) and add a click function to it.
           
           // Set up data object on page load.

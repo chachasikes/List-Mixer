@@ -143,13 +143,56 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
       '#type' => 'textfield',
       '#size' => 90,
       '#title' => t('Target Field'),
-      '#description' => '<p>Enter the machine name of the field that
+      '#description' => t('<p>Enter the machine name of the field that
        should be saved to.</p>
        <p>This should match the widget "Push" type you selected above.
-       <em>Example: field_text_babble</em></p>',
+       <em>Example: field_text_babble</em></p>'),
       '#default_value' => $interactions['interactions_target_field'],
       '#weight' => 6,
-  );   
+  );
+  // @TODO Fix fieldset so it will store the data properly.
+  /*
+  $form['interactions_labels'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Interactive element labels'),
+      '#weight' => 7,
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+      '#tree' => TRUE,
+  );
+  $form['interactions_labels']['interactions_interact_label'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Label for interactive element'),
+      '#description' => t('<p>Enter text as it should appear to user</p>'),
+      '#default_value' => $interactions['interactions_interact_label'],
+      '#weight' => 1,
+  );
+  $form['interactions_labels']['interactions_submit_label'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Label for submit element'),
+      '#description' => t('<p>Enter text as it should appear to user</p>'),
+      '#default_value' => $interactions['interactions_submit_label'],
+      '#weight' => 2,
+  );
+  $form['interactions_labels']['interactions_push_label'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Label for push element'),
+      '#description' => t('<p>Enter text as it should appear to user</p>'),
+      '#default_value' => $interactions['interactions_push_label'],
+      '#weight' => 3,
+  ); 
+  $form['interactions_labels']['interactions_activate_label'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Label for activate element'),
+      '#description' => t('<p>Enter text as it should appear to user</p>'),
+      '#default_value' => $interactions['interactions_activate_label'],
+      '#weight' => 4,
+  ); 
+  */
   $all_nodetypes = node_get_types();
   $all_nodetype_options = array();
   foreach ($all_nodetypes as $item) {
