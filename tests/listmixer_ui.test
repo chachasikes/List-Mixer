@@ -1,13 +1,12 @@
 <?php
 // $Id$
 
-/*
- *******************************************************************************
- * @file listmixer.test
+/**
+ * @file
  * Tests for listmixer module
- *******************************************************************************
+ *
  */
- 
+
 class ListMixerUITest extends DrupalWebTestCase {
   public static function getInfo() {
     return array(
@@ -20,7 +19,4 @@ class ListMixerUITest extends DrupalWebTestCase {
   function setUp() {
     parent::setUp('listmixer_ui');
   }
-} 
-
-
- 
+}

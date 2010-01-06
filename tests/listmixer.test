@@ -2,12 +2,10 @@
 // $Id$
 
 /*
- *******************************************************************************
- * @file listmixer.test
+ * @file
  * Tests for listmixer module
- *******************************************************************************
  */
- 
+
 class ListMixerTest extends DrupalWebTestCase {
   public static function getInfo() {
     return array(
@@ -20,17 +18,12 @@ class ListMixerTest extends DrupalWebTestCase {
   function setUp() {
     parent::setUp('listmixer');
   }
-} 
+}
 
 /**
-
-TESTS TO WRITE
-
-database installed properly
-
-database uninstalld properly
-
-
-
-**/
- 
+ *
+ * TESTS TO WRITE
+ *
+ * database installed properly
+ * database uninstalld properly
+ */

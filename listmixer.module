@@ -1,14 +1,12 @@
 <?php
 // $Id$
 
-/*
- *******************************************************************************
- * @file listmixer.module
+/**
+ * @file
  * Main module file for List Mixer module
  * (Preset storing methods inspired by Imagecache)
- *******************************************************************************
  */
- 
+
 /**
  * ListMixer preset storage constant for user-defined presets in the DB.
  */
@@ -23,16 +21,16 @@ define('LISTMIXER_STORAGE_DEFAULT', 1);
  * ListMixer preset storage constant for user-defined presets that override
  * module-defined presets.
  */
-define('LISTMIXER_STORAGE_OVERRIDE', 2); 
+define('LISTMIXER_STORAGE_OVERRIDE', 2);
 
 /**
  * Includes
- */ 
+ */
 include('includes/listmixer.utilities.inc');
-include('includes/listmixer.hooks.inc'); 
-include('includes/listmixer.presets.inc'); 
-include('includes/listmixer.interactions.inc'); 
-include('includes/listmixer.behaviors.inc'); 
+include('includes/listmixer.hooks.inc');
+include('includes/listmixer.presets.inc');
+include('includes/listmixer.interactions.inc');
+include('includes/listmixer.behaviors.inc');
 
 /**
  * Implementation of hook_help().
@@ -40,12 +38,12 @@ include('includes/listmixer.behaviors.inc');
 function listmixer_help($section) {
   switch ($section) {
     case 'admin/help#listmixer':
-    return '<p>'. t('List Mixer helps users of a Drupal website to manage 
-    methods of creating and updating lists of content. List Mixer works with 
-    fields, views and taxonomy. 
-    A site administrator can set up any number of interaction presets. The 
+    return '<p>'. t('List Mixer helps users of a Drupal website to manage
+    methods of creating and updating lists of content. List Mixer works with
+    fields, views and taxonomy.
+    A site administrator can set up any number of interaction presets. The
     interaction presets allow associations of content types, fields, views,
-    taxonomy terms, block ids to be connected up to a variety of ajax-tools 
+    taxonomy terms, block ids to be connected up to a variety of ajax-tools
     and data storage methods.') .'</p>';
   }
 }
@@ -65,7 +63,7 @@ function listmixer_perm() {
 /**
  * Implementation of hook_menu().
  */
-function listmixer_menu() { 
+function listmixer_menu() {
   $items = array();
   // Code extract configuration pages
   $items['admin/settings/listmixer'] = array(
@@ -86,14 +84,14 @@ function listmixer_menu() {
   );
    // @TODO: There are probably too many arguments here, but it is due to the
    // way the behaviors are named. But this version works for now.
-   $items['admin/ajax/listmixer/behavior/%/%/%'] = array(
+    $items['admin/ajax/listmixer/behavior/%/%/%'] = array(
     'title' => 'Executing ajax function',
     'description' => 'loading form callback',
     'page callback' => 'listmixer_behaviors_callback',
     'page arguments' => array(4, 5, 6),
     'access arguments' => array('administer list mixer'),
     'type' => MENU_CALLBACK,
-  );  
+  );
   $items['admin/ajax/listmixer/redirect/%/%/%'] = array(
     'title' => 'Executing ajax redirect function',
     'description' => 'redirecting form callback',
@@ -101,12 +99,12 @@ function listmixer_menu() {
     'page arguments' => array(4, 5, 6),
     'access arguments' => array('administer list mixer'),
     'type' => MENU_CALLBACK,
-  );  
+  );
   return $items;
 }
 /**
  * Determine which listmixer behavior function should be run based on arguments
- * 
+ *
  */
 function listmixer_behaviors_callback($type, $name, $root) {
   $data_post_value_name = 'data_' . $name;
@@ -117,24 +115,23 @@ function listmixer_behaviors_callback($type, $name, $root) {
   // Load include (path stored with behavior library)
   // @TODO The library might get consolidated to not be all includes,
   // but not until most of the library is actually built.
-  
   // Get the registered behaviors.
   $behavior = listmixer_behavior_registry_load($root);
   // Load include file.
   if (file_exists($behavior['behavior_include'])) {
     include($behavior['behavior_include']);
-  }  
+  }
   // Call function for handling callback.
   if (function_exists($function_name)) {
     $return = call_user_func($function_name, $data);
     if (!empty($return)) {
       /*
       If we need to add more javascript to the page here, use this function.
-      $set_rendered_markup = drupal_add_js('Drupal.behaviors.listmixer.behaviors.return.' 
-      . $behavior['behavior_name'] . '("' . $return['message'] . '");', 'inline');  
+      $set_rendered_markup = drupal_add_js('Drupal.behaviors.listmixer.behaviors.return.'
+      . $behavior['behavior_name'] . '("' . $return['message'] . '");', 'inline');
       // dpm($set_rendered_markup);
       */
-      
+
       // Return nothing, but set a message.
       // @TODO Date is added for testing purposes. May become unneccessary
       // If debugging messages allowed, set message every time a behavior callback is executed.
@@ -145,14 +142,14 @@ function listmixer_behaviors_callback($type, $name, $root) {
     }
     else{
       if (variable_get('listmixer_debugging', 0)) {
-        drupal_set_message(t('Warning: Data not saved. Source: ' 
+        drupal_set_message(t('Warning: Data not saved. Source: '
         . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');
       }
     }
-  } 
+  }
   else{
       if (variable_get('listmixer_debugging', 0)) {
-        drupal_set_message(t('Warning: Data not saved. Source: ' 
+        drupal_set_message(t('Warning: Data not saved. Source: '
         . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');
       }
   }
@@ -169,7 +166,7 @@ function listmixer_behaviors_redirect_callback($type, $name, $root) {
 
 
 /**
- * List Mixer, init 
+ * List Mixer, init
  *
  * Add javascript and CSS to every page on a Drupal site.
  * Add an array of settings for all interactions that should
@@ -187,14 +184,14 @@ function listmixer_init() {
   drupal_add_js($path .'/behaviors/listmixer_behaviors_push.js', 'footer');
   drupal_add_js($path .'/behaviors/listmixer_behaviors_submit.js', 'footer');
   drupal_add_js($path .'/behaviors/listmixer_behaviors_interact.js', 'footer');
-  
+
   // Add custom style sheet.
   drupal_add_css($path .'/listmixer.css');
 
   // Add all interaction presets and callback settings to every Drupal page.
   // This array includes only presets that should always be available.
   $presets = listmixer_presets(TRUE);
-  
+
   // Build array of settings for Drupal.settings javascript
   $settings = array();
   foreach ($presets as $preset) {

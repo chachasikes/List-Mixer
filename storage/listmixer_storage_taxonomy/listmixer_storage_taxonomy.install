@@ -26,7 +26,7 @@ function listmixer_storage_taxonomy_uninstall() {
  * Implementation of hook_schema().
  */
 function listmixer_storage_taxonomy_schema() {
- $schema['listmixer_storage_taxonomy'] = array(
+  $schema['listmixer_storage_taxonomy'] = array(
     'fields' => array(
       'id' => array(
         'description' => t('The primary identifier for an interaction.'),

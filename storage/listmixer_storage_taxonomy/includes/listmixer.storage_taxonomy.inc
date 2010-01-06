@@ -2,7 +2,5 @@
 // $Id$
 
 /**
- * @file listmixer.taxonomy.inc
- * 
- *
+ * @file
  */

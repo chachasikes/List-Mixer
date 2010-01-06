@@ -24,7 +24,7 @@ function listmixer_storage_nodes_uninstall() {
  * Implementation of hook_schema().
  */
 function listmixer_storage_nodes_schema() {
- $schema['listmixer_storage_nodes'] = array(
+  $schema['listmixer_storage_nodes'] = array(
     'fields' => array(
       'id' => array(
         'description' => t('The primary identifier for an interaction.'),
@@ -76,7 +76,7 @@ function listmixer_storage_nodes_schema() {
         'type' => 'text',
         'length' => 0,
         'not null' => TRUE,
-      ),     
+      ),
       'interactions_label' => array(
         'description' => '<p>' . t('Label text.') . '</p>',
         'type' => 'text',
@@ -118,7 +118,7 @@ function listmixer_storage_nodes_schema() {
         'type' => 'text',
         'length' => 255,
         'not null' => TRUE,
-      ),   
+      ),
     ),
     'primary key' => array('id'),
     'indexes' => array(
