@@ -2,9 +2,7 @@
 // $Id$
 
 /**
- * @file listmixer.presets.inc
- * 
- *
+ * @file
  */
 
 /*
@@ -43,13 +41,13 @@ function listmixer_presets($reset = TRUE) {
   else {
     $normal_presets = array();
 
-    $result = db_query('SELECT * FROM {listmixer_preset} ORDER BY preset_name');    
-    
+    $result = db_query('SELECT * FROM {listmixer_preset} ORDER BY preset_name');
+
     while ($preset = db_fetch_array($result)) {
       $presets[$preset['preset_id']] = $preset;
       $presets[$preset['preset_id']]['behaviors'] = listmixer_behaviors_load(array('preset_id' => $preset['preset_id']));
       $presets[$preset['preset_id']]['interactions'] = listmixer_interactions_load($preset);
-      
+
       $presets[$preset['preset_id']]['storage'] = LISTMIXER_STORAGE_NORMAL;
 
       // Collect normal preset names so we can skip defaults and mark overrides accordingly

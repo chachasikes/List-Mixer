@@ -2,13 +2,13 @@
 // $Id$
 
 /**
- * @file listmixer.admin.inc
+ * @file
  * File for List Mixer Administrative settings
  */
- 
+
 /**
  * List Mixer Administrative settings (Drupal Form)
- */ 
+ */
 function listmixer_admin_settings() {
   $form = array();
   // Setting for internal link nodererence field

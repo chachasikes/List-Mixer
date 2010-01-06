@@ -2,23 +2,22 @@
 // $Id$
 
 /**
- * @file listmixer_ui.interactions.inc
- * 
+ * @file
  */
- 
+
 
 /**
  * Load form from module
  */
 function listmixer_interactions_form(&$form, &$form_state, $preset = array()) {
-  // Based on the type of interaction $preset['preset_method'] load data from the table to be used with the interaction form.  
+  // Based on the type of interaction $preset['preset_method'] load data from the table to be used with the interaction form.
   $form['interactions'] = array(
     '#type' => 'fieldset',
     '#title' => t('Interactions'),
     '#tree' => TRUE,
     '#weight' => 8,
   );
-  
+
   // The preset method is stored as the module name for the storage method.
   if (!empty($form['preset_method']['#default_value'])) {
     $form_load_function = $form['preset_method']['#default_value'] . '_load_interactions_form';
@@ -68,4 +67,4 @@ function listmixer_interactions_delete($preset) {
     }
   }
   return TRUE;
-} 
+}
