@@ -1,0 +1,259 @@
+<?php
+// $Id$
+
+/*
+ * @file
+ * Main module file for List Mixer Node Storage module
+ */
+
+/**
+ *  listmixer_storage_register hook implementation
+ *  Return this type to the list of storage methods available to the preset selector.
+ */
+
+function listmixer_storage_nodes_listmixer_storage_register() {
+  return array(
+    array(
+    'name' => 'Nodes',
+    'module' => 'listmixer_storage_nodes',
+    'weight' => '-10',
+    ),
+  );
+}
+/**
+ * Create form to update interactions
+ */
+function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $preset = array()) {
+  // @TODO: use interaction preset load function instead
+  $results = db_query("SELECT * FROM {listmixer_storage_nodes} WHERE preset_id = %d", $preset['preset_id']);
+  while ($row = db_fetch_array($results)) {
+    $interactions = $row;
+  }
+  $form = array();
+
+  $form['id'] = array(
+    '#type' => 'value',
+    '#value' => $interactions['id'],
+  );
+  $form['preset_id'] = array(
+    '#type' => 'value',
+    '#value' => $preset['preset_id'],
+  );
+  $form['interactions_label'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Label for interaction'),
+      '#description' => '<p>' . t('Label for the interaction. Will display to user. You may leave this blank.') . '</p>',
+      '#default_value' => $interactions['interactions_label'],
+      '#weight' => 0,
+  );
+  $form['interactions_help'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Help Text for Drupal User'),
+      '#description' => '<p>' . t('Explain to the Drupal User how they
+      should use this interaction. You may leave this blank.') . '</p>',
+      '#default_value' => $interactions['interactions_help'],
+      '#weight' => 0,
+      '#rows' => 2,
+  );
+  $form['interactions_container'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Selector: Interaction Container'),
+      '#description' => '<p>This is the container that ListMixer will look
+      for to apply presets. If this html element is not on a page, ListMixer will not
+      get load the preset.</p>
+      <p>Example: div#block-views-babble-block_1</p>',
+      '#default_value' => $interactions['interactions_container'],
+      '#weight' => 1,
+  );
+  $form['interactions_target_id'] = array(
+    '#type' => 'textfield',
+    '#size' => 90,
+    '#title' => t('Selector: Target Node ID'),
+    '#default_value' => $interactions['interactions_target_id'],
+    '#description' => '<p>Define a jQuery compatible selector.</p>
+    This is the node that data should be saved <strong>TO.</strong>
+    The selector should point to an html element that contains the nid.</p>
+
+    <p>Example markup: &lt;div class="class-for-listmixer-target-node-id"&gt;345&lt;/div&gt;</p>
+    <p>Example selector: div.class-for-listmixer-target-node-id</p>
+
+    <p>This is an example that would work with the NID field from a view:</p>
+    <p>Example markup: &lt;div id="#block-views-babble-block_1"&gt;&lt;div class="views-field-nid"&gt;&lt;span class="field-content"&gt;345&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;</p>
+    <p>Example selector: div#block-views-babble-block_1 div.views-field-nid span.field-content</p>
+
+    The html of the target should contain only the numeric node id.
+    NOTE: ListMixer will hide the element for you.
+    </p>',
+    '#weight' => 1,
+  );
+  $form['interactions_restrictions'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Selector: Interactive Region'),
+      '#description' => '<p>Define selector for an html element of a page
+      that will contain the interactive widgets. This could be the same as the
+      target container, or it could be another region of the page.</p>',
+      '#default_value' => $interactions['interactions_restrictions'],
+      '#weight' => 3,
+  );
+  $form['interactions_inclusions'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Selector: Interactive Element Receivers'),
+      '#description' => '<p>Define a selector that will locate
+      the html elements that should receive interactive widgets.</p>
+      <p>The element receivers should exist inside the interactive
+      region</p>
+      <p>Example: table.views-view-grid td</p>
+      <ul>
+      <li>Tip: If you want an element to show up in the form generated
+       by listmixer, enter this: form#listmixer-target-babble
+       (but replace "babble" with the name of your interaction setting</li>
+      </ul>',
+      '#default_value' => $interactions['interactions_inclusions'],
+      '#weight' => 4,
+  );
+  $form['interactions_source_id'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Selector: Source Value Selector'),
+      '#description' => '<p>Define a selector that will contain
+      the value that should be passed to the target node.</p>
+      <p>The source value selector should exist inside the markup
+      for the element receiver.</p>
+      <p>Example markup:</p>
+      <pre>
+           &lt;div class="view"&gt;
+              &lt;table id="views-grid"&gt;
+                &lt;tr...
+                  &lt;td&gt;
+                    &lt;span class="list-mixer-source-value"&gt;614&lt;/span&gt;
+      </pre>
+      <p>Example selector: span.list-mixer-source-value</p>
+      <ul>
+        <li>You may need to add this value to your content.</li>
+        <li>ListMixer will hide this value for you.</li>
+        <li>The value should be compatible with where it will be
+            saved in the node. It should be a number if it will
+            be saved to a nodereference field.</li>
+      </ul>',
+      '#default_value' => $interactions['interactions_source_id'],
+      '#weight' => 5,
+  );
+  $form['interactions_target_field'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Fieldname: Target Field'),
+      '#description' => t('<p>Enter the machine name of the field that
+       should be saved to.</p>
+       <p>This should match the widget "Push" type you selected above.
+       <em>Example: field_text_babble</em></p>'),
+      '#default_value' => $interactions['interactions_target_field'],
+      '#weight' => 6,
+  );
+  // @TODO Fix fieldset so it will store the data properly.
+  /*
+  $form['interactions_labels'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Interactive element labels'),
+      '#weight' => 7,
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+      '#tree' => TRUE,
+  );
+  $form['interactions_labels']['interactions_interact_label'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Label for interactive element'),
+      '#description' => t('<p>Enter text as it should appear to user</p>'),
+      '#default_value' => $interactions['interactions_interact_label'],
+      '#weight' => 1,
+  );
+  $form['interactions_labels']['interactions_submit_label'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Label for submit element'),
+      '#description' => t('<p>Enter text as it should appear to user</p>'),
+      '#default_value' => $interactions['interactions_submit_label'],
+      '#weight' => 2,
+  );
+  $form['interactions_labels']['interactions_push_label'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Label for push element'),
+      '#description' => t('<p>Enter text as it should appear to user</p>'),
+      '#default_value' => $interactions['interactions_push_label'],
+      '#weight' => 3,
+  );
+  $form['interactions_labels']['interactions_activate_label'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Label for activate element'),
+      '#description' => t('<p>Enter text as it should appear to user</p>'),
+      '#default_value' => $interactions['interactions_activate_label'],
+      '#weight' => 4,
+  );
+  */
+  $all_nodetypes = node_get_types();
+  $all_nodetype_options = array();
+  foreach ($all_nodetypes as $item) {
+    $all_nodetype_options[$item->type] = $item->name;
+  }
+  $form['interactions_source_content_types'] = array(
+      '#type' => 'disabled',
+      '#title' => t('Content types'),
+      '#description' => t('Select which content types will be allowed to be added to the list content type. This won\'t do much just yet, but might help with permissions'),
+      '#options' => $all_nodetype_options,
+      '#default_value' => $interactions['interactions_source_content_types'],
+      '#weight' => 20,
+  );
+  return $form;
+}
+/**
+ * Load a behavior or set of behaviors
+ *
+ * @param preset
+ *   an listmixer preset array.
+ * @return
+ *   a preset array.  In the case of a new preset, 'preset_id' will be populated.
+ */
+function listmixer_storage_nodes_listmixer_storage_load($preset) {
+  $interactions = array();
+  if (!empty($preset['preset_id'])) {
+    $result = db_query("SELECT * FROM {listmixer_storage_nodes} WHERE preset_id = %d", $preset['preset_id']);
+    while ($row = db_fetch_array($result)) {
+      $interactions = $row;
+    }
+  }
+  return $interactions;
+}
+
+/**
+ * Save an listmixer preset.
+ *
+ * @param preset
+ *   an listmixer preset array.
+ * @return
+ *   a preset array.  In the case of a new preset, 'preset_id' will be populated.
+ */
+function listmixer_storage_nodes_listmixer_storage_save($form, &$form_state) {
+  $form_store = $form_state['values']['interactions'][0];
+  $form_store['preset_id'] = $form_state['values']['preset_id'];
+  // If an id already exists
+  if (!empty($form['interactions'][0]['id']['#value'])) {
+    drupal_write_record('listmixer_storage_nodes', $form_store, array('preset_id'));
+  }
+  else {
+    drupal_write_record('listmixer_storage_nodes', $form_store);
+  }
+  return $behavior;
+}
+
+/**
+ * Delete interaction preset.
+ */
+function listmixer_storage_nodes_listmixer_storage_delete($preset) {
+  db_query("DELETE FROM {listmixer_storage_nodes} WHERE preset_id = '%d'", $preset['preset_id']);
+  return TRUE;
+}
