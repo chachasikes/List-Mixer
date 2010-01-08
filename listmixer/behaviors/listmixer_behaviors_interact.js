@@ -1,8 +1,8 @@
 // $Id$
 
-Drupal.behaviors.listmixer.Interact = function() {
+Drupal.behaviors.listmixer.Interact = function(preset) {
   this.init = function() {
-  //alert('Interact Library Loaded');
+  // alert('Interact Library Loaded');
   }
 
   /* Library Functions */ 

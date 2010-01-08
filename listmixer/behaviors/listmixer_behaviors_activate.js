@@ -1,5 +1,5 @@
 // $Id$
-Drupal.behaviors.listmixer.Activate = function() {
+Drupal.behaviors.listmixer.Activate = function(preset) {
   this.init = function() {
    // alert('Activate Library Loaded');
   }
@@ -16,5 +16,11 @@ Drupal.behaviors.listmixer.Activate = function() {
   this.mousedownActivate = function() {
     alert(Drupal.t('activate mousedown'));
   }
-
+  this.markup = { 
+    // @TODO checkboxSubmit not quite figured out yet.
+    // checkboxActivate : '<div class="listmixer-activate-button"><input type="checkbox" class="listmixer-activate-button"></input><div class="listmixer-activate-label">Activate</div></div>',
+    buttonActivate : '<div class="listmixer-activate-button"><button class="button"><div class="listmixer-activate-label">Activate</div></button></div>',
+    mouseDownActivate : ''
+  };
 }
+
