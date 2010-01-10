@@ -192,16 +192,18 @@ jQuery.expr[':'].regex = function(elem, index, match) {
 Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
     // *********** Set up target field (for node save function)
     // @TODO Add validation function if necessary
-    var target_field = preset.interactions.interactions_target_field;
+    preset.target_field = preset.interactions.interactions_target_field;
     // *********** Set up the target id
     // Make sure that the target id is a number  
     try {    
-       var target_id = $(preset.interactions.interactions_target_id).html();
-       target_id.length > 0;
+       preset.target_id = $(preset.interactions.interactions_target_id).html();
+       preset.target_id.length > 0;
        $(preset.interactions.interactions_target_id).hide();
     }
     catch(err) {
-      alert(Drupal.t('ListMixer Error: Target ID not a number or could not be found. Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
+      // @TODO If user has permissions to edit the preset, give them an error.
+      alert(Drupal.t('ListMixer Interaction Preset Error: Target ID not a number or could not be found. Did you enter the right CSS Selector? Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
+      // @TODO Else, break out of this function  return false;
     }
     
     // *********** Set up target restrictions. 
@@ -210,12 +212,13 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
     if (preset.interactions.interactions_restrictions === undefined) {
         preset.interactions.interactions_restrictions = 'body';
     }
-    var interactions_restrictions = $(preset.interactions.interactions_restrictions).html();
+    preset.interactions_restrictions = $(preset.interactions.interactions_restrictions).html();
     try {    
-       interactions_restrictions.length > 0;     
+       preset.interactions_restrictions.length > 0;     
     }
     catch(err) {
-      alert(Drupal.t('ListMixer Error: Restrictions Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
+      // @TODO If this is set to body, are there any other chances that this would be empty? This check maybe unnecessary for anything except debugging this JS file.
+      alert(Drupal.t('ListMixer Error: Restricted selector not found. Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
     }
    
     // *********** Create interaction form and target classes
@@ -223,8 +226,8 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
     preset.target_form_id = 'listmixer-target-'+ preset.preset_name;
     // @TODO Should form be a 'wrap()' function?
     preset.target_form = '<form id="' + preset.target_form_id + '" ' + preset.target_form_class + '></form>';
-    var form = preset.target_form;
-    var container = preset.interactions.interactions_container;
+    preset.form = preset.target_form;
+    preset.container = preset.interactions.interactions_container;
     
     // *********** Set up interactivity
     // This is restrictions here. If the user just wants a form field in block,
@@ -236,24 +239,24 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
     // the container if the container is a child of the restrictions container.
     try {
       // Create the pointer to the container for where the form should be added.
-      var form_container;
+      //var form_container;
       if (preset.interactions.interactions_container == preset.interactions.interactions_restrictions) {
-        form_container = preset.interactions.interactions_container;
+        preset.form_container = preset.interactions.interactions_container;
       }
       else{
-        form_container = preset.interactions.interactions_restrictions + ':has(' + preset.interactions.interactions_container + ')';
+        preset.form_container = preset.interactions.interactions_restrictions + ':has(' + preset.interactions.interactions_container + ')';
       }
 
       // Make sure that the form container is valid.
-      $(form_container).length > 0;
-      $(form_container).prepend(form);
+      $(preset.form_container).length > 0;
+      $(preset.form_container).prepend(preset.form);
       
       // If the interaction container matches the restriction container, make interactive elements live in the form. 
       // (looks better)
       
       
       // Set up selector for the source_id (for input values)
-      var source_id_selector = preset.interactions.interactions_source_id;
+      preset.source_id_selector = preset.interactions.interactions_source_id;
       
       try {
         // Inclusions are the elements that will receive interactions.
@@ -271,7 +274,7 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
           var interactFunction = preset.behaviors.interact.settings.behavior_function;
           // @TODO check source_id is numeric
           // The selector might be empty if user enters nothing, if so, just use the default input.
-          if(source_id_selector != '') {
+          if(preset.source_id_selector != '') {
             // Get each source id
             var source_id = $(this).find(source_id_selector).html();
             // Hide the source selector. (@TODO, make this an option)
@@ -304,20 +307,20 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
     $('form#' + preset.target_form_id).append(preset.submit);
     
     // *********** Handle help text
-    var interactions_help = preset.interactions.interactions_help;
+    preset.interactions_help = preset.interactions.interactions_help;
     // Append help text to interaction container.
     // *********** Handle interaction label
-    var interactions_label = preset.interactions.interactions_label;
-    $('form#' + preset.target_form_id).prepend('<div class="listmixer-interaction-help">' + interactions_help + '</div>');
-    $('form#' + preset.target_form_id).prepend('<div class="listmixer-interaction-label">' + interactions_label + '</div>');
+    preset.interactions_label = preset.interactions.interactions_label;
+    $('form#' + preset.target_form_id).prepend('<div class="listmixer-interaction-help">' + preset.interactions_help + '</div>');
+    $('form#' + preset.target_form_id).prepend('<div class="listmixer-interaction-label">' + preset.interactions_label + '</div>');
     // ********* Find the button (which might not be a button) and add a click function to it.
     
     // Set up data object on page load.
     preset.data = {
       'inputArray' : [],
       'input' : '',
-      'target_id' : target_id,
-      'target_field' : target_field
+      'target_id' : preset.target_id,
+      'target_field' : preset.target_field
       // @TODO Collect other data here if necessary
     };
     // Activate push callback
@@ -330,8 +333,8 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
       preset.data = {
       'inputArray' : [],
       'input' : '',
-      'target_id' : target_id,
-      'target_field' : target_field
+      'target_id' : preset.target_id,
+      'target_field' : preset.target_field
       }          
       // @TODO Change input val clearing.
       // $('form.listmixer-target-form div.listmixer-interact-input input').val('');
