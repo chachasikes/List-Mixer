@@ -63,7 +63,7 @@ Drupal.behaviors.listmixer = function() {
           // @TODO return false was escaping the each() loop completely.
         }
         else {
-          Drupal.behaviors.listmixer.listmixer_setup(preset);
+          Drupal.behaviors.listmixer.listmixerSetup(preset);
         } // else
       }
     });
@@ -173,7 +173,7 @@ Drupal.behaviors.listmixer.behaviorSubmitCallback = function(preset, type) {
   }
   return false;
 };
-Drupal.behaviors.listmixer.Behavior = function() { 
+Drupal.behaviors.listmixer.behavior = function() { 
   // Create new object stored in include file.
   var Behavior = new Behavior();
   //Behavior.init();
@@ -200,7 +200,7 @@ jQuery.expr[':'].regex = function(elem, index, match) {
         regex = new RegExp(matchParams.join('').replace(/^\s+|\s+$/g,''), regexFlags);
     return regex.test(jQuery(elem)[attr.method](attr.property));
 };
-Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
+Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
     // 1. *********** Set up target field (for node save function)
     // @TODO Add validation function if necessary
 
@@ -279,8 +279,6 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
     catch(err3) {
       alert(Drupal.t('ListMixer Error: Restrictions and Container conflict: admin/build/listmixer/' + preset.preset_id + ''));
     }
-
-   
 };
 Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
   // If the interaction container matches the restriction container, make interactive elements live in the form. 
