@@ -280,9 +280,11 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
         Activate.init();
         var activateFunction = preset.behaviors.activate.settings.behavior_function;
         preset.activate = Activate.markup[activateFunction];   
-        $('form#' + preset.target_form_id).prepend(Activate.markup[activateFunction]);
+        $('form#' + preset.target_form_id).append(Activate.markup[activateFunction]);
+
         // Hide deactivate button.
-        $('form#' + preset.target_form_id + ' div.listmixer-deactivate-button').hide();
+
+       $('form#' + preset.target_form_id + ' div.listmixer-deactivate-button').hide();
         $('form#' + preset.target_form_id + ' div.listmixer-activate-button').children(".button").click(function() {
           if(preset.activated == null) {
             Drupal.behaviors.listmixer.listmixerActivate(preset, true);
@@ -303,6 +305,7 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
             return false;
           }
         });
+        $('form#' + preset.target_form_id + ' div.listmixer-deactivate-button').children(".button").trigger('click');  
         // @TODO Set up deactivate    
       }
     }
