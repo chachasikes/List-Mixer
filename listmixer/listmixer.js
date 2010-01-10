@@ -257,7 +257,6 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
       
       // Set up selector for the source_id (for input values)
       preset.source_id_selector = preset.interactions.interactions_source_id;
-      
       try {
         // Inclusions are the elements that will receive interactions.
         // Find all of the items that should act as a source of interaction.
@@ -276,9 +275,9 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
           // The selector might be empty if user enters nothing, if so, just use the default input.
           if(preset.source_id_selector != '') {
             // Get each source id
-            var source_id = $(this).find(source_id_selector).html();
+            var source_id = $(this).find(preset.source_id_selector).html();
             // Hide the source selector. (@TODO, make this an option)
-            $(this).find(source_id_selector).hide();
+            $(this).find(preset.source_id_selector).hide();
             if(source_id != null) {
               // Only add interactive elements if a valid value is present.
               $(this).prepend(Interact.markup[interactFunction]);
@@ -343,4 +342,41 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
       // @TODO... actually the reloading can be nice. 
       // return false;
     });
+}
+
+
+/**
+ * Function : dump()
+ * Arguments: The data - array,hash(associative array),object
+ *    The level - OPTIONAL
+ * Returns  : The textual representation of the array.
+ * This function was inspired by the print_r function of PHP.
+ * This will accept some data as the argument and return a
+ * text that will be a more readable version of the
+ * array/hash/object that is given.
+ * Docs: http://www.openjs.com/scripts/others/dump_function_php_print_r.php
+ */
+function dump(arr,level) {
+	var dumped_text = "";
+	if(!level) level = 0;
+	
+	//The padding given at the beginning of the line.
+	var level_padding = "";
+	for(var j=0;j<level+1;j++) level_padding += "    ";
+	
+	if(typeof(arr) == 'object') { //Array/Hashes/Objects 
+		for(var item in arr) {
+			var value = arr[item];
+			
+			if(typeof(value) == 'object') { //If it is an array,
+				dumped_text += level_padding + "'" + item + "' ...\n";
+				dumped_text += dump(value,level+1);
+			} else {
+				dumped_text += level_padding + "'" + item + "' => \"" + value + "\"\n";
+			}
+		}
+	} else { //Stings/Chars/Numbers etc.
+		dumped_text = "===>"+arr+"<===("+typeof(arr)+")";
+	}
+	return alert(dumped_text);
 }
