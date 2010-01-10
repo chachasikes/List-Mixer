@@ -19,6 +19,8 @@
  * 4. Submit will trigger the data to be saved.
  * 5. Push triggers a callback function which sends the data to drupal.
  * 
+ * @TODO: Make this file camelCase: http://drupal.org/node/172169
+ * @TODO: Make themeable output exist in Drupa.theme
  */
 
 var pageLoaded = 0;
