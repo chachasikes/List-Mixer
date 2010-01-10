@@ -24,7 +24,7 @@
 var pageLoaded = 0;
 
 Drupal.behaviors.listmixer = function() {
-  if (pageLoaded == 0) {
+  if (pageLoaded === 0) {
     // Read through each preset and set up the first time the page is loaded.
     $.each(Drupal.settings.listmixer, function() {
       // If interaction involves saving content to target nodes.
@@ -52,23 +52,23 @@ Drupal.behaviors.listmixer = function() {
   }
   // Increment the pageLoaded variable everytime this function is called (usually on page load)
   pageLoaded++;
-}
+};
 // ******* Build functions that load the behaviors.
 // Load javascript behavior libraries.
 // Interact is called when elements are being applied to a container.
 Drupal.behaviors.listmixer.interact = function(preset) {    
   Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'interact');      
-}
+};
 // @TODO Set up activate buttons, only Mousedown works at the moment.
 Drupal.behaviors.listmixer.activate = function(preset) {    
   Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'activate');
   var Activate = new Drupal.behaviors.listmixer.Activate();
-  Activate.init();         
-}
+  Activate.init();
+};
 // Submit called when form is created and added to container.
 Drupal.behaviors.listmixer.submit = function(preset) {    
   Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'submit');
-}
+};
 // Push is called when user interacts with submit button
 Drupal.behaviors.listmixer.push = function(preset) { 
   var Push = new Drupal.behaviors.listmixer.Push();
@@ -77,7 +77,7 @@ Drupal.behaviors.listmixer.push = function(preset) {
   var Interact = new Drupal.behaviors.listmixer.Interact();
   Interact.init();
   var interactFunction = preset.behaviors.interact.settings.behavior_function;  
- 
+
   // Get value from interact element 
   // @TODO Add validators :checked, not empty... what else?
   $.each($(preset.interactions.interactions_restrictions + ' ' + Interact.validation[interactFunction]), function(){
@@ -85,22 +85,20 @@ Drupal.behaviors.listmixer.push = function(preset) {
     // Store values in data object in preset.
     preset.data.inputArray.push($(this).val());
   });  
-  Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'push'); 
+  Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'push');
 
   // @TODO Check that the callback isn't reloading the page. 
-  return false;  
-}
+  return false;
+};
 // ******* Load javascript includes, set up the callbacks for all behaviors.
 Drupal.behaviors.listmixer.behaviorBuildCallback = function(preset, type) {
-  var preset = preset;
-  var type = type;
   var preset_id = preset.preset_id;
   var callback;
   var behavior_name;
   var behavior_function;
   // Create an array of the settings for the current behavior.
   var behavior = preset.behaviors[type];
-  if (behavior.settings != null) {
+  if (behavior.settings !== null) {
     callback = behavior.settings.behavior_callback;
     behavior_function = behavior.settings.behavior_function;
     behavior_name =  behavior.settings.behavior_name;
@@ -111,7 +109,7 @@ Drupal.behaviors.listmixer.behaviorBuildCallback = function(preset, type) {
     // The data might need to be cleaned up if the funciton is used several times before submitting  
     // Ajax call to callback for this behavior.
     // @TODO currently this runs automatically, make push happen after submit behavior is activated.
-    if (callback != null) {
+    if (callback !== null) {
       if (type == 'push') {
         if (preset.data.inputArray.length > 0) {
           preset.data.input = preset.data.inputArray.toString();
@@ -121,24 +119,22 @@ Drupal.behaviors.listmixer.behaviorBuildCallback = function(preset, type) {
         type: "POST",
         url: callback,
         data: preset.data,
-        complete: Drupal.behaviors.listmixer.redirect(preset, preset.data),
+        complete: Drupal.behaviors.listmixer.redirect(preset, preset.data)
       });
       return false;
     }
   }
   return false;
-}
+};
 // Load javascript includes, set up the callbacks for all behaviors.
 Drupal.behaviors.listmixer.behaviorSubmitCallback = function(preset, type) {
-  var preset = preset;
-  var type = type;
   var preset_id = preset.preset_id;
   var callback;
   var behavior_name;
   var behavior_function;
   // Create an array of the settings for the current behavior.
   var behavior = preset.behaviors[type];
-  if (behavior.settings != null) {
+  if (behavior.settings !== null) {
     // @TODO rename _redirect to _submit_callback, and _callback to _build_callback
     callback = behavior.settings.behavior_redirect;
     behavior_name =  behavior.settings.behavior_name;
@@ -153,27 +149,25 @@ Drupal.behaviors.listmixer.behaviorSubmitCallback = function(preset, type) {
        
     // Ajax call to callback for this behavior.
     // @TODO currently this runs automatically, make push happen after submit behavior is activated.
-    if (callback != null) {
+    if (callback !== null) {
       $.post(callback, data, Drupal.behaviors.listmixer.redirect(preset, preset.data));
     }
   }
-  return false; 
-}    
+  return false;
+};
 Drupal.behaviors.listmixer.Behavior = function() { 
   // Create new object stored in include file.
   var Behavior = new Behavior();
   //Behavior.init();
   //return Behavior;
   return false;
-}
-Drupal.behaviors.listmixer.redirect = function(preset, data) {
-  var preset = preset;
-  var data = data;  
+};
+Drupal.behaviors.listmixer.redirect = function(preset, data) { 
   // Get the returned javascript from the function and apply it wherever it is supposed to go
   // @TODO: maybe - Calling the redirect function, which returns $output?
 
-  return false;  
-}
+  return false;
+};
 // ******* Make jQuery regex expression available 
 // http://james.padolsey.com/javascript/regex-selector-for-jquery/
 jQuery.expr[':'].regex = function(elem, index, match) {
@@ -187,15 +181,14 @@ jQuery.expr[':'].regex = function(elem, index, match) {
         regexFlags = 'ig',
         regex = new RegExp(matchParams.join('').replace(/^\s+|\s+$/g,''), regexFlags);
     return regex.test(jQuery(elem)[attr.method](attr.property));
-}
-
+};
 Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
     // *********** Set up target field (for node save function)
     // @TODO Add validation function if necessary
     preset.target_field = preset.interactions.interactions_target_field;
     // *********** Set up the target id
-    // Make sure that the target id is a number  
-    try {    
+    // Make sure that the target id is a number
+    try {
        preset.target_id = $(preset.interactions.interactions_target_id).html();
        preset.target_id.length > 0;
        $(preset.interactions.interactions_target_id).hide();
@@ -205,35 +198,35 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
       alert(Drupal.t('ListMixer Interaction Preset Error: Target ID not a number or could not be found. Did you enter the right CSS Selector? Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
       // @TODO Else, break out of this function  return false;
     }
-    
-    // *********** Set up target restrictions. 
-    // Make sure it contains markup.  
-    // If undefined, set to a default of 'html' (the whole page)      
+
+    // *********** Set up target restrictions.
+    // Make sure it contains markup.
+    // If undefined, set to a default of 'html' (the whole page)
     if (preset.interactions.interactions_restrictions === undefined) {
         preset.interactions.interactions_restrictions = 'body';
     }
     preset.interactions_restrictions = $(preset.interactions.interactions_restrictions).html();
-    try {    
-       preset.interactions_restrictions.length > 0;     
+    try {
+       preset.interactions_restrictions.length > 0;
     }
-    catch(err) {
+    catch(err1) {
       // @TODO If this is set to body, are there any other chances that this would be empty? This check maybe unnecessary for anything except debugging this JS file.
       alert(Drupal.t('ListMixer Error: Restricted selector not found. Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
     }
-   
+
     // *********** Create interaction form and target classes
-    preset.target_form_class = 'class="listmixer-target-form"';   
+    preset.target_form_class = 'class="listmixer-target-form"';
     preset.target_form_id = 'listmixer-target-'+ preset.preset_name;
     // @TODO Should form be a 'wrap()' function?
     preset.target_form = '<form id="' + preset.target_form_id + '" ' + preset.target_form_class + '></form>';
     preset.form = preset.target_form;
     preset.container = preset.interactions.interactions_container;
-    
+
     // *********** Set up interactivity
     // This is restrictions here. If the user just wants a form field in block,
     // Then they need to set it to just the block. Default is 'body' so 
     // if nothing is entered, it will show up at the very bottom of the page.
-            
+
 
     // Only one form is allowed, if the form should be applied to the restrictions container, but not
     // the container if the container is a child of the restrictions container.
@@ -253,21 +246,19 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
       
       // If the interaction container matches the restriction container, make interactive elements live in the form. 
       // (looks better)
-      
-      
+
       // Set up selector for the source_id (for input values)
       preset.source_id_selector = preset.interactions.interactions_source_id;
       try {
         // Inclusions are the elements that will receive interactions.
         // Find all of the items that should act as a source of interaction.
         // EXAMPLE: div.views-field-field-photo-fid  a:regex(class, ^gallery-photo-)
-        
-
         // Inclusions should be children of the restrictions.
         // The source selector needs to be a child of the element.
         // @TODO make the form into textfields and rearrange and rewrite the help.
-                    
+
         $.each($(preset.interactions.interactions_restrictions + ' ' + preset.interactions.interactions_inclusions), function() {
+          var source_id = null;
           var Interact = new Drupal.behaviors.listmixer.Interact();
           Interact.init();
           var interactFunction = preset.behaviors.interact.settings.behavior_function;
@@ -275,26 +266,26 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
           // The selector might be empty if user enters nothing, if so, just use the default input.
           if(preset.source_id_selector != '') {
             // Get each source id
-            var source_id = $(this).find(preset.source_id_selector).html();
+            source_id = $(this).find(preset.source_id_selector).html();
             // Hide the source selector. (@TODO, make this an option)
             $(this).find(preset.source_id_selector).hide();
-            if(source_id != null) {
+            if(source_id !== null) {
               // Only add interactive elements if a valid value is present.
               $(this).prepend(Interact.markup[interactFunction]);
             }
           }
           else{
             $(this).prepend(Interact.markup[interactFunction]);
-          }  
+          }
           // Add value to input field after input is created
-          $(this).find('input').val(source_id);       
+          $(this).find('input').val(source_id);
         });
       }
-      catch(err) {
+      catch(err2) {
         alert(Drupal.t('ListMixer Error: Inclusion & input validation problem. Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
-      }      
+      }
     }
-    catch(err) {
+    catch(err3) {
       alert(Drupal.t('ListMixer Error: Restrictions and Container conflict: admin/build/listmixer/' + preset.preset_id + ''));
     }
     // ********* Set up Submit button
@@ -304,7 +295,7 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
     preset.submit = Submit.markup[submitFunction];         
     // Add button to form/containter
     $('form#' + preset.target_form_id).append(preset.submit);
-    
+
     // *********** Handle help text
     preset.interactions_help = preset.interactions.interactions_help;
     // Append help text to interaction container.
@@ -313,7 +304,7 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
     $('form#' + preset.target_form_id).prepend('<div class="listmixer-interaction-help">' + preset.interactions_help + '</div>');
     $('form#' + preset.target_form_id).prepend('<div class="listmixer-interaction-label">' + preset.interactions_label + '</div>');
     // ********* Find the button (which might not be a button) and add a click function to it.
-    
+
     // Set up data object on page load.
     preset.data = {
       'inputArray' : [],
@@ -325,16 +316,16 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
     // Activate push callback
     $('form#' + preset.target_form_id + ' div.listmixer-push-submit').children(".button").click(function() {
       Drupal.behaviors.listmixer.push(preset); 
-    
+
       //@TODO make sure target_id is available to push function
-      
+
       // If page stayed loaded, clear out the data array.
       preset.data = {
       'inputArray' : [],
       'input' : '',
       'target_id' : preset.target_id,
       'target_field' : preset.target_field
-      }          
+      };          
       // @TODO Change input val clearing.
       // $('form.listmixer-target-form div.listmixer-interact-input input').val('');
       
@@ -342,7 +333,7 @@ Drupal.behaviors.listmixer.listmixer_setup = function(preset) {
       // @TODO... actually the reloading can be nice. 
       // return false;
     });
-}
+};
 
 
 /**
@@ -379,4 +370,4 @@ function dump(arr,level) {
 		dumped_text = "===>"+arr+"<===("+typeof(arr)+")";
 	}
 	return alert(dumped_text);
-}
+};
