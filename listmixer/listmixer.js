@@ -356,7 +356,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset, activation) {
       else{
         // Only add interactive elements if a valid value is present.
         if(activation == true) {
-          $(this).prepend(Interact.markup[interactFunction]);
+          $(this).append(Interact.markup[interactFunction]);
         }
         else{
           $(this).find('div.listmixer-source-value').remove();
