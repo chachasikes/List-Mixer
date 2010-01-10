@@ -1,4 +1,11 @@
 // $Id$
+ /*
+  // @TODO This should be theme function?
+  
+  Drupal.theme.prototype.Interact = function(preset) {
+    return '<div class="listmixer-source-value"><div class="listmixer-source-label"><div class="listmixer-source-label"></div></div>"';
+  }
+ */
 
 Drupal.behaviors.listmixer.Interact = function(preset) {
   this.init = function() {

@@ -19,7 +19,7 @@ Drupal.behaviors.listmixer.Activate = function(preset) {
   this.markup = { 
     // @TODO checkboxSubmit not quite figured out yet.
     // checkboxActivate : '<div class="listmixer-activate-button"><input type="checkbox" class="listmixer-activate-button"></input><div class="listmixer-activate-label">Activate</div></div>',
-    buttonActivate : '<div class="listmixer-activate-button"><button class="button"><div class="listmixer-activate-label">Activate</div></button></div>',
+    buttonActivate : '<div class="listmixer-activate-button"><button class="button"><div class="listmixer-activate-label">Activate</div></button></div><div class="listmixer-deactivate-button"><button class="button"><div class="listmixer-deactivate-label">Deactivate</div></button></div>',
     mouseDownActivate : ''
   };
 }

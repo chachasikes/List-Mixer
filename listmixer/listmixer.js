@@ -270,19 +270,52 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
       $('form#' + preset.target_form_id).prepend('<div class="listmixer-interaction-label">' + preset.interactions_label + '</div>');      
  
       if (preset.behaviors.activate.settings.behavior_function == 'mouseDownActivate') {
-        Drupal.behaviors.listmixer.listmixerActivate(preset);     
+        Drupal.behaviors.listmixer.listmixerActivate(preset, true);     
       }
       else {
-        Drupal.behaviors.listmixer.listmixerActivate(preset);    
+        // Add activate widget.
+        // On activate widget click, set up the interaction.
+      
+        var Activate = new Drupal.behaviors.listmixer.Activate();
+        Activate.init();
+        var activateFunction = preset.behaviors.activate.settings.behavior_function;
+        preset.activate = Activate.markup[activateFunction];   
+        $('form#' + preset.target_form_id).prepend(Activate.markup[activateFunction]);
+        // Hide deactivate button.
+        $('form#' + preset.target_form_id + ' div.listmixer-deactivate-button').hide();
+        $('form#' + preset.target_form_id + ' div.listmixer-activate-button').children(".button").click(function() {
+          if(preset.activated == null) {
+            Drupal.behaviors.listmixer.listmixerActivate(preset, true);
+            preset.activated = true;
+            preset.deactivated = null;
+            $('form#' + preset.target_form_id + ' div.listmixer-deactivate-button').show();
+            $('form#' + preset.target_form_id + ' div.listmixer-activate-button').hide();
+          }
+          return false;
+        });
+        $('form#' + preset.target_form_id + ' div.listmixer-deactivate-button').children(".button").click(function() {
+          if(preset.deactivated == null) {
+            Drupal.behaviors.listmixer.listmixerDeactivate(preset);
+            preset.deactivated = true;
+            preset.activated = null;
+            $('form#' + preset.target_form_id + ' div.listmixer-deactivate-button').hide();
+            $('form#' + preset.target_form_id + ' div.listmixer-activate-button').show();
+            return false;
+          }
+        });
+        // @TODO Set up deactivate    
       }
     }
     catch(err3) {
       alert(Drupal.t('ListMixer Error: Restrictions and Container conflict: admin/build/listmixer/' + preset.preset_id + ''));
     }
 };
-Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
+Drupal.behaviors.listmixer.listmixerDeactivate = function(preset) {
+  Drupal.behaviors.listmixer.listmixerActivate(preset, false);
+};
+Drupal.behaviors.listmixer.listmixerActivate = function(preset, activation) {
   // If the interaction container matches the restriction container, make interactive elements live in the form. 
-      
+  var hideSourceId = true;
   // Set up selector for the source_id (for input values)
   preset.source_id_selector = preset.interactions.interactions_source_id;
   try {
@@ -304,14 +337,27 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
         // Get each source id
         source_id = $(this).find(preset.source_id_selector).html();
         // Hide the source selector. (@TODO, make this an option)
-        $(this).find(preset.source_id_selector).hide();
+        if(hideSourceId == true) {
+          $(this).find(preset.source_id_selector).hide();
+        }
         if(source_id !== null) {
           // Only add interactive elements if a valid value is present.
-          $(this).prepend(Interact.markup[interactFunction]);
+          if(activation == true) {
+            $(this).prepend(Interact.markup[interactFunction]);
+          }
+          else{
+            $(this).find('div.listmixer-source-value').remove();
+          }
         }
       }
       else{
-        $(this).prepend(Interact.markup[interactFunction]);
+        // Only add interactive elements if a valid value is present.
+        if(activation == true) {
+          $(this).prepend(Interact.markup[interactFunction]);
+        }
+        else{
+          $(this).find('div.listmixer-source-value').remove();
+        }
       }
       // Add value to input field after input is created
       $(this).find('input').val(source_id);
@@ -326,8 +372,14 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
   var submitFunction = preset.behaviors.submit.settings.behavior_function;
   preset.submit = Submit.markup[submitFunction];         
   // Add button to form/containter
-  $('form#' + preset.target_form_id).append(preset.submit);
-
+  // Only add interactive elements if a valid value is present.
+  if(activation == true) {
+    $('form#' + preset.target_form_id).append(preset.submit);
+  }
+  else{
+    // @TODO test that remove works
+    $('form#' + preset.target_form_id).find('div.listmixer-push-submit').remove();
+  }
 
   // ********* Find the button (which might not be a button) and add a click function to it.
 
