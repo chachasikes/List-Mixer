@@ -141,6 +141,15 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
       '#default_value' => $interactions['interactions_source_id'],
       '#weight' => 5,
   );
+  $form['interactions_source_id_attr'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Selector: Source Value Attribute Selector'),
+      '#description' => '<p>Add the attribute (of the Source ID), for example 
+      \'href\' if the source ID is \'a\'.</p>',
+      '#default_value' => $interactions['interactions_source_id_attr'],
+      '#weight' => 6,
+  );
   $form['interactions_target_field'] = array(
       '#type' => 'textfield',
       '#size' => 90,
@@ -150,7 +159,7 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
        <p>This should match the widget "Push" type you selected above.
        <em>Example: field_text_babble</em></p>'),
       '#default_value' => $interactions['interactions_target_field'],
-      '#weight' => 6,
+      '#weight' => 7,
   );
   // @TODO Fix fieldset so it will store the data properly.
   /*

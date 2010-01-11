@@ -1,0 +1,8 @@
+core = "6.x"
+dependencies[] = "features"
+dependencies[] = "link"
+features[content][] = "favorite_links-field_link"
+features[node][] = "favorite_links"
+name = "favorite_links"
+package = "Features"
+project = "favorite_links"

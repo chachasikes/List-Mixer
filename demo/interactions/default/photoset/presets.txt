@@ -22,4 +22,5 @@ Selector: Target Node ID: div.view-photo-gallery div.attachment div.views-field-
 Selector: Interactive Region: div.view-photo-gallery
 Selector: Interactive Element Receivers: table.views-view-grid td
 Selector: Source Value Selector: div.views-field-nid span.field-content
+Selector: Source Value Attribute Selector: {nothing entered}
 Fieldname: Target Field: field_reference_photo

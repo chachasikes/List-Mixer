@@ -275,11 +275,10 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
       else {
         // Add activate widget.
         // On activate widget click, set up the interaction.
-      
         var Activate = new Drupal.behaviors.listmixer.Activate();
         Activate.init();
         var activateFunction = preset.behaviors.activate.settings.behavior_function;
-        preset.activate = Activate.markup[activateFunction];   
+        preset.activate = Activate.markup[activateFunction]; 
         $('form#' + preset.target_form_id).append(Activate.markup[activateFunction]);
 
         // Hide deactivate button.
@@ -318,9 +317,10 @@ Drupal.behaviors.listmixer.listmixerDeactivate = function(preset) {
 };
 Drupal.behaviors.listmixer.listmixerActivate = function(preset, activation) {
   // If the interaction container matches the restriction container, make interactive elements live in the form. 
-  var hideSourceId = true;
+  var hideSourceId = false;
   // Set up selector for the source_id (for input values)
   preset.source_id_selector = preset.interactions.interactions_source_id;
+  preset.source_id_attr = preset.interactions.interactions_source_id_attr;
   try {
     // Inclusions are the elements that will receive interactions.
     // Find all of the items that should act as a source of interaction.
@@ -338,7 +338,13 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset, activation) {
       // The selector might be empty if user enters nothing, if so, just use the default input.
       if(preset.source_id_selector != '') {
         // Get each source id
-        source_id = $(this).find(preset.source_id_selector).html();
+        if(preset.source_id_attr !== null) {
+          source_id = $(this).find(preset.source_id_selector).attr(preset.source_id_attr);      
+        }
+        else {
+          source_id = $(this).find(preset.source_id_selector).html();
+        }
+        
         // Hide the source selector. (@TODO, make this an option)
         if(hideSourceId == true) {
           $(this).find(preset.source_id_selector).hide();
@@ -363,7 +369,8 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset, activation) {
         }
       }
       // Add value to input field after input is created
-      $(this).find('input').val(source_id);
+      $(this).find('div.listmixer-source-value input').val(source_id);
+      // @TODO add label for activate
     });
   }
   catch(err2) {
@@ -397,7 +404,6 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset, activation) {
   // Activate push callback
   $('form#' + preset.target_form_id + ' div.listmixer-push-submit').children(".button").click(function() {
     Drupal.behaviors.listmixer.push(preset); 
-
     //@TODO make sure target_id is available to push function
 
     // If page stayed loaded, clear out the data array.
