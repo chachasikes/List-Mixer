@@ -37,6 +37,12 @@
     +'.png" />";
     }
 
+
+
+ @TODO add js for weight (hooking into special class - and using some table drag, (except whatever drag)
+ then pull up those order values for ordering the input array 
+
+ @TODO But...I want to add the custom js just for the weight...guess i'll put it in 'interact'
  */
 
 var pageLoaded = 0;
@@ -94,7 +100,7 @@ Drupal.behaviors.listmixer.push = function(preset) {
   // Load data for interact button validation  
   var Interact = new Drupal.behaviors.listmixer.Interact();
   Interact.init();
-  var interactFunction = preset.behaviors.interact.settings.behavior_function;  
+  var interactFunction = preset.behaviors.interact.settings.behavior_function; 
 
   // Get value from interact element 
   // @TODO Add validators :checked, not empty... what else?
@@ -329,16 +335,25 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset, activation) {
     // The source selector needs to be a child of the element.
     // @TODO make the form into textfields and rearrange and rewrite the help.
 
+    var Interact = new Drupal.behaviors.listmixer.Interact();
+    Interact.init();
+    var interactFunction = preset.behaviors.interact.settings.behavior_function;
+    // @TODO See if there is any possible way to get this function to load.
+    // Otherwise, maybe store the function in the php??
+    if (interactFunction == 'weightInteract') {
+      Interact.weightInteract(preset);
+    }
     $.each($(preset.interactions.interactions_restrictions + ' ' + preset.interactions.interactions_inclusions), function() {
       var source_id = null;
       var Interact = new Drupal.behaviors.listmixer.Interact();
       Interact.init();
       var interactFunction = preset.behaviors.interact.settings.behavior_function;
+
       // @TODO check source_id is numeric
       // The selector might be empty if user enters nothing, if so, just use the default input.
       if(preset.source_id_selector != '') {
         // Get each source id
-        if(preset.source_id_attr !== null) {
+        if(preset.source_id_attr !== '') {
           source_id = $(this).find(preset.source_id_selector).attr(preset.source_id_attr);      
         }
         else {

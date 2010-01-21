@@ -188,6 +188,9 @@ function listmixer_init() {
   // Add custom style sheet.
   drupal_add_css($path .'/listmixer.css');
 
+  // Add JQuery User Interface
+  jquery_ui_add('ui.sortable');
+
   // Add all interaction presets and callback settings to every Drupal page.
   // This array includes only presets that should always be available.
   $presets = listmixer_presets(TRUE);

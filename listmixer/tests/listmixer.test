@@ -4,7 +4,7 @@
 /*
  * @file
  * Tests for listmixer module
- */
+
 
 class ListMixerTest extends DrupalWebTestCase {
   public static function getInfo() {
@@ -17,9 +17,12 @@ class ListMixerTest extends DrupalWebTestCase {
 
   function setUp() {
     parent::setUp('listmixer');
+    $privileged_user = $this->drupalCreateUser(array('access list mixer, administer list mixer'));
+    // Login the user.
+    $this->drupalLogin($privileged_user);
   }
 }
-
+ */
 /**
  *
  * TESTS TO WRITE
@@ -27,3 +30,221 @@ class ListMixerTest extends DrupalWebTestCase {
  * database installed properly
  * database uninstalld properly
  */
+
+/**
+ * @file
+ * Tests for listmixer module
+ *
+ */
+
+class ListMixerTest extends DrupalWebTestCase {
+  public static function getInfo() {
+    return array(
+      'name' => t('List Mixer UI Test'),
+      'description' => t('Test something'),
+      'group' => t('List Mixer'),
+    );
+  }
+  // @TODO see why storage nodes not loading for tests
+  function setUp() {
+    // Enable all the necessary modules.
+    parent::setUp('content', 'views', 'nodereference', 'features', 'listmixer_storage_nodes', 'listmixer_ui', 'listmixer');
+
+    // Create a user with permissions determined by our module.
+    $no_listmixer_permissions = array();
+    $listmixer_permissions = array('administer list mixer', 'access list mixer');
+    $listmixer_content_permissions = array('access content'); // @TODO Add views, features, node ref etc.
+    // Create user with main listmixer permissions.
+    $listmixer_user = $this->drupalCreateUser($listmixer_permissions);
+    // Login the user.
+    $this->drupalLogin($listmixer_user);
+  }
+  // @TODO This is a list of all possible tests that should be created. Should be broken into the right function
+
+  /**
+   * Test access permissions - has role, doesn't have role
+   */
+
+  /**
+   * Test that User can view list mixer build page.
+   */
+  function testViewBuildPage() {
+    $this->drupalGet('admin/build/listmixer');  
+    $this->assertResponse(200, t('User can load listmixer build page.'));
+  }
+  /**
+   * Test that User can add a new list mixer
+   */
+  function testAddNewListMixer() {
+    $this->drupalGet('admin/build/listmixer/add');
+    $this->assertResponse(200, t('User can load listmixer add page.'));
+  }
+  // @TODO Test enabled/disabled
+  /**
+   * Test that User can add interaction presets
+   */
+  function testAddNewPreset() {
+    $this->drupalGet('admin/build/listmixer/add');
+    $this->assertResponse(200, t('User can load listmixer add page.'));
+    // Create an array of values that should be posted.
+    $edit = array();
+    $edit['preset_name'] = "test";
+    $edit['preset_description'] = "description";
+    $edit['preset_enabled'] = "1";
+    $edit['preset_method'] = "listmixer_storage_nodes";
+    // Call the post function on the path that contains the form.
+    // Click the 'submit' button, which in this case is called 'Save configuration'
+    $this->drupalPost('admin/build/listmixer/add', $edit, t('Save Preset'));  
+    $this->verbose('preset added');  
+    $this->outputScreenContents('current screen','Listmixer');
+    // @TODO Why is the form element named like this?
+    // @TODO get ID of new preset (how?)
+    // get form action : listmixer-ui-preset-form
+    $edit = array();
+    $edit['activate-'] = 'activate_button';
+    $edit['push-'] = 'push_link';
+    $edit['interact-'] = 'interact_checkbox';
+    $edit['submit-'] = 'submit_button';
+
+/*
+    $edit['activate-'] = 'activate_button';
+    $edit['push-'] = 'push_link';
+    $edit['interact-'] = 'interact_checkbox';
+    $edit['submit-'] = 'submit_button';
+
+*/
+  } 
+  /**
+   * Test that User can delete a new list mixer
+
+  function testDeleteNewListMixer() {
+  }   */
+  /**
+   * Test that User can edit a new list mixer
+
+  function testEditNewListMixer() {
+  }   */
+  /**
+   * Test that User can save data to a new list mixer
+   */
+
+  /**
+   * Test that User can edit data in a list mixer
+   */
+
+
+  /**
+   * Test that User can edit interaction presets
+   */
+
+  /**
+   * Test that if listmixer is deleted, that it removes data from the database
+   */
+
+  /**
+   * Test that if listmixer is installed, that databases tables
+   */
+
+  /**
+   * Test that database has correct structure
+   */
+
+  /* ********** Ajax tests ************** */
+
+  /**
+   * Test that Ajax functions save properly
+   * Create test content types, with certain fields
+   * Save the nid of the content type.
+   * be logged in
+   * test not logged in
+   * create fake data
+   * save the data
+   * be sure that it was stored in the node through ajax function
+   * test each type of node save function
+   */  
+
+
+
+  /* ********** Javascript tests ************** */
+
+  // Question does SimpleTest execute javascript?
+
+  /** Set up demo
+   * Add: CCK, Views, features
+   */
+  
+  /**
+   * Set up a listmixer preset for 'babble'
+   * Install features in a certain order
+   * Add content
+   * Set up preset
+   */
+
+  /**
+   * Set up a listmixer preset for 'photoset maker'
+   * Install features in a certain order
+   * Add content
+   * Set up preset
+   */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*  function testMySettingsFormSave() {
+    // Set a value that will be saved to the form.
+    $test_value = "This is my test value.";
+
+    // Path that will load the form.
+    $edit_path = "admin/settings/mysettings";
+
+    // Have DrupalWebTest load the page into the invisible web browser.
+    $this->drupalGet($edit_path);
+
+    // Say that the page will have a field with no value.
+    $this->assertFieldById('edit-mysettings-message', '', 'Looking for edit-mysettings-message field as indication that we got to MySettings settings page.', 'MySettings');
+
+    // Create an array of values that should be posted.
+    $edit = array();
+    $edit['mysettings_message'] = $test_value;
+   
+    // Call the post function on the path that contains the form.
+    // Click the 'submit' button, which in this case is called 'Save configuration'
+    $this->drupalPost('admin/settings/mysettings', $edit, t('Save configuration'));
+
+    // For debugging we can output the page so it can be opened with a browser.
+    // Remove this line when the test has been debugged.
+    $this->outputScreenContents("After drupalGet($edit_path) in testMySettingsFormSave", 'testMySettingsFormSave'); 
+
+    // Say that the text "The configuration options have been saved." will be on the redirected page. 
+    $this->assertText(t('The configuration options have been saved.'));
+
+    // If none of these functions validate, parts of the test will fail.
+  }*/
+
+  /**
+   * A utility function that dumps an HTML page into a folder in the files directory.
+   * Provides a link in the test interface. This will allow you to see what the invisible 
+   * web browser could see.
+   */
+  private function outputScreenContents($description, $basename) {
+    // This is a hack to get a directory that won't be cleaned up by simpletest
+    $file_dir = file_directory_path().'/../simpletest_output_pages';
+    if (!is_dir($file_dir)) {
+      mkdir($file_dir, 0777, TRUE);
+    }
+    $output_path = "$file_dir/$basename." . $this->randomName(10) . '.html';
+    $rv = file_put_contents($output_path, $this->drupalGetContent());
+    $this->pass("$description: Contents of result page are ".l('here',$output_path));
+  }  
+
+}

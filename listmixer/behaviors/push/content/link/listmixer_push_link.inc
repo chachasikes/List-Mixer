@@ -47,6 +47,7 @@ function listmixer_utilities_convert_url_to_path($value) {
 
    // If a link is a relative link to something in the drupal system, strip off the drupal path and replace it with absolute path.
    if (empty($is_absolute_link)) {
+      // @BUG Check how this validates, it is probably wrong
      if ($is_local_link == 0) {
       // Remove drupal path from the link
       $value = str_replace(base_path(), '', $value);
@@ -54,8 +55,10 @@ function listmixer_utilities_convert_url_to_path($value) {
       // This will try to store the node id in the nodereference field. 
       // The nodereference field will be validated, and ignored if necessary during the node_save() function.
       $path = drupal_get_normal_path($value);
-      // If the path points to a node, get the nid value
-      return $path;
+      // Only return the path if it is valid
+      if(!empty($path)) {
+        return $path;
+      }
     }
   }
   return $value;

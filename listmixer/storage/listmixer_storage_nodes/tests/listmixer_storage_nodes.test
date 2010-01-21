@@ -1,0 +1,103 @@
+<?php
+// $Id$
+
+class ListMixerStorageNodes extends DrupalWebTestCase {
+  public static function getInfo() {
+    return array(
+      'name' => t('List Mixer Storage Nodes'),
+      'description' => t('Test node storage'),
+      'group' => t('List Mixer Nodes'),
+    );
+  }
+  // @TODO see why storage nodes not loading for tests
+  function setUp() {
+    // Enable all the necessary modules.
+    parent::setUp('listmixer_ui', 'listmixer', 'listmixer_storage_nodes', 'content', 'views', 'nodereference', 'features');
+
+    // Create a user with permissions determined by our module.
+    $no_listmixer_permissions = array();
+    $listmixer_permissions = array('administer list mixer', 'access list mixer');
+    $listmixer_content_permissions = array('access content'); // @TODO Add views, features, node ref etc.
+    // Create user with main listmixer permissions.
+    $listmixer_user = $this->drupalCreateUser($listmixer_permissions);
+    // Login the user.
+    $this->drupalLogin($listmixer_user);
+  }
+  // @TODO This is a list of all possible tests that should be created. Should be broken into the right function
+
+  /**
+   * Test access permissions - has role, doesn't have role
+   */
+
+  /**
+   * Test that User can view list mixer build page.
+   */
+  function testViewBuildPage() {
+    $this->drupalGet('admin/build/listmixer');  
+    $this->assertResponse(200, t('User can load listmixer build page.'));
+  }
+  /**
+   * Test that User can add a new list mixer
+   */
+  function testAddNewListMixer() {
+    $this->drupalGet('admin/build/listmixer/add');
+    $this->assertResponse(200, t('User can load listmixer add page.'));
+  }
+  // @TODO Test enabled/disabled
+  /**
+   * Test that User can add interaction presets
+   */
+  function testAddNewPreset() {
+    // Create an array of values that should be posted.
+    $edit = array();
+    $edit['preset_name'] = "test";
+    $edit['preset_description'] = "description";
+    $edit['preset_enabled'] = "1";
+    $edit['preset_method'] = "listmixer_storage_nodes";
+    // Call the post function on the path that contains the form.
+    // Click the 'submit' button, which in this case is called 'Save configuration'
+    $this->drupalPost('admin/build/listmixer/add', $edit, t('Save Preset'));  
+    $this->verbose('preset added');  
+  } 
+  
+  /** 
+   * Test Database installed.
+   */
+
+  /** 
+   * Test Database deleted.
+   */
+
+  /** 
+   * Test Form saved.
+   */
+
+  /** 
+   * Test Form edited.
+   */
+
+  /** 
+   * Test Form loaded.
+   */
+
+  /** 
+   * Test register hook.
+   */
+
+  /** 
+   * Test access.
+   */
+
+
+  private function outputScreenContents($description, $basename) {
+    // This is a hack to get a directory that won't be cleaned up by simpletest
+    $file_dir = file_directory_path().'/../simpletest_output_pages';
+    if (!is_dir($file_dir)) {
+      mkdir($file_dir, 0777, TRUE);
+    }
+    $output_path = "$file_dir/$basename." . $this->randomName(10) . '.html';
+    $rv = file_put_contents($output_path, $this->drupalGetContent());
+    $this->pass("$description: Contents of result page are ".l('here',$output_path));
+  }  
+
+}
