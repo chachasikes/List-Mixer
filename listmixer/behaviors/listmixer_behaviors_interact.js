@@ -55,7 +55,7 @@ Drupal.behaviors.listmixer.Interact = function(preset) {
     selectInteract : '<div class="listmixer-source-value"><input type="select" class="listmixer-source-value"></input><div class="listmixer-source-label"></div></div>',
     inputInteract : '<div class="listmixer-source-value"><input type="input" class="listmixer-source-value"></input><div class="listmixer-source-label"></div></div>',
     checkboxInteract : '<div class="listmixer-source-value"><input type="checkbox" class="listmixer-source-value"></input><div class="listmixer-source-label"></div></div>',
-    weightInteract : '<div class="listmixer-source-value"><input type="input" class="listmixer-source-value"></input><div class="listmixer-source-weight">WEIGHT HERE</div><div class="listmixer-source-label"></div></div>'
+    weightInteract : '<div class="listmixer-source-value"><div class="listmixer-source-weight-handle"></div><div class="listmixer-source-label"></div></div>'
   };
   // @TODO Weight will change to some sort of controls, and it will take the source value and resave it in a certain order, so it's an extended input field.
   this.validation = { 
