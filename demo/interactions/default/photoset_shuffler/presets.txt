@@ -1,0 +1,26 @@
+Settings to build photoset shuffler
+--------------------------------
+You also have to install the features exports of the views, cck types.
+You will probably need to set up imagecache settings and add some test photo content.
+
+
+Preset Namespace: photoset_shuffler
+Preset Description: Shuffle a photoset.
+Select the type of storage method for this interaction: Nodes
+Enabled: checked
+
+Activate: Buton
+Push: Store Weights: Nodereference
+Interact: Weight
+Submit: Button
+
+
+Label for interaction: Shuffle the nodereferences
+Help Text for Drupal User: Drag links to rearrange.
+Selector: Interaction Container: div.view-photoset-shuffler table.views-view-grid div.views-field-field-reference-photo-nid div.field-content
+Selector: Target Node ID: div.view-photoset-shuffler table.views-view-grid div.views-field-nid
+Selector: Interactive Region: div.view-photoset-shuffler table.views-view-grid div.views-field-field-reference-photo-nid div.field-content
+Selector: Interactive Element Receivers: div.field-item
+Selector: Source Value Selector: a
+Selector: Source Value Attribute Selector: href
+Fieldname: Target Field: field_reference_photo
