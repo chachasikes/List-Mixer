@@ -73,7 +73,17 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
     '#default_value' => $interactions['interactions_target_id'],
     '#description' => '<p>Define a jQuery compatible selector.</p>
     This is the node that data should be saved <strong>TO.</strong>
-    The selector should point to an html element that contains the nid.</p>
+    <p>There are a few ways to generate this number.</p>
+    <ol>
+    <li>You can create a container that just contains the node id. <br />
+    (For example, a views node id field, with no label.)<br />
+     <em>ListMixer will hide this element for you.</em>
+    </li>
+    <li>You can point to a link that contains the path that should be saved to.<br />
+    (For example, a linking node title. Create the selector that points to the link (a).<br />
+    <em>Then add \'href\' to the Target Value Attribute selector below: The href contains the path.</em>
+    </li>
+    </ol>
 
     <p>Example markup: &lt;div class="class-for-listmixer-target-node-id"&gt;345&lt;/div&gt;</p>
     <p>Example selector: div.class-for-listmixer-target-node-id</p>
@@ -83,9 +93,18 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
     <p>Example selector: div#block-views-babble-block_1 div.views-field-nid span.field-content</p>
 
     The html of the target should contain only the numeric node id.
-    NOTE: ListMixer will hide the element for you.
+
     </p>',
     '#weight' => 1,
+  );
+  $form['interactions_target_id_attr'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Selector: Target Value Attribute Selector'),
+      '#description' => '<p>Add the attribute (of the Target ID), for example 
+      \'href\' if the source ID selector is \'a\'.</p>',
+      '#default_value' => $interactions['interactions_target_id_attr'],
+      '#weight' => 2,
   );
   $form['interactions_restrictions'] = array(
       '#type' => 'textfield',
@@ -146,7 +165,7 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
       '#size' => 90,
       '#title' => t('Selector: Source Value Attribute Selector'),
       '#description' => '<p>Add the attribute (of the Source ID), for example 
-      \'href\' if the source ID is \'a\'.</p>',
+      \'href\' if the source ID selector is \'a\'.</p>',
       '#default_value' => $interactions['interactions_source_id_attr'],
       '#weight' => 6,
   );

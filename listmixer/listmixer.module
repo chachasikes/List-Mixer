@@ -153,6 +153,8 @@ function listmixer_behaviors_callback($type, $name, $root) {
         . $function_name . ' ' . date("F j, Y, g:i:s a")), 'status');
       }
   }
+  // @DEBUG Enable for debugging callbacks
+  // return '';
 }
 
 /**

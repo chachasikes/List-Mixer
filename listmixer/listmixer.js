@@ -211,12 +211,18 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
     // @TODO Add validation function if necessary
 
     preset.target_field = preset.interactions.interactions_target_field;
+    preset.target_id_attr = preset.interactions.interactions_target_id_attr;
     // *********** Set up the target id
     // Make sure that the target id is a number
     try {
-       preset.target_id = $(preset.interactions.interactions_target_id).html();
-       preset.target_id.length > 0;
-       $(preset.interactions.interactions_target_id).hide();
+      if(preset.target_id_attr !== '') {
+         preset.target_id = $(preset.interactions.interactions_target_id).attr(preset.target_id_attr);   
+      }
+      else {
+         preset.target_id = $(preset.interactions.interactions_target_id).html();
+         $(preset.interactions.interactions_target_id).hide();
+         preset.target_id.length > 0;
+      }
     }
     catch(err) {
       // @TODO If user has permissions to edit the preset, give them an error.
