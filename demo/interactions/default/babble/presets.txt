@@ -19,6 +19,7 @@ Label for interaction: Say something
 Help Text for Drupal User: Enter some text.
 Selector: Interaction Container: div#block-views-babble-block_1
 Selector: Target Node ID: div#block-views-babble-block_1 div.views-field-nid span.field-content
+Selector: Target Value Attribute Selector: {nothing entered}
 Selector: Interactive Region: div#block-views-babble-block_1
 Selector: Interactive Element Receivers: form#listmixer-target-babble
 Selector: Source Value Selector: {nothing entered}

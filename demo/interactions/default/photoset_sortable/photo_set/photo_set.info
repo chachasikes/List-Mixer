@@ -1,0 +1,8 @@
+core = "6.x"
+dependencies[] = "features"
+dependencies[] = "nodereference"
+features[content][] = "photo_set-field_reference_photo"
+features[node][] = "photo_set"
+name = "photo_set"
+package = "Features"
+project = "photo_set"

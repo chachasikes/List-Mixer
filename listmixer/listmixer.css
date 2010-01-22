@@ -11,8 +11,8 @@
   background: url(includes/images/weight-handle.gif);
   width: 30px;
   height: 30px;
-  float: left;
+  /* float: left; */
 }
 .listmixer-source-value{
-  clear: both;
+ /* clear: both;*/
 }

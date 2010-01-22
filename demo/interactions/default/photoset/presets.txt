@@ -19,6 +19,7 @@ Label for interaction: Make a photoset
 Help Text for Drupal User: You are making a photoset. Click the checkboxes to select images to save into your photo set. Then click save.
 Selector: Interaction Container: div.attachment div.view-display-id-attachment_1 div.view-content
 Selector: Target Node ID: div.view-photo-gallery div.attachment div.views-field-nid span.field-content
+Selector: Target Value Attribute Selector: {nothing entered}
 Selector: Interactive Region: div.view-photo-gallery
 Selector: Interactive Element Receivers: table.views-view-grid td
 Selector: Source Value Selector: div.views-field-nid span.field-content

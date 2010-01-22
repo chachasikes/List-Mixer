@@ -19,6 +19,7 @@ Label for interaction: Shuffle the nodereferences
 Help Text for Drupal User: Drag links to rearrange.
 Selector: Interaction Container: div.view-photoset-shuffler table.views-view-grid div.views-field-field-reference-photo-nid div.field-content
 Selector: Target Node ID: div.view-photoset-shuffler table.views-view-grid div.views-field-nid
+Selector: Target Value Attribute Selector: 
 Selector: Interactive Region: div.view-photoset-shuffler table.views-view-grid div.views-field-field-reference-photo-nid div.field-content
 Selector: Interactive Element Receivers: div.field-item
 Selector: Source Value Selector: a

@@ -1,0 +1,3 @@
+<?php
+
+include_once('photoset_shuffler.features.inc');

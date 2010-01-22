@@ -3,18 +3,17 @@
 /**
  * Helper to implementation of hook_content_default_fields().
  */
-function _photo_set_content_default_fields() {
+function _babble_stream_content_default_fields() {
   $fields = array();
 
-  // Exported field: field_reference_photo
+  // Exported field: field_text_babble
   $fields[] = array(
-    'field_name' => 'field_reference_photo',
-    'type_name' => 'photo_set',
+    'field_name' => 'field_text_babble',
+    'type_name' => 'babble_stream',
     'display_settings' => array(
-      'weight' => '-3',
-      'parent' => '',
       'label' => array(
         'format' => 'above',
+        'exclude' => 0,
       ),
       'teaser' => array(
         'format' => 'default',
@@ -42,42 +41,36 @@ function _photo_set_content_default_fields() {
       ),
     ),
     'widget_active' => '1',
-    'type' => 'nodereference',
+    'type' => 'text',
     'required' => '0',
     'multiple' => '1',
-    'module' => 'nodereference',
+    'module' => 'text',
     'active' => '1',
-    'referenceable_types' => array(
-      'photo' => 'photo',
-      'babble_stream' => 0,
-      'favorite_links' => 0,
-      'page' => 0,
-      'photo_set' => 0,
-      'story' => 0,
-      'to_do_list' => 0,
-    ),
-    'advanced_view' => '--',
-    'advanced_view_args' => '',
+    'text_processing' => '0',
+    'max_length' => '',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
     'widget' => array(
-      'autocomplete_match' => 'contains',
-      'size' => '60',
+      'rows' => '5',
+      'size' => 60,
       'default_value' => array(
         '0' => array(
-          'nid' => '',
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_text_babble][0][value',
         ),
       ),
       'default_value_php' => NULL,
-      'label' => 'Photo',
-      'weight' => '-3',
-      'description' => '',
-      'type' => 'nodereference_select',
-      'module' => 'nodereference',
+      'label' => 'Babble',
+      'weight' => '31',
+      'description' => 'Enter content.',
+      'type' => 'text_textarea',
+      'module' => 'text',
     ),
   );
 
   // Translatables
   array(
-    t('Photo'),
+    t('Babble'),
   );
 
   return $fields;
