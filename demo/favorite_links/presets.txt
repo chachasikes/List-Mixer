@@ -1,0 +1,27 @@
+Settings to build favorite links
+--------------------------------
+You also have to install the features exports of the views, cck types.
+You will probably need to set up imagecache settings and add some test photo content.
+
+
+Preset Namespace: favorite_links
+Preset Description: Save links from any Drupal page into a link node.
+Select the type of storage method for this interaction: Nodes
+Enabled: checked
+
+Activate: Button
+Push: Store Link
+Interact: Checkbox
+Submit: Button
+
+
+Label for interaction: Save links on this page to your favorites list.
+Help Text for Drupal User: Click 'Activate.' Then check the checkboxes to save links to your list.
+Selector: Interaction Container: div#block-views-favorite_links-block_1
+Selector: Target Node ID: div#block-views-favorite_links-block_1 div.views-field-nid span.field-content
+Selector: Target Value Attribute Selector: {nothing entered}
+Selector: Interactive Region: body
+Selector: Interactive Element Receivers: div#center div.node div.field-item:has(a.imagecache)
+Selector: Source Value Selector: a.imagecache
+Selector: Source Value Attribute Selector: href
+Fieldname: Target Field: field_link

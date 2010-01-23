@@ -1,0 +1,7 @@
+core = "6.x"
+dependencies[] = "content"
+dependencies[] = "views"
+features[views][] = "photo_gallery_sortable"
+name = "photo_gallery_sortable"
+package = "Features"
+project = "photo_gallery_sortable"

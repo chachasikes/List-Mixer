@@ -1,0 +1,8 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ */
+
+include_once('photo_gallery.features.inc');

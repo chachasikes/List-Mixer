@@ -7,7 +7,7 @@
   }
  */
 
-Drupal.behaviors.listmixer.Interact = function(preset) {
+Drupal.behaviors.listmixer.interact = function(preset) {
   this.init = function() {
   // alert('Interact Library Loaded');
   }
@@ -67,10 +67,17 @@ Drupal.behaviors.listmixer.Interact = function(preset) {
  * Add sort dragging capabilities to each weighted item on a page (jQuery UI)
  */
 Drupal.behaviors.listmixer.sortDrag = function(preset) {
-  $(preset.interactions.interactions_region).addClass('sortable');
-  	$(function() {
-    	$(".sortable").sortable({ items: preset.interactions_inclusions, axis: 'y' });
-		  $(".sortable").disableSelection();
-  });
+//console.log(preset);
+  if(preset.activation === true) {
+    $(preset.interactions.interactions_region).addClass('sortable');
+    	$(function() {
+      	$(preset.interactions.interactions_region + ".sortable").sortable({ items: preset.interactions_inclusions, axis: 'y' });
+  		  $(preset.interactions.interactions_region + ".sortable").disableSelection();
+    }); 
+  }
+  else {
+   // $(preset.interactions.interactions_region + ".sortable").sortable('destroy');
+    //$(preset.interactions.interactions_region).removeClass('sortable');
+  }
 }
 

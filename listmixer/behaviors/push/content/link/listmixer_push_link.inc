@@ -14,6 +14,12 @@ function listmixer_behaviors_listmixer_push_link($data) {
   // If POST data has been set, save the node
   if (isset($_POST['target_id']) && isset($_POST['input']) && isset($_POST['target_field'])) {
     $node = listmixer_utilities_load_target_node($_POST['target_id']);
+    // If we are sorting, deleting all text values.
+    if($_POST['interact_function'] == 'sortInteract') {
+      foreach ($node->{$_POST['target_field']} as $key => $value) {
+        $node->{$_POST['target_field']}[$key] = '';
+      }
+    }
     foreach (split(',', $_POST['input']) as $value) {
       // Convert URL to nid (if field type is nodereference)
       // $value = listmixer_utilities_convert_url_to_nid($value);

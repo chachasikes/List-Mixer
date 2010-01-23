@@ -1,6 +1,6 @@
 // $Id$
 
-Drupal.behaviors.listmixer.Push = function() {
+Drupal.behaviors.listmixer.push = function() {
   this.init = function() {
    // alert('Push Library Loaded');
   }

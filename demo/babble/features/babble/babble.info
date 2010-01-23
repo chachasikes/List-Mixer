@@ -1,0 +1,8 @@
+; $Id$
+core = "6.x"
+dependencies[] = "content"
+dependencies[] = "views"
+features[views][] = "babble"
+name = "babble"
+package = "Features"
+project = "babble"

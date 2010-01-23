@@ -1,0 +1,27 @@
+Settings to build babble
+------------------------
+You also have to install the features exports of the views, cck types.
+
+
+
+Preset Namespace: babble
+Preset Description: This preset adds an input field to a page. Typing in the box saves text to a node.
+Select the type of storage method for this interaction: Nodes
+Enabled: checked
+
+Activate: MouseDown
+Push: Text
+Interact: Input
+Submit: Button
+
+
+Label for interaction: Say something
+Help Text for Drupal User: Enter some text.
+Selector: Interaction Container: div#block-views-babble-block_1
+Selector: Target Node ID: div#block-views-babble-block_1 div.views-field-nid span.field-content
+Selector: Target Value Attribute Selector: {nothing entered}
+Selector: Interactive Region: div#block-views-babble-block_1
+Selector: Interactive Element Receivers: form#listmixer-target-babble
+Selector: Source Value Selector: {nothing entered}
+Selector: Source Value Attribute Selector: {nothing entered}
+Fieldname: Target Field: ffield_text_babble

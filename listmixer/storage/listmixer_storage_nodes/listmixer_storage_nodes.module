@@ -117,7 +117,8 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
       '#size' => 90,
       '#title' => t('Selector: Interactive Element Receivers'),
       '#description' => 'Element selector inside interactive region that will receive interactive elements.<br />
-      (Example, <em>div.field-item</em> elements that receive checkboxes.)',
+      (Example, <em>div.field-item</em> elements that receive checkboxes.)<br />
+      form#listmixer-target-babble',
       '#default_value' => $interactions['interactions_inclusions'],
       '#weight' => 6,
   );

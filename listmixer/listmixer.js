@@ -96,7 +96,7 @@ Drupal.behaviors.listmixer.interact = function(preset) {
  */
 Drupal.behaviors.listmixer.activate = function(preset) {
   Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'activate');
-  var Activate = new Drupal.behaviors.listmixer.Activate();
+  var Activate = new Drupal.behaviors.listmixer.activate();
   Activate.init();
 };
 /**
@@ -109,22 +109,19 @@ Drupal.behaviors.listmixer.submit = function(preset) {
  * Push is called when user interacts with submit button.
  */
 Drupal.behaviors.listmixer.push = function(preset) {
-  var Push = new Drupal.behaviors.listmixer.Push();
+  var Push = new Drupal.behaviors.listmixer.push();
   Push.init();
   // Load data for interact button validation.
-  var Interact = new Drupal.behaviors.listmixer.Interact();
+  var Interact = new Drupal.behaviors.listmixer.interact();
   Interact.init();
   preset.interactFunction = preset.behaviors.interact.settings.behavior_function; 
-
   // Get value from interact element.
-  // @TODO Add validators :checked, not empty... what else?
   $.each($(preset.interactions.interactions_region + ' ' + Interact.validation[preset.interactFunction]), function(){
     // Collect the value from each of the interactive elements.
     // Store values in data object in preset.
-    preset.data.inputArray.push($(this).val());
+    preset.data.inputArray.push($(this).val().trim());
   });
   Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'push');
-
   // @TODO Check that the callback isn't reloading the page. 
   return false;
 };
@@ -227,7 +224,11 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
          $(preset.interactions.interactions_target_id).hide();
       }
       // Make sure that the target id has a value
-      preset.targetId.length > 0;
+      if(preset.targetId.length > 0) {
+      }
+      else {
+        throw 'error';
+      }
     }
     catch(err) {
       // @TODO If user has permissions to edit the preset, give them an error.
@@ -243,7 +244,12 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
     }
     preset.interactionsRegion = $(preset.interactions.interactions_region).html();
     try {
-       preset.interactionsRegion.length > 0;
+      // if(preset.interactionsRegion.length > 0;
+      if(preset.interactionsRegion.length > 0) {
+      }
+      else {
+        throw 'error';
+      }
     }
     catch(err1) {
       // @TODO If this is set to body, are there any other chances that this would be empty? This check maybe unnecessary for anything except debugging this JS file.
@@ -283,13 +289,15 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
       // Set up form.
       Drupal.behaviors.listmixer.setupForm(preset);
       // Create activate behavior, or load straightaway if set to onLoad
-      // @TODO Change 'mouseDownActivate' to 'onLoad' 
-      if (preset.behaviors.activate.settings.behavior_function == 'mouseDownActivate') {
-        Drupal.behaviors.listmixer.listmixerActivate(preset, true);
+      // @TODO Change 'loadActivate' to 'onLoad' 
+      if (preset.behaviors.activate.settings.behavior_function == 'loadActivate') {
+        preset.activation = true;
+        Drupal.behaviors.listmixer.listmixerActivate(preset);
       }
       else {
         // Add activate widget.
         //Drupal.behaviors.listmixer.listmixerActivate(preset, true);
+        preset.activation = false;
         Drupal.behaviors.listmixer.setupActivateWidget(preset);
       }
     }
@@ -316,7 +324,7 @@ Drupal.behaviors.listmixer.setupForm = function(preset) {
 Drupal.behaviors.listmixer.setupActivateWidget = function(preset) {
   // @TODO Work on declaring decactivated, can't use === operator as is
   // On activate widget click, set up the interaction.
-  var Activate = new Drupal.behaviors.listmixer.Activate();
+  var Activate = new Drupal.behaviors.listmixer.activate();
   Activate.init();
   var activateFunction = preset.behaviors.activate.settings.behavior_function;
   preset.activate = Activate.markup[activateFunction];
@@ -326,7 +334,8 @@ Drupal.behaviors.listmixer.setupActivateWidget = function(preset) {
   $('form#' + preset.targetFormId + ' div.listmixer-deactivate-button').hide();
   $('form#' + preset.targetFormId + ' div.listmixer-activate-button').children(".button").click(function() {
     if(preset.activated == null) {
-      Drupal.behaviors.listmixer.listmixerActivate(preset, true);
+      preset.activation = true;
+      Drupal.behaviors.listmixer.listmixerActivate(preset);
       preset.activated = true;
       preset.deactivated = null;
       $('form#' + preset.targetFormId + ' div.listmixer-deactivate-button').show();
@@ -337,6 +346,7 @@ Drupal.behaviors.listmixer.setupActivateWidget = function(preset) {
   // Set up deactivate button.
   $('form#' + preset.targetFormId + ' div.listmixer-deactivate-button').children(".button").click(function() {
     if(preset.deactivated == null) {
+      preset.activation = false;
       Drupal.behaviors.listmixer.listmixerDeactivate(preset);
       preset.deactivated = true;
       preset.activated = null;
@@ -352,12 +362,13 @@ Drupal.behaviors.listmixer.setupActivateWidget = function(preset) {
  * Deactivate function.
  */
 Drupal.behaviors.listmixer.listmixerDeactivate = function(preset) {
-  Drupal.behaviors.listmixer.listmixerActivate(preset, false);
+  preset.activation = false;
+  Drupal.behaviors.listmixer.listmixerActivate(preset);
 };
 /**
  *
  */
-Drupal.behaviors.listmixer.listmixerActivate = function(preset, activation) {
+Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
   // If the interaction container matches the restriction container, make interactive elements live in the form. 
   var hideSourceValue = false;
   // Set up selector for the sourceValue (for input values)
@@ -371,7 +382,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset, activation) {
     // The source selector needs to be a child of the element.
     // @TODO make the form into textfields and rearrange and rewrite the help.
 
-    var Interact = new Drupal.behaviors.listmixer.Interact();
+    var Interact = new Drupal.behaviors.listmixer.interact();
     Interact.init();
     preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
     // @TODO See if there is any possible way to get this function to load.
@@ -379,48 +390,63 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset, activation) {
     if (preset.interactFunction == 'sortInteract') {
       Interact.sortInteract(preset);
     }
+
     $.each($(preset.interactions.interactions_region + ' ' + preset.interactions.interactions_inclusions), function() {
       var sourceValue = null;
-      var Interact = new Drupal.behaviors.listmixer.Interact();
+      var sourceElement = null;
+      var Interact = new Drupal.behaviors.listmixer.interact();
       Interact.init();
+      var sourceValueMarkup = 'div.listmixer-source-value';
+      var sourceValueMarkupProcessed = 'processed-value-' + preset.preset_name;
       preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
 
       // @TODO check sourceValue is numeric
       // The selector might be empty if user enters nothing, if so, just use the default input.
       if(preset.sourceValueSelector != '') {
-        // Get each source id
-        if(preset.sourceValueAttribute !== '') {
-          sourceValue = $(this).find(preset.sourceValueSelector).attr(preset.sourceValueAttribute);
+        if(preset.sourceValueSelector == preset.interactions.interactions_inclusions) {
+          sourceElement = $(this);
         }
         else {
-          sourceValue = $(this).find(preset.sourceValueSelector).html();
+          sourceElement = $(this).find(preset.sourceValueSelector);
         }
-        
+        // Get each source id
+        if(preset.sourceValueAttribute !== '') {
+          sourceValue = sourceElement.attr(preset.sourceValueAttribute);
+        }
+        else {
+          sourceValue = sourceElement.html();
+        }
         // Hide the source selector. (@TODO, make this an option)
         if(hideSourceValue === true) {
-          $(this).find(preset.sourceValueSelector).hide();
+          sourceElement.hide();
         }
         if(sourceValue !== null) {
           // Only add interactive elements if a valid value is present.
-          if(activation === true) {
+          if(preset.activation === true) {
+            $(this).addClass(sourceValueMarkupProcessed);
             $(this).prepend(Interact.markup[preset.interactFunction]);
+            $(this).find(sourceValueMarkup).addClass(sourceValueMarkupProcessed);
           }
           else{
-            $(this).find('div.listmixer-source-value').remove();
+            $(this).removeClass(sourceValueMarkupProcessed);
+            $(this).find(sourceValueMarkup).remove();
           }
         }
       }
       else{
         // Only add interactive elements if a valid value is present.
-        if(activation === true) {
+        if(preset.activation === true) {
+          $(this).addClass(sourceValueMarkupProcessed);
           $(this).append(Interact.markup[preset.interactFunction]);
+          $(this).find(sourceValueMarkup).addClass(sourceValueMarkupProcessed);
         }
         else{
-          $(this).find('div.listmixer-source-value').remove();
+          $(this).removeClass(sourceValueMarkupProcessed);
+          //$(this).find(sourceValueMarkup).remove();
         }
       }
       // Add value to input field after input is created
-      $(this).find('div.listmixer-source-value input').val(sourceValue);
+      $(this).find('*.' + sourceValueMarkupProcessed + ' input').val(sourceValue);
       // @TODO add label for activate
     });
   }
@@ -428,13 +454,13 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset, activation) {
     alert(Drupal.t('ListMixer Error: Inclusion & input validation problem. Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
   }
   // ********* Set up Submit button
-  var Submit = new Drupal.behaviors.listmixer.Submit();
+  var Submit = new Drupal.behaviors.listmixer.submit();
   Submit.init();
   var submitFunction = preset.behaviors.submit.settings.behavior_function;
   preset.submit = Submit.markup[submitFunction];
   // Add button to form/containter
   // Only add interactive elements if a valid value is present.
-  if(activation === true) {
+  if(preset.activation === true) {
     $('form#' + preset.targetFormId).append(preset.submit);
   }
   else{

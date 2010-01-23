@@ -1,0 +1,9 @@
+; $Id$
+core = "6.x"
+dependencies[] = "features"
+dependencies[] = "text"
+features[content][] = "babble_stream-field_text_babble"
+features[node][] = "babble_stream"
+name = "babble_stream"
+package = "Features"
+project = "babble_stream"

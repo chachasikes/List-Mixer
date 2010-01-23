@@ -308,7 +308,7 @@ function listmixer_behaviors_registry_build() {
   $listmixer_behaviors_registry = array();
 
   /* ACTIVATE functions */
-  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'MouseDown', $enabled, '', 'mousedown', 'activate_mousedown', 'Activate Mousedown', 'mouseDownActivate');
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Load', $enabled, '', 'mousedown', 'activate_load', 'Activate Load', 'loadActivate');
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Button', $enabled, '', 'button', 'activate_button', 'Activate Button', 'buttonActivate');
   // $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Drag', $enabled, '', 'drag', 'activate_drag', 'Activate Drag description', 'dragActivate');
 
@@ -325,7 +325,6 @@ function listmixer_behaviors_registry_build() {
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Nodereference', $enabled, '/content', 'nodereference', 'push_nodereference', 'Store Nodereference', 'nodereferencePush');
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Text', $enabled, '/content', 'text', 'push_text', 'Store Text', 'textPush');
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Link', $enabled, '/content', 'link', 'push_link', 'Store Link', 'linkPush');
-  //$listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Weights - Nodereference', $enabled, '/content', 'weight', 'push_nodereference_weight', 'Store Weights - Nodereference', 'nodereferenceWeightPush');
 
   /* Taxonomy push functions */
   // $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Term', $enabled, '/taxonomy', 'term', 'push_taxonomy_term', 'Push Taxonomy Term', 'termPush');
