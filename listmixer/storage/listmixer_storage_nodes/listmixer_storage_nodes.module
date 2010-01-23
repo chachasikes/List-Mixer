@@ -39,39 +39,139 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
     '#type' => 'value',
     '#value' => $preset['preset_id'],
   );
+  $form['interactions_labels'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('1. Label the interaction'),
+      '#description' => '<p>Label for the interaction. Will display to user. You may leave this blank.</p>',
+      '#weight' => 0,
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+  );
+  $form['interactions_introduction'] = array(
+    /* Set up which html elements your interaction should be applied to, and where it should be saved.
+     */
+  );
   $form['interactions_label'] = array(
       '#type' => 'textfield',
       '#title' => t('Label for interaction'),
-      '#description' => '<p>' . t('Label for the interaction. Will display to user. You may leave this blank.') . '</p>',
+      '#description' => 'Title of interaction for end-user.',
       '#default_value' => $interactions['interactions_label'],
-      '#weight' => 0,
+      '#weight' => 1,
   );
   $form['interactions_help'] = array(
       '#type' => 'textarea',
       '#title' => t('Help Text for Drupal User'),
-      '#description' => '<p>' . t('Explain to the Drupal User how they
-      should use this interaction. You may leave this blank.') . '</p>',
+      '#description' => '<p>Instructions for end-user.</p>',
       '#default_value' => $interactions['interactions_help'],
-      '#weight' => 0,
+      '#weight' => 2,
       '#rows' => 2,
+  );
+  $form['interactions_interactive_area'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('2. Interactive area'),
+      '#description' => '<p>This is the container that ListMixer will look
+      for to apply presets. If this html element is not on a page, ListMixer will not
+      get load the preset.</p>
+      <p>Example: div#block-views-babble-block_1</p>
+
+      <p>Define selector for an html element of a page
+      that will contain the interactive widgets. This could be the same as the
+      target container, or it could be another region of the page.</p>
+
+      <p>Define a selector that will locate
+      the html elements that should receive interactive widgets.</p>
+      <p>The element receivers should exist inside the interactive
+      region</p>
+      <p>Example: table.views-view-grid td</p>
+      <ul>
+      <li>Tip: If you want an element to show up in the form generated
+       by listmixer, enter this: form#listmixer-target-babble
+       (but replace "babble" with the name of your interaction setting</li>
+      </ul>',
+      '#weight' => 3,
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
   );
   $form['interactions_container'] = array(
       '#type' => 'textfield',
       '#size' => 90,
-      '#title' => t('Selector: Interaction Container'),
-      '#description' => '<p>This is the container that ListMixer will look
-      for to apply presets. If this html element is not on a page, ListMixer will not
-      get load the preset.</p>
-      <p>Example: div#block-views-babble-block_1</p>',
+      '#title' => t('Selector: Main Interaction Container'),
+      '#description' => 'Most external element selector that will contain the whole interaction.<br />
+      (Example, <em>div.view-content</em>.) If empty, defaults to &lt;body&gt;. <br />
+      If element not found, interaction will not be applied to a page.',
       '#default_value' => $interactions['interactions_container'],
-      '#weight' => 1,
+      '#weight' => 4,
   );
-  $form['interactions_target_id'] = array(
-    '#type' => 'textfield',
-    '#size' => 90,
-    '#title' => t('Selector: Target Node ID'),
-    '#default_value' => $interactions['interactions_target_id'],
-    '#description' => '<p>Define a jQuery compatible selector.</p>
+  // @TODO rename interactions_restrictions to interactions_region
+  $form['interactions_restrictions'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Selector: Interactive Region'),
+      '#description' => 'Element selector inside the main interaction container. <br />
+      Set equal to the main container to target that container.<br />
+      (Example, <em>div.field-items</em> elements.)',
+      '#default_value' => $interactions['interactions_restrictions'],
+      '#weight' => 5,
+  );
+  $form['interactions_inclusions'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Selector: Interactive Element Receivers'),
+      '#description' => 'Element selector inside interactive region that will receive interactive elements.<br />
+      (Example, <em>div.field-item</em> elements that receive checkboxes.)',
+      '#default_value' => $interactions['interactions_inclusions'],
+      '#weight' => 6,
+  );
+
+  $form['interactions_source_value'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('3. Source Values: Elements that point to values that should be stored'),
+      '#description' => '<p>Define a selector that will contain
+      the value that should be passed to the target node.</p>
+      <p>The source value selector should exist inside the markup
+      for the element receiver.</p>
+      <p>Example markup:</p>
+      <pre>
+           &lt;div class="view"&gt;
+              &lt;table id="views-grid"&gt;
+                &lt;tr...
+                  &lt;td&gt;
+                    &lt;span class="list-mixer-source-value"&gt;614&lt;/span&gt;
+      </pre>
+      <p>Example selector: span.list-mixer-source-value</p>
+      <ul>
+        <li>You may need to add this value to your content.</li>
+        <li>ListMixer will hide this value for you.</li>
+        <li>The value should be compatible with where it will be
+            saved in the node. It should be a number if it will
+            be saved to a nodereference field.</li>
+      </ul>
+      <p>Add the attribute (of the Source ID), for example 
+      \'href\' if the source ID selector is \'a\'.</p>',
+      '#weight' => 7,
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+  );
+  $form['interactions_source_id'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Selector: Source Value(s)'),
+      '#description' => 'Element selector inside interactive element receiver that contains the value to be stored. (Example, <em>span.field-content</em> or <em>a</em>.)',
+      '#default_value' => $interactions['interactions_source_id'],
+      '#weight' => 8,
+  );
+  $form['interactions_source_id_attr'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Selector: Source Value Attribute'),
+      '#description' => 'Attribute of source value selector that contains the value. (Example, <em>href</em> if selector is <em>a</em>.) If empty, will use the .html() value of the selector.',
+      '#default_value' => $interactions['interactions_source_id_attr'],
+      '#weight' => 9,
+  );
+  $form['interactions_target_value'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('4. Target: where data should be saved TO '),
+      '#description' => '<p>Define a jQuery compatible selector.</p>
     This is the node that data should be saved <strong>TO.</strong>
     <p>There are a few ways to generate this number.</p>
     <ol>
@@ -94,91 +194,43 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
 
     The html of the target should contain only the numeric node id.
 
-    </p>',
-    '#weight' => 1,
+    </p>
+
+
+    <p>Add the attribute (of the Target ID), for example 
+      \'href\' if the source ID selector is \'a\'.</p>'
+
+    . t('<p>Enter the machine name of the field that
+       should be saved to.</p>
+       <p>This should match the widget "Push" type you selected above.
+       <em>Example: field_text_babble</em></p>'),
+      '#weight' => 10,
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+  );
+  $form['interactions_target_id'] = array(
+    '#type' => 'textfield',
+    '#size' => 90,
+    '#title' => t('Selector: Target Node ID Value'),
+    '#default_value' => $interactions['interactions_target_id'],
+    '#description' => 'Element selector that points to the value of the node that data should be saved to. Can be a numeric nid value or a drupal path.',
+    '#weight' => 11,
   );
   $form['interactions_target_id_attr'] = array(
       '#type' => 'textfield',
       '#size' => 90,
-      '#title' => t('Selector: Target Value Attribute Selector'),
-      '#description' => '<p>Add the attribute (of the Target ID), for example 
-      \'href\' if the source ID selector is \'a\'.</p>',
+      '#title' => t('Selector: Target Value Attribute'),
+      '#description' => 'Attribute of target value selector that contains the value. (Example, <em>href</em> if selector is <em>a</em>.) If empty, will use the .html() value of the selector.',
       '#default_value' => $interactions['interactions_target_id_attr'],
-      '#weight' => 2,
-  );
-  $form['interactions_restrictions'] = array(
-      '#type' => 'textfield',
-      '#size' => 90,
-      '#title' => t('Selector: Interactive Region'),
-      '#description' => '<p>Define selector for an html element of a page
-      that will contain the interactive widgets. This could be the same as the
-      target container, or it could be another region of the page.</p>',
-      '#default_value' => $interactions['interactions_restrictions'],
-      '#weight' => 3,
-  );
-  $form['interactions_inclusions'] = array(
-      '#type' => 'textfield',
-      '#size' => 90,
-      '#title' => t('Selector: Interactive Element Receivers'),
-      '#description' => '<p>Define a selector that will locate
-      the html elements that should receive interactive widgets.</p>
-      <p>The element receivers should exist inside the interactive
-      region</p>
-      <p>Example: table.views-view-grid td</p>
-      <ul>
-      <li>Tip: If you want an element to show up in the form generated
-       by listmixer, enter this: form#listmixer-target-babble
-       (but replace "babble" with the name of your interaction setting</li>
-      </ul>',
-      '#default_value' => $interactions['interactions_inclusions'],
-      '#weight' => 4,
-  );
-  $form['interactions_source_id'] = array(
-      '#type' => 'textfield',
-      '#size' => 90,
-      '#title' => t('Selector: Source Value Selector'),
-      '#description' => '<p>Define a selector that will contain
-      the value that should be passed to the target node.</p>
-      <p>The source value selector should exist inside the markup
-      for the element receiver.</p>
-      <p>Example markup:</p>
-      <pre>
-           &lt;div class="view"&gt;
-              &lt;table id="views-grid"&gt;
-                &lt;tr...
-                  &lt;td&gt;
-                    &lt;span class="list-mixer-source-value"&gt;614&lt;/span&gt;
-      </pre>
-      <p>Example selector: span.list-mixer-source-value</p>
-      <ul>
-        <li>You may need to add this value to your content.</li>
-        <li>ListMixer will hide this value for you.</li>
-        <li>The value should be compatible with where it will be
-            saved in the node. It should be a number if it will
-            be saved to a nodereference field.</li>
-      </ul>',
-      '#default_value' => $interactions['interactions_source_id'],
-      '#weight' => 5,
-  );
-  $form['interactions_source_id_attr'] = array(
-      '#type' => 'textfield',
-      '#size' => 90,
-      '#title' => t('Selector: Source Value Attribute Selector'),
-      '#description' => '<p>Add the attribute (of the Source ID), for example 
-      \'href\' if the source ID selector is \'a\'.</p>',
-      '#default_value' => $interactions['interactions_source_id_attr'],
-      '#weight' => 6,
+      '#weight' => 12,
   );
   $form['interactions_target_field'] = array(
       '#type' => 'textfield',
       '#size' => 90,
       '#title' => t('Fieldname: Target Field'),
-      '#description' => t('<p>Enter the machine name of the field that
-       should be saved to.</p>
-       <p>This should match the widget "Push" type you selected above.
-       <em>Example: field_text_babble</em></p>'),
+      '#description' => 'Machine name of the field in the node that data should be stored to. (Example, <em>field_reference_photo.</em>)',
       '#default_value' => $interactions['interactions_target_field'],
-      '#weight' => 7,
+      '#weight' => 13,
   );
   // @TODO Fix fieldset so it will store the data properly.
   /*
