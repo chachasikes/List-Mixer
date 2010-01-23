@@ -1,6 +1,10 @@
 <?php
 // $Id$
 
+/*
+ * @file
+ * Tests for listmixer module
+ */
 class ListMixerStorageNodes extends DrupalWebTestCase {
   public static function getInfo() {
     return array(
@@ -91,13 +95,13 @@ class ListMixerStorageNodes extends DrupalWebTestCase {
 
   private function outputScreenContents($description, $basename) {
     // This is a hack to get a directory that won't be cleaned up by simpletest
-    $file_dir = file_directory_path().'/../simpletest_output_pages';
+    $file_dir = file_directory_path() . '/../simpletest_output_pages';
     if (!is_dir($file_dir)) {
       mkdir($file_dir, 0777, TRUE);
     }
     $output_path = "$file_dir/$basename." . $this->randomName(10) . '.html';
     $rv = file_put_contents($output_path, $this->drupalGetContent());
-    $this->pass("$description: Contents of result page are ".l('here',$output_path));
+    $this->pass("$description: Contents of result page are " . l('here', $output_path));
   }  
 
 }

@@ -16,7 +16,7 @@ function listmixer_behaviors_listmixer_push_nodereference_weight($data) {
   if (isset($_POST['target_id']) && isset($_POST['input']) && isset($_POST['target_field'])) {
     $node = listmixer_utilities_load_target_node($_POST['target_id']);
 
-    foreach($node->{$_POST['target_field']} as $key => $value) {
+    foreach ($node->{$_POST['target_field']} as $key => $value) {
        $node->{$_POST['target_field']}[$key] = '';
     }
 

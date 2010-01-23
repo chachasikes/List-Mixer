@@ -96,7 +96,7 @@ class ListMixerTest extends DrupalWebTestCase {
     // Click the 'submit' button, which in this case is called 'Save configuration'
     $this->drupalPost('admin/build/listmixer/add', $edit, t('Save Preset'));  
     $this->verbose('preset added');  
-    $this->outputScreenContents('current screen','Listmixer');
+    $this->outputScreenContents('current screen', 'Listmixer');
     // @TODO Why is the form element named like this?
     // @TODO get ID of new preset (how?)
     // get form action : listmixer-ui-preset-form
@@ -238,13 +238,13 @@ class ListMixerTest extends DrupalWebTestCase {
    */
   private function outputScreenContents($description, $basename) {
     // This is a hack to get a directory that won't be cleaned up by simpletest
-    $file_dir = file_directory_path().'/../simpletest_output_pages';
+    $file_dir = file_directory_path() . '/../simpletest_output_pages';
     if (!is_dir($file_dir)) {
       mkdir($file_dir, 0777, TRUE);
     }
     $output_path = "$file_dir/$basename." . $this->randomName(10) . '.html';
     $rv = file_put_contents($output_path, $this->drupalGetContent());
-    $this->pass("$description: Contents of result page are ".l('here',$output_path));
+    $this->pass("$description: Contents of result page are " . l('here', $output_path));
   }  
 
 }

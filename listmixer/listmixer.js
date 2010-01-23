@@ -215,18 +215,18 @@ Drupal.behaviors.listmixer.redirect = function(preset, data) {
 Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
     // Set up target field (for node save function.)
     preset.targetField = preset.interactions.interactions_target_field;
-    preset.targetIdAttribute = preset.interactions.interactions_target_id_attr;
-    // Set up the target id
+    // Set up the target value
+    preset.targetValueAttribute = preset.interactions.interactions_target_id_attr;
     try {
       // If an attribute has been set by user, get the value.
-      if(preset.targetIdAttribute !== '') {
-         preset.targetId = $(preset.interactions.interactions_target_id).attr(preset.targetIdAttribute);
+      if(preset.targetValueAttribute !== '') {
+         preset.targetId = $(preset.interactions.interactions_target_id).attr(preset.targetValueAttribute);
       }
       else {
          preset.targetId = $(preset.interactions.interactions_target_id).html();
          $(preset.interactions.interactions_target_id).hide();
       }
-    // Make sure that the target id has a value
+      // Make sure that the target id has a value
       preset.targetId.length > 0;
     }
     catch(err) {
@@ -274,14 +274,14 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
         preset.formContainer = preset.interactions.interactions_container;
       }
       // There is some trickiness to how the form container is determined.
+      // Currently, the form container is attached to the most external element, if it has the region.
       else{
-        preset.formContainer = preset.interactions.interactions_container + ':has(' + preset.interactions.interactions_region + ')';
-        
+        preset.formContainer = preset.interactions.interactions_container + ':has(' + preset.interactions.interactions_region + ')';       
       }
       // Make sure that the form container is valid.
       $(preset.formContainer).length > 0;
       // Set up form.
-      // Drupal.behaviors.listmixer.setupForm(preset);
+      Drupal.behaviors.listmixer.setupForm(preset);
       // Create activate behavior, or load straightaway if set to onLoad
       // @TODO Change 'mouseDownActivate' to 'onLoad' 
       if (preset.behaviors.activate.settings.behavior_function == 'mouseDownActivate') {
@@ -289,11 +289,11 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
       }
       else {
         // Add activate widget.
-        // Drupal.behaviors.listmixer.setupActivateWidget(preset);
+        Drupal.behaviors.listmixer.setupActivateWidget(preset);
       }
     }
     catch(err3) {
-      alert(Drupal.t('ListMixer Error: region and Container conflict: admin/build/listmixer/' + preset.preset_id + ''));
+      alert(Drupal.t('ListMixer Error: Interactive region and main container conflict: admin/build/listmixer/' + preset.preset_id + ''));
     }
 };
 /**

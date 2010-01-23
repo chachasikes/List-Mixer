@@ -17,15 +17,15 @@ function listmixer_behaviors_listmixer_push_nodereference($data) {
 
     foreach (split(',', $_POST['input']) as $value) {
       $is_duplicate = FALSE;
-      foreach($node->{$_POST['target_field']} as $key) {
-        if($key['nid'] == $value) {
+      foreach ($node->{$_POST['target_field']} as $key) {
+        if ($key['nid'] == $value) {
           $is_duplicate = TRUE;
         }
         // Clear out nodereferences
         //$node->{$_POST['target_field']}[$key1]['nid'] = '';
       }
 
-      if(!$is_duplicate) {
+      if (!$is_duplicate) {
         $node->{$_POST['target_field']}[] = array('nid' => $value);
       }
     }

@@ -1,2 +1,7 @@
 <?php
 // $Id$
+
+/*
+ * @file
+ * Tests for listmixer module
+ */

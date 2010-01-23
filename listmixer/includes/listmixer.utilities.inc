@@ -65,7 +65,7 @@ function listmixer_utilities_convert_url_to_path($value) {
       // The nodereference field will be validated, and ignored if necessary during the node_save() function.
       $path = drupal_get_normal_path($value);
       // Only return the path if it is valid
-      if(!empty($path)) {
+      if (!empty($path)) {
         return $path;
       }
     }
