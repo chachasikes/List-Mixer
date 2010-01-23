@@ -40,57 +40,55 @@ function listmixer_storage_nodes_schema() {
         'default' => 0,
       ),
       'interactions_target_id' => array(
-        'description' => t('The name of a views block id to be used as a container for storing list data.'),
+        'description' => t(''),
         'type' => 'text',
         'length' => 255,
         'not null' => TRUE,
       ),
-      'interactions_restrictions' => array(
-        'description' => '<p>' . t('Provide a newline separated list of markup targets to exclude. Enter in jQuery compatible format, ex div.view-favorites, form#edit-image.
-        This will restrict interactions on a page to a container or condition.') . '</p>',
+      'interactions_region' => array(
+        'description' => '<p>' . t('') . '</p>',
         'type' => 'text',
         'length' => 0,
         'not null' => TRUE,
       ),
       'interactions_inclusions' => array(
-        'description' => '<p>' . t('Provide a newline separated list of markup targets to exclude. Enter in jQuery compatible format, ex div.view-favorites, form#edit-image.
-        This will make interaction available to containers and conditions, especially if they were partly overridden by the restrictions.') . '</p>',
+        'description' => '<p>' . t('') . '</p>',
         'type' => 'text',
         'length' => 0,
         'not null' => TRUE,
       ),
       'interactions_container' => array(
-        'description' => '<p>' . t('Container text.') . '</p>',
+        'description' => '<p>' . t('') . '</p>',
         'type' => 'text',
         'length' => 0,
         'not null' => TRUE,
       ),
       'interactions_source_id' => array(
-        'description' => '<p>' . t('Selector for id of source.') . '</p>',
+        'description' => '<p>' . t('') . '</p>',
         'type' => 'text',
         'length' => 0,
         'not null' => TRUE,
       ),
       'interactions_source_id_attr' => array(
-        'description' => '<p>' . t('Selector for attribute of source id.') . '</p>',
+        'description' => '<p>' . t('') . '</p>',
         'type' => 'text',
         'length' => 0,
         'not null' => TRUE,
       ),
       'interactions_target_id_attr' => array(
-        'description' => '<p>' . t('Selector for attribute of target id.') . '</p>',
+        'description' => '<p>' . t('') . '</p>',
         'type' => 'text',
         'length' => 0,
         'not null' => TRUE,
       ),
       'interactions_target_field' => array(
-        'description' => '<p>' . t('Target Field.') . '</p>',
+        'description' => '<p>' . t('') . '</p>',
         'type' => 'text',
         'length' => 0,
         'not null' => TRUE,
       ),
       'interactions_label' => array(
-        'description' => '<p>' . t('Label text.') . '</p>',
+        'description' => '<p>' . t('') . '</p>',
         'type' => 'text',
         'length' => 0,
         'not null' => TRUE,
@@ -126,7 +124,7 @@ function listmixer_storage_nodes_schema() {
         'not null' => TRUE,
       ),
       'interactions_source_content_types' => array(
-        'description' => t('Select which content types will be allowed to be added to the list content type.'),
+        'description' => '<p>' . t('') . '</p>',
         'type' => 'text',
         'length' => 255,
         'not null' => TRUE,

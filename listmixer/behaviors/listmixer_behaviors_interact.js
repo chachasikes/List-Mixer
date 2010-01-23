@@ -37,17 +37,13 @@ Drupal.behaviors.listmixer.Interact = function(preset) {
     // let people scramble the order as much as they want
     // and then save it on pushing, so need another function that will read the weights
     // MAYBE weight should have its own js file
-   // alert(Drupal.t('interact weight'));
 
     // Get index number for this element.
     // @TODO really this isn't the right index - we want the index for the source id...since it will be some sort of list.
     var weight = $('*').index($(element));
     $(element).find('div.listmixer-source-weight').html(weight);
-  
     Drupal.behaviors.listmixer.weightDrag(preset);
   }
-
-
   // @TODO This could connect with jQuery UI library, or even jQuery selectors. Might need more markup though.
   // @TODO 'Click' will be more like a default, and target whatever the container is.
   this.markup = { 
@@ -65,12 +61,13 @@ Drupal.behaviors.listmixer.Interact = function(preset) {
     checkboxInteract : 'input.listmixer-source-value:checked',
     weightInteract : 'input.listmixer-source-value'
   };
-
 }
 
-// Add weight dragging capabilities to each weighted item on a page (jQuery UI)
+/**
+ * Add weight dragging capabilities to each weighted item on a page (jQuery UI)
+ */
 Drupal.behaviors.listmixer.weightDrag = function(preset) {
-  $(preset.interactions.interactions_restrictions).addClass('sortable');
+  $(preset.interactions.interactions_region).addClass('sortable');
   	$(function() {
     	$(".sortable").sortable({ items: preset.interactions_inclusions, axis: 'y' });
 		  $(".sortable").disableSelection();
