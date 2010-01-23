@@ -1,5 +1,5 @@
 // $Id$
-Drupal.behaviors.listmixer.activate = function(preset) {
+Drupal.behaviors.listmixer.activateBehavior = function(preset) {
   this.init = function() {
    // alert('Activate Library Loaded');
   }

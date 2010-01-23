@@ -96,7 +96,7 @@ Drupal.behaviors.listmixer.interact = function(preset) {
  */
 Drupal.behaviors.listmixer.activate = function(preset) {
   Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'activate');
-  var Activate = new Drupal.behaviors.listmixer.activate();
+  var Activate = new Drupal.behaviors.listmixer.activateBehavior();
   Activate.init();
 };
 /**
@@ -109,17 +109,19 @@ Drupal.behaviors.listmixer.submit = function(preset) {
  * Push is called when user interacts with submit button.
  */
 Drupal.behaviors.listmixer.push = function(preset) {
-  var Push = new Drupal.behaviors.listmixer.push();
+  var Push = new Drupal.behaviors.listmixer.pushBehavior();
   Push.init();
   // Load data for interact button validation.
-  var Interact = new Drupal.behaviors.listmixer.interact();
+  var Interact = new Drupal.behaviors.listmixer.interactBehavior();
   Interact.init();
   preset.interactFunction = preset.behaviors.interact.settings.behavior_function; 
   // Get value from interact element.
+console.log(Interact.validation[preset.interactFunction]);
   $.each($(preset.interactions.interactions_region + ' ' + Interact.validation[preset.interactFunction]), function(){
     // Collect the value from each of the interactive elements.
     // Store values in data object in preset.
-    preset.data.inputArray.push($(this).val().trim());
+    preset.data.inputArray.push($(this).val());
+    console.log(preset.data);
   });
   Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'push');
   // @TODO Check that the callback isn't reloading the page. 
@@ -324,7 +326,7 @@ Drupal.behaviors.listmixer.setupForm = function(preset) {
 Drupal.behaviors.listmixer.setupActivateWidget = function(preset) {
   // @TODO Work on declaring decactivated, can't use === operator as is
   // On activate widget click, set up the interaction.
-  var Activate = new Drupal.behaviors.listmixer.activate();
+  var Activate = new Drupal.behaviors.listmixer.activateBehavior();
   Activate.init();
   var activateFunction = preset.behaviors.activate.settings.behavior_function;
   preset.activate = Activate.markup[activateFunction];
@@ -382,7 +384,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
     // The source selector needs to be a child of the element.
     // @TODO make the form into textfields and rearrange and rewrite the help.
 
-    var Interact = new Drupal.behaviors.listmixer.interact();
+    var Interact = new Drupal.behaviors.listmixer.interactBehavior();
     Interact.init();
     preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
     // @TODO See if there is any possible way to get this function to load.
@@ -394,7 +396,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
     $.each($(preset.interactions.interactions_region + ' ' + preset.interactions.interactions_inclusions), function() {
       var sourceValue = null;
       var sourceElement = null;
-      var Interact = new Drupal.behaviors.listmixer.interact();
+      var Interact = new Drupal.behaviors.listmixer.interactBehavior();
       Interact.init();
       var sourceValueMarkup = 'div.listmixer-source-value';
       var sourceValueMarkupProcessed = 'processed-value-' + preset.preset_name;
@@ -442,7 +444,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
         }
         else{
           $(this).removeClass(sourceValueMarkupProcessed);
-          //$(this).find(sourceValueMarkup).remove();
+          $(this).find(sourceValueMarkup).remove();
         }
       }
       // Add value to input field after input is created
@@ -454,7 +456,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
     alert(Drupal.t('ListMixer Error: Inclusion & input validation problem. Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
   }
   // ********* Set up Submit button
-  var Submit = new Drupal.behaviors.listmixer.submit();
+  var Submit = new Drupal.behaviors.listmixer.submitBehavior();
   Submit.init();
   var submitFunction = preset.behaviors.submit.settings.behavior_function;
   preset.submit = Submit.markup[submitFunction];

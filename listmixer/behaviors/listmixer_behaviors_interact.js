@@ -7,7 +7,7 @@
   }
  */
 
-Drupal.behaviors.listmixer.interact = function(preset) {
+Drupal.behaviors.listmixer.interactBehavior = function(preset) {
   this.init = function() {
   // alert('Interact Library Loaded');
   }

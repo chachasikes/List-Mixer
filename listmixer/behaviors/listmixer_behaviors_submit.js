@@ -1,6 +1,6 @@
 // $Id$
 
-Drupal.behaviors.listmixer.submit = function() {
+Drupal.behaviors.listmixer.submitBehavior = function() {
   this.init = function() {
    // alert('Submit Library Loaded');
   }
