@@ -17,7 +17,7 @@ function listmixer_behaviors_listmixer_push_nodereference_weight($data) {
     $node = listmixer_utilities_load_target_node($_POST['target_id']);
 
     foreach ($node->{$_POST['target_field']} as $key => $value) {
-       $node->{$_POST['target_field']}[$key] = '';
+      $node->{$_POST['target_field']}[$key] = '';
     }
 
     foreach (split(',', $_POST['input']) as $key => $value) {
@@ -34,7 +34,7 @@ function listmixer_behaviors_listmixer_push_nodereference_weight($data) {
     'message' => t('Weight saved'),
     'markup' => $markup,
     );
-   return $return;
+    return $return;
 }
 
 function listmixer_behaviors_redirect_listmixer_push_nodereference_weight($data) {

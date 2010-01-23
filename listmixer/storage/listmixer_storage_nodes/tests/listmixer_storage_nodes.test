@@ -37,7 +37,7 @@ class ListMixerStorageNodes extends DrupalWebTestCase {
    * Test that User can view list mixer build page.
    */
   function testViewBuildPage() {
-    $this->drupalGet('admin/build/listmixer');  
+    $this->drupalGet('admin/build/listmixer');
     $this->assertResponse(200, t('User can load listmixer build page.'));
   }
   /**
@@ -60,35 +60,35 @@ class ListMixerStorageNodes extends DrupalWebTestCase {
     $edit['preset_method'] = "listmixer_storage_nodes";
     // Call the post function on the path that contains the form.
     // Click the 'submit' button, which in this case is called 'Save configuration'
-    $this->drupalPost('admin/build/listmixer/add', $edit, t('Save Preset'));  
-    $this->verbose('preset added');  
-  } 
-  
-  /** 
+    $this->drupalPost('admin/build/listmixer/add', $edit, t('Save Preset'));
+    $this->verbose('preset added');
+  }
+
+  /**
    * Test Database installed.
    */
 
-  /** 
+  /**
    * Test Database deleted.
    */
 
-  /** 
+  /**
    * Test Form saved.
    */
 
-  /** 
+  /**
    * Test Form edited.
    */
 
-  /** 
+  /**
    * Test Form loaded.
    */
 
-  /** 
+  /**
    * Test register hook.
    */
 
-  /** 
+  /**
    * Test access.
    */
 
@@ -102,6 +102,6 @@ class ListMixerStorageNodes extends DrupalWebTestCase {
     $output_path = "$file_dir/$basename." . $this->randomName(10) . '.html';
     $rv = file_put_contents($output_path, $this->drupalGetContent());
     $this->pass("$description: Contents of result page are " . l('here', $output_path));
-  }  
+  }
 
 }
