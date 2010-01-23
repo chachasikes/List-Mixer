@@ -179,7 +179,7 @@ function listmixer_ui_preset_form($form_state, $preset = array()) {
   $form['preset_enabled'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enabled'),
-    '#default_value' => $preset['preset_enabled'] ? $preset['preset_enabled'] : 1,
+    '#default_value' => $preset['preset_enabled'],
     '#description' => t('Uncheck box to disable this preset'),
     '#weight' => 4,
   );

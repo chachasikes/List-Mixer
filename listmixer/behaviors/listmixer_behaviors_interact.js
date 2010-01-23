@@ -30,8 +30,8 @@ Drupal.behaviors.listmixer.Interact = function(preset) {
     alert(Drupal.t('interact click'));
   }
 
-  this.weightInteract = function(preset, element) {
-    // Find the souce value weight selectors, apply an initial value to them all -10 0 10 style
+  this.sortInteract = function(preset, element) {
+    // Find the souce value sort selectors, apply an initial value to them all -10 0 10 style
     // for initial testing, just type in the weight
     // figure out the interaction (based on table drag)
     // let people scramble the order as much as they want
@@ -40,9 +40,9 @@ Drupal.behaviors.listmixer.Interact = function(preset) {
 
     // Get index number for this element.
     // @TODO really this isn't the right index - we want the index for the source id...since it will be some sort of list.
-    var weight = $('*').index($(element));
-    $(element).find('div.listmixer-source-weight').html(weight);
-    Drupal.behaviors.listmixer.weightDrag(preset);
+    var sort = $('*').index($(element));
+    $(element).find('div.listmixer-source-sort').html(sort);
+    Drupal.behaviors.listmixer.sortDrag(preset);
   }
   // @TODO This could connect with jQuery UI library, or even jQuery selectors. Might need more markup though.
   // @TODO 'Click' will be more like a default, and target whatever the container is.
@@ -51,7 +51,7 @@ Drupal.behaviors.listmixer.Interact = function(preset) {
     selectInteract : '<div class="listmixer-source-value"><input type="select" class="listmixer-source-value"></input><div class="listmixer-source-label"></div></div>',
     inputInteract : '<div class="listmixer-source-value"><input type="input" class="listmixer-source-value"></input><div class="listmixer-source-label"></div></div>',
     checkboxInteract : '<div class="listmixer-source-value"><input type="checkbox" class="listmixer-source-value"></input><div class="listmixer-source-label"></div></div>',
-    weightInteract : '<div class="listmixer-source-value"><div class="listmixer-source-weight-handle"></div><input type="hidden" class="listmixer-source-value"></input><div class="listmixer-source-label"></div></div>'
+    sortInteract : '<div class="listmixer-source-value"><div class="listmixer-source-sort-handle"></div><input type="hidden" class="listmixer-source-value"></input><div class="listmixer-source-label"></div></div>'
   };
   // @TODO Weight will change to some sort of controls, and it will take the source value and resave it in a certain order, so it's an extended input field.
   this.validation = { 
@@ -59,14 +59,14 @@ Drupal.behaviors.listmixer.Interact = function(preset) {
     selectInteract : 'input.listmixer-source-value:selected',
     inputInteract : 'input.listmixer-source-value', // @TODO How to see if it's empty?
     checkboxInteract : 'input.listmixer-source-value:checked',
-    weightInteract : 'input.listmixer-source-value'
+    sortInteract : 'input.listmixer-source-value'
   };
 }
 
 /**
- * Add weight dragging capabilities to each weighted item on a page (jQuery UI)
+ * Add sort dragging capabilities to each weighted item on a page (jQuery UI)
  */
-Drupal.behaviors.listmixer.weightDrag = function(preset) {
+Drupal.behaviors.listmixer.sortDrag = function(preset) {
   $(preset.interactions.interactions_region).addClass('sortable');
   	$(function() {
     	$(".sortable").sortable({ items: preset.interactions_inclusions, axis: 'y' });

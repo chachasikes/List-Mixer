@@ -7,8 +7,8 @@
   border: 1px dotted #cccccc;
   padding: 1em;
 }
-.listmixer-source-weight-handle{
-  background: url(includes/images/weight-handle.gif);
+.listmixer-source-sort-handle{
+  background: url(includes/images/sort-handle.gif);
   width: 30px;
   height: 30px;
   /* float: left; */
