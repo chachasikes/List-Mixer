@@ -214,6 +214,7 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
     preset.target_id_attr = preset.interactions.interactions_target_id_attr;
     // *********** Set up the target id
     // Make sure that the target id is a number
+    // console.log('target field: ' + preset.target_field);
     try {
       if(preset.target_id_attr !== '') {
          preset.target_id = $(preset.interactions.interactions_target_id).attr(preset.target_id_attr);   
@@ -233,6 +234,7 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
     // 2. *********** Set up target restrictions.
     // Make sure it contains markup.
     // If undefined, set to a default of 'html' (the whole page)
+    // console.log('target restrictions: ' + preset.interactions.interactions_restrictions);
     if (preset.interactions.interactions_restrictions === undefined) {
         preset.interactions.interactions_restrictions = 'body';
     }
@@ -261,6 +263,7 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
     // Only one form is allowed, if the form should be applied to the 
     // restrictions container, but not the container if the container is a 
     // child of the restrictions container.
+    // console.log('target container: ' + preset.interactions.interactions_container);
     try {
       // Create the pointer to the container for where the form should be added.
       if (preset.interactions.interactions_container == preset.interactions.interactions_restrictions) {

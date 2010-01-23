@@ -1,10 +1,10 @@
-Settings to build photoset maker 
+Settings to build sortable photoset maker 
 --------------------------------
 You also have to install the features exports of the views, cck types.
 You will probably need to set up imagecache settings and add some test photo content.
 
 
-Preset Namespace: photoset_maker
+Preset Namespace: photoset_add
 Preset Description: This connects the node ids from a gallery view to a view attachment.
 Select the type of storage method for this interaction: Nodes
 Enabled: checked
@@ -17,10 +17,10 @@ Submit: Button
 
 Label for interaction: Make a photoset
 Help Text for Drupal User: You are making a photoset. Click the checkboxes to select images to save into your photo set. Then click save.
-Selector: Interaction Container: div.view-photo-gallery div.attachment div.view-display-id-attachment_1 div.view-content
-Selector: Target Node ID: div.view-photo-gallery div.attachment div.views-field-nid span.field-content
-Selector: Target Value Attribute Selector: {nothing entered}
-Selector: Interactive Region: div.view-photo-gallery
+Selector: Interaction Container: div.view-photo-gallery-sortable div.attachment div.view-display-id-attachment_1 div.view-content
+Selector: Target Node ID: div.view-photo-gallery-sortable div.attachment div.view-content h2 a
+Selector: Target Value Attribute Selector: href
+Selector: Interactive Region: div.view-photo-gallery-sortable
 Selector: Interactive Element Receivers: table.views-view-grid td
 Selector: Source Value Selector: div.views-field-nid span.field-content
 Selector: Source Value Attribute Selector: {nothing entered}
