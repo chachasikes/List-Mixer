@@ -272,8 +272,6 @@ function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
     $form_state['redirect'] = 'admin/build/listmixer';
   }
 
-  $preset = listmixer_presets(TRUE);
-
   $exported = '$presets = array();';
   $exported .= "\n";
   $exported .= '$presets[\''. $preset['preset_name'] .'\'] = ';

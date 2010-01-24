@@ -68,6 +68,8 @@ Drupal.behaviors.listmixer = function() {
         // Make sure that a container is found. 
         // This should be done first, as nothing else will happen if there is no container on the page.
         var interactionsContainerExists = $.find(this.interactions.interactions_container);
+        // console.log(interactionsContainerExists);
+        // console.log(preset);
         // Interaction container not found, do nothing, other wise, proceed.
         if (interactionsContainerExists == '') {
           // No container found, do nothing. Go find the next preset.
