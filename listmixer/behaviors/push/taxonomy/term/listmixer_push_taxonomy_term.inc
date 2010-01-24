@@ -12,8 +12,6 @@
 
 function listmixer_behaviors_listmixer_push_taxonomy_term($data) {
   // If POST data has been set, save the node
-  $_POST['input'] = 'Goats, French Fries, Monkeys, Bunnies, Money, Muffins, cabbage, tacos';
-  $_POST['target_id'] = '8';
   if (isset($_POST['target_id']) && isset($_POST['input'])) {
     $node = listmixer_utilities_load_target_node($_POST['target_id']);
     // @TODO if content taxonomy? (or D7)
