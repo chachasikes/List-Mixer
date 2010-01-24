@@ -15,7 +15,7 @@ function listmixer_behaviors_listmixer_push_nodereference($data) {
   if (isset($_POST['target_id']) && isset($_POST['input']) && isset($_POST['target_field'])) {
     $node = listmixer_utilities_load_target_node($_POST['target_id']);
     // If we are sorting, deleting all existing node reference values.
-    if($_POST['interact_function'] == 'sortInteract') {
+    if ($_POST['interact_function'] == 'sortInteract') {
       foreach ($node->{$_POST['target_field']} as $key => $value) {
         $node->{$_POST['target_field']}[$key] = '';
       }
