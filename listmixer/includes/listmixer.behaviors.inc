@@ -310,7 +310,7 @@ function listmixer_behaviors_registry_build() {
   /* ACTIVATE functions */
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Load', $enabled, '', 'load', 'activate_load', 'Activate Load', 'loadActivate');
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Button', $enabled, '', 'button', 'activate_button', 'Activate Button', 'buttonActivate');
-  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Select Button', $enabled, '', 'select', 'activate_select', 'Activate Select', 'selectActivate');  
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Select', $enabled, '', 'select', 'activate_select', 'Activate Select', 'selectActivate');
   //$listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Radio Button', $enabled, '', 'radio', 'activate_radio', 'Activate Radio', 'radioActivate');
   // $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Drag', $enabled, '', 'drag', 'activate_drag', 'Activate Drag description', 'dragActivate');
 

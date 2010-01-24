@@ -36,12 +36,14 @@ Drupal.behaviors.listmixer.selectable = function(preset) {
     $(preset.interactions.interactions_target_id).attr("id", "selectable");
     	$(function() {
         	$(preset.interactions.interactions_target_id + "#selectable").selectable({ 
-            filter : preset.interactions.interactions_target_id_element,
+           // filter : preset.interactions.interactions_target_id_element,
             selected: function(event, ui) { 
             // @TODO test the different ways of useing the ui object to figure out the value of what was selected.
             // This will only support paths for the moment.
             //if (preset.interactions.interactions_target_id_attr === 'href' ) {
-              preset.targetId.push(ui.selected.pathname);
+              if(ui.selected.pathname !== undefined) {
+                preset.targetIdArray.push(ui.selected.pathname);
+              }
               preset.activation = true;
               Drupal.behaviors.listmixer.listmixerActivate(preset);
               preset.activated = true;

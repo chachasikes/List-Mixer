@@ -80,7 +80,7 @@ function listmixer_utilities_convert_url_to_path($value) {
 function listmixer_utilities_load_target_node($target_id_array) {
   $nodes = array();
   $target = explode( ',', $target_id_array);
-  foreach($target as $target_id) {
+  foreach ($target as $target_id) {
     $target_id = listmixer_utilities_convert_url_to_nid($target_id);
     $node = node_load($target_id);
     $nodes[] = $node;

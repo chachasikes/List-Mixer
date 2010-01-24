@@ -1,0 +1,6 @@
+core = "6.x"
+dependencies[] = "views"
+features[views][] = "categorizer"
+name = "categorizer"
+package = "Features"
+project = "categorizer"

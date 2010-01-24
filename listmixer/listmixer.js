@@ -120,7 +120,7 @@ Drupal.behaviors.listmixer.push = function(preset) {
     // Collect the value from each of the interactive elements.
     // Store values in data object in preset.
     preset.data.inputArray.push($(this).val());
-    console.log(preset.data);
+    // console.log(preset.data);
   });
   Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'push');
   // @TODO Check that the callback isn't reloading the page. 
@@ -152,8 +152,8 @@ Drupal.behaviors.listmixer.behaviorBuildCallback = function(preset, type) {
         if (preset.data.inputArray.length > 0) {
           preset.data.input = preset.data.inputArray.toString();
         }
-        if (preset.data.targetId.length > 0) {
-          preset.data.target_id = preset.data.targetId.toString();
+        if (preset.targetIdArray.length > 0) {
+          preset.data.target_id = preset.targetIdArray.toString();
         }
       }
       $.ajax({
@@ -219,31 +219,37 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
     // Set up the target value
     preset.targetValueAttribute = preset.interactions.interactions_target_id_attr;
     preset.activationComplete = false;
+    preset.targetId = '';
+    preset.targetIdArray = [];
     try {
       // If an attribute has been set by user, get the value.
-        preset.targetId = new Array();
         var targetValue;
-        if(preset.targetValueAttribute !== '') {
-          $(preset.interactions.interactions_target_id).each( function() {
-            targetValue = $(this).attr(preset.targetValueAttribute);
-            if(targetValue !== undefined) {
-              preset.targetId.push(targetValue);
-            }  
-          });
+        if(preset.interactions.interactions_target_id_element !== '') {
+          // @TODO fill in
         }
         else {
-          $(preset.interactions.interactions_target_id).each( function() { 
-            targetValue = $(this).html();
-            if(targetValue !== undefined) {
-              preset.targetId.push(targetValue);
-            }  
-          });
-          $(preset.interactions.interactions_target_id).hide();
-        }   
-      // console.log("tid2: " + preset.targetId);
+          if(preset.targetValueAttribute !== '') {
+            $(preset.interactions.interactions_target_id).each( function() {
+              targetValue = $(this).attr(preset.targetValueAttribute);
+              if(targetValue !== undefined) {
+                preset.targetIdArray.push(targetValue);
+              }  
+            });
+          }
+          else {
+            $(preset.interactions.interactions_target_id).each( function() { 
+              targetValue = $(this).html();
+              if(targetValue !== undefined) {
+                preset.targetIdArray.push(targetValue);
+              }  
+            });
+            $(preset.interactions.interactions_target_id).hide();
+          } 
+        } 
+      // console.log("tid2: " + preset.targetIdArray);
       // Make sure that the target id has a value
       // @TODO If selectable ... figure out what to do here
-      if((preset.targetId.length > 0) || (preset.behaviors.activate.settings.behavior_function === 'selectActivate')) {
+      if((preset.targetIdArray.length > 0) || (preset.behaviors.activate.settings.behavior_function === 'selectActivate')) {
       }
       else {
         throw 'error';
@@ -386,8 +392,10 @@ Drupal.behaviors.listmixer.setupActivateWidget = function(preset) {
  * Deactivate function.
  */
 Drupal.behaviors.listmixer.listmixerDeactivate = function(preset) {
-  preset.activation = false; // actiavted/deactivated state
-  preset.activationComplete = false; // Only allow 1 activation.
+  // Set activated/deactivated state.
+  preset.activation = false;
+  // Only allow 1 activation.
+  preset.activationComplete = false;
   Drupal.behaviors.listmixer.listmixerActivate(preset);
 };
 /**
@@ -400,7 +408,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
     // Set up selector for the sourceValue (for input values)
     preset.sourceValueSelector = preset.interactions.interactions_source_id;
     preset.sourceValueAttribute = preset.interactions.interactions_source_id_attr;
-    console.log(preset);
+    // console.log(preset);
     try {
       // Inclusions are the elements that will receive interactions.
       // Find all of the items that should act as a source of interaction.
@@ -501,7 +509,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
     preset.data = {
       'inputArray' : [],
       'input' : '',
-      'target_id' : preset.targetId ,
+      'target_id' : preset.targetId,
       'target_field' : preset.targetField,
       'interact_function' : preset.interactFunction
       // @TODO Collect other data here if necessary
@@ -515,7 +523,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
       preset.data = {
       'inputArray' : [],
       'input' : '',
-      'target_id' : preset.targetId ,
+      'target_id' : preset.targetId,
       'target_field' : preset.targetField,
       'interact_function' : preset.interactFunction
       };

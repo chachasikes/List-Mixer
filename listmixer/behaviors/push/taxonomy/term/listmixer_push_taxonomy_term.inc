@@ -12,27 +12,29 @@
 
 function listmixer_behaviors_listmixer_push_taxonomy_term($data) {
   // If POST data has been set, save the node
+  // $_POST['input'] = 'Bananas,Goats,Monkeys';
+  // $_POST['target_id'] = '/6x/node/6,/6x/node/7,/6x/node/8,/6x/node/30';
   if (isset($_POST['target_id']) && isset($_POST['input'])) {
     $nodes = listmixer_utilities_load_target_node($_POST['target_id']);
-    foreach($nodes as $node) {
       // @TODO if content taxonomy? (or D7)
       // if  (isset($_POST['target_field'])) {
       //   $node->{$_POST['target_field']}[] = array('value' => $_POST['input']);
       // }
-  
-      // If terms are not already in system, rebuild comma separated string
-      // and assign it to taxonomy on node save.
-      $terms = array();
-      foreach (split(',', $_POST['input']) as $name) {
-        $term = taxonomy_get_term_by_name($name);
-        if (empty($term)) {
-          $terms[] = $term;
+      // If terms are not already in system, do not add them to node
+      foreach ($nodes as $node) {
+        $terms = array();
+        $tags = array();
+        foreach (split(',', $_POST['input']) as $name) {
+          $term = taxonomy_get_term_by_name($name);
+          if (empty($node->taxonomy[$term[0]->tid])) {
+            // $node->taxonomy[$term[0]->tid] = $term;
+            $tags[] = $term[0]->name;
+          }
         }
+        $tags = implode(',', $tags);
+        $node->taxonomy['tags'][1] = $tags;
+        node_save($node);
       }
-      $node->taxonomy['tags'][1] = implode(',', $terms);
-
-      node_save($node);
-    }
   }
 
   $markup = '';
