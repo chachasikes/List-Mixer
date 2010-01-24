@@ -23,10 +23,12 @@ function listmixer_ui_help($section) {
 
 /**
  * Implementation of hook_perm().
+
+  function listmixer_ui_perm() {
+    return array('administer list mixer');
+  }
+
  */
-function listmixer_ui_perm() {
-  return array('administer list mixer');
-}
 
 /**
  * Implementation of hook_menu().
