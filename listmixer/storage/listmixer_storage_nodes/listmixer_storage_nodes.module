@@ -216,13 +216,21 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
     '#description' => 'Element selector that points to the value of the node that data should be saved to. Can be a numeric nid value or a drupal path.',
     '#weight' => 11,
   );
+  $form['interactions_target_id_element'] = array(
+      '#type' => 'textfield',
+      '#size' => 90,
+      '#title' => t('Selector: Target Element Receiver'),
+      '#description' => 'Selector element for target (Example, <em>li</em>.',
+      '#default_value' => $interactions['interactions_target_id_element'],
+      '#weight' => 12,
+  );
   $form['interactions_target_id_attr'] = array(
       '#type' => 'textfield',
       '#size' => 90,
       '#title' => t('Selector: Target Value Attribute'),
       '#description' => 'Attribute of target value selector that contains the value. (Example, <em>href</em> if selector is <em>a</em>.) If empty, will use the .html() value of the selector.',
       '#default_value' => $interactions['interactions_target_id_attr'],
-      '#weight' => 12,
+      '#weight' => 12.5,
   );
   $form['interactions_target_field'] = array(
       '#type' => 'textfield',
