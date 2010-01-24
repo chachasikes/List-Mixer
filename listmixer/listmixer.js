@@ -156,6 +156,7 @@ Drupal.behaviors.listmixer.behaviorBuildCallback = function(preset, type) {
           preset.data.target_id = preset.targetIdArray.toString();
         }
       }
+      //console.log(preset.data);
       $.ajax({
         type: "POST",
         url: callback,
@@ -353,14 +354,16 @@ Drupal.behaviors.listmixer.setupActivateWidget = function(preset) {
   Activate.init();
   preset.activateFunction = preset.behaviors.activate.settings.behavior_function;
   preset.activate = Activate.markup[preset.activateFunction];
-  if (preset.interactFunction == 'buttonActivate') {
+  if (preset.activateFunction == 'buttonActivate') {
     // Add activate button to form.
     $('form#' + preset.targetFormId).append(Activate.markup[preset.activateFunction]);
     // Hide deactivate button.
     $('form#' + preset.targetFormId + ' div.listmixer-deactivate-button').hide();
+    // On click activation button
     $('form#' + preset.targetFormId + ' div.listmixer-activate-button').children(".button").click(function() {
       if(preset.activated == null) {
         preset.activation = true;
+        preset.activationComplete = false;
         Drupal.behaviors.listmixer.listmixerActivate(preset);
         preset.activated = true;
         preset.deactivated = null;
@@ -402,13 +405,14 @@ Drupal.behaviors.listmixer.listmixerDeactivate = function(preset) {
  *
  */
 Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
+  // For only 1 activation per preset.
+  // Otherwise, all activations/deactivations are handled individually.
   if(preset.activationComplete === false) {
     // If the interaction container matches the restriction container, make interactive elements live in the form. 
     var hideSourceValue = false;
     // Set up selector for the sourceValue (for input values)
     preset.sourceValueSelector = preset.interactions.interactions_source_id;
     preset.sourceValueAttribute = preset.interactions.interactions_source_id_attr;
-    // console.log(preset);
     try {
       // Inclusions are the elements that will receive interactions.
       // Find all of the items that should act as a source of interaction.
@@ -423,6 +427,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
       // @TODO See if there is any possible way to get this function to load.
       // Otherwise, maybe store the function in the php??
       if (preset.interactFunction == 'sortInteract') {
+
         Interact.sortInteract(preset);
       }
   

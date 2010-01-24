@@ -30,7 +30,7 @@ Drupal.behaviors.listmixer.interactBehavior = function(preset) {
     alert(Drupal.t('interact click'));
   }
 
-  this.sortInteract = function(preset, element) {
+  this.sortInteract = function(preset) {
     // Find the souce value sort selectors, apply an initial value to them all -10 0 10 style
     // for initial testing, just type in the weight
     // figure out the interaction (based on table drag)
@@ -40,9 +40,7 @@ Drupal.behaviors.listmixer.interactBehavior = function(preset) {
 
     // Get index number for this element.
     // @TODO really this isn't the right index - we want the index for the source id...since it will be some sort of list.
-    var sort = $('*').index($(element));
-    // $(element).find('div.listmixer-source-sort').html(sort);
-    Drupal.behaviors.listmixer.sortDrag(preset);
+    Drupal.behaviors.listmixer.sortInteract(preset);
   }
   // @TODO This could connect with jQuery UI library, or even jQuery selectors. Might need more markup though.
   // @TODO 'Click' will be more like a default, and target whatever the container is.
@@ -66,17 +64,17 @@ Drupal.behaviors.listmixer.interactBehavior = function(preset) {
 /**
  * Add sort dragging capabilities to each weighted item on a page (jQuery UI)
  */
-Drupal.behaviors.listmixer.sortDrag = function(preset) {
-//console.log(preset);
+Drupal.behaviors.listmixer.sortInteract = function(preset) {
+console.log(preset);
   if(preset.activation === true) {
-    $(preset.interactions.interactions_region).addClass('sortable');
+    $(preset.interactions.interactions_region).attr('id', 'sortable');
     	$(function() {
-      	$(preset.interactions.interactions_region + ".sortable").sortable({ items: preset.interactions_inclusions, axis: 'y' });
-  		  $(preset.interactions.interactions_region + ".sortable").disableSelection();
+      	$(preset.interactions.interactions_region + "#sortable").sortable({ items: preset.interactions_inclusions, axis: 'y' });
+  		  $(preset.interactions.interactions_region + "#sortable").disableSelection();
     }); 
   }
   else {
-   // $(preset.interactions.interactions_region + ".sortable").sortable('destroy');
+    $(preset.interactions.interactions_region + "#sortable").sortable('destroy');
     //$(preset.interactions.interactions_region).removeClass('sortable');
   }
 }

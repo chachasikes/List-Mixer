@@ -12,30 +12,36 @@
 
 function listmixer_behaviors_listmixer_push_text($data) {
   // If POST data has been set, save the node
+  // $_POST['target_id'] = '1';
+  // $_POST['input'] = '123';
+  // $_POST['target_field'] = 'field_text_babble';
+
   if (isset($_POST['target_id']) && isset($_POST['input']) && isset($_POST['target_field'])) {
-    $node = listmixer_utilities_load_target_node($_POST['target_id']);
-    // If we are sorting, deleting all text values.
-    if ($_POST['interact_function'] == 'sortInteract') {
-      foreach ($node->{$_POST['target_field']} as $key => $value) {
-        $node->{$_POST['target_field']}[$key] = '';
-      }
-    }
-    //node->{$_POST['target_field']}[] = array('value' => $_POST['input']);
-    // Save values to field.
-    foreach (split(',', $_POST['input']) as $value) {
-      // Prevent storing duplicates.
-      // @TODO Future verions of Drupal may allow this to be controlled.
-      $is_duplicate = FALSE;
-      foreach ($node->{$_POST['target_field']} as $key) {
-        if ($key['nid'] == $value) {
-          $is_duplicate = TRUE; // Turn off duplicate check for text fields
+    $nodes = listmixer_utilities_load_target_node($_POST['target_id']);
+    foreach ($nodes as $node) {
+      // If we are sorting, deleting all text values.
+      if ($_POST['interact_function'] == 'sortInteract') {
+        foreach ($node->{$_POST['target_field']} as $key => $value) {
+          $node->{$_POST['target_field']}[$key] = '';
         }
       }
-      if (!$is_duplicate) {
-        $node->{$_POST['target_field']}[] = array('value' => $value);
+      //node->{$_POST['target_field']}[] = array('value' => $_POST['input']);
+      // Save values to field.
+      foreach (split(',', $_POST['input']) as $value) {
+        // Prevent storing duplicates.
+        // @TODO Future verions of Drupal may allow this to be controlled.
+        $is_duplicate = FALSE;
+        foreach ($node->{$_POST['target_field']} as $key) {
+          if ($key['nid'] == $value) {
+            $is_duplicate = TRUE; // Turn off duplicate check for text fields
+          }
+        }
+        if (!$is_duplicate) {
+          $node->{$_POST['target_field']}[] = array('value' => $value);
+        }
       }
+      node_save($node);
     }
-    node_save($node);
   }
 
   $markup = '';
