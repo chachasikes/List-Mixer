@@ -11,6 +11,17 @@
  */
 
 function listmixer_behaviors_listmixer_push_nodereference($data) {
+  // Test data
+  // @TODO Move into actual tests.
+  // $data->name = "test";
+  $callback = "admin/ajax/listmixer/behavior/push/listmixer_push_nodereference/push_nodereference";
+  if ($data->name == "test") {
+    // If POST data has been set, save the node
+    $_POST['target_id'] = '3';
+    $_POST['input'] = '6,2,4,5';
+    $_POST['target_field'] = 'field_reference_photo';
+  }
+
   // If POST data has been set, save the node
   if (isset($_POST['target_id']) && isset($_POST['input']) && isset($_POST['target_field'])) {
     $nodes = listmixer_utilities_load_target_node($_POST['target_id']);
@@ -36,8 +47,7 @@ function listmixer_behaviors_listmixer_push_nodereference($data) {
           $node->{$_POST['target_field']}[] = array('nid' => $value);
         }
       }
-  
-      node_save($node);
+      listmixer_utilities_save_target_node($node);
     }
   }
 

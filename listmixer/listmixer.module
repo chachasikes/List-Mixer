@@ -154,7 +154,7 @@ function listmixer_behaviors_callback($type, $name, $root) {
       }
   }
   // @DEBUG Enable for debugging callbacks
-  return '';
+  // return '';
 }
 
 /**

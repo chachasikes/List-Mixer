@@ -65,17 +65,21 @@ Drupal.behaviors.listmixer.interactBehavior = function(preset) {
  * Add sort dragging capabilities to each weighted item on a page (jQuery UI)
  */
 Drupal.behaviors.listmixer.sortInteract = function(preset) {
-console.log(preset);
-  if(preset.activation === true) {
-    $(preset.interactions.interactions_region).attr('id', 'sortable');
-    	$(function() {
-      	$(preset.interactions.interactions_region + "#sortable").sortable({ items: preset.interactions_inclusions, axis: 'y' });
-  		  $(preset.interactions.interactions_region + "#sortable").disableSelection();
-    }); 
+  try {
+    if(preset.activation === true) {
+      $(preset.interactions.interactions_region).attr('id', 'sortable');
+      	$(function() {
+        	$(preset.interactions.interactions_region + "#sortable").sortable({ items: preset.interactions_inclusions, axis: 'y' });
+    		  $(preset.interactions.interactions_region + "#sortable").disableSelection();
+      }); 
+    }
+    else {
+      $(preset.interactions.interactions_region + "#sortable").sortable('destroy');
+      //$(preset.interactions.interactions_region).removeClass('sortable');
+    }
   }
-  else {
-    $(preset.interactions.interactions_region + "#sortable").sortable('destroy');
-    //$(preset.interactions.interactions_region).removeClass('sortable');
+  catch(err3) {
+   alert(Drupal.t("Could not add sort to" + preset.preset_name + "."));
   }
 }
 

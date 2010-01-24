@@ -11,11 +11,17 @@
  */
 
 function listmixer_behaviors_listmixer_push_text($data) {
-  // If POST data has been set, save the node
-  // $_POST['target_id'] = '1';
-  // $_POST['input'] = '123';
-  // $_POST['target_field'] = 'field_text_babble';
-
+  // Test data
+  // @TODO Move into actual tests.
+  // $data->name = "test";
+  $callback = "admin/ajax/listmixer/behavior/push/listmixer_push_text/push_text";
+  if ($data->name == "test") {
+    // If POST data has been set, save the node
+    $_POST['target_id'] = '1';
+    $_POST['input'] = 'Test content generated at: ' . date("F j, Y, g:i:s a");
+    $_POST['target_field'] = 'field_text_babble';
+  }
+  
   if (isset($_POST['target_id']) && isset($_POST['input']) && isset($_POST['target_field'])) {
     $nodes = listmixer_utilities_load_target_node($_POST['target_id']);
     foreach ($nodes as $node) {
@@ -40,7 +46,7 @@ function listmixer_behaviors_listmixer_push_text($data) {
           $node->{$_POST['target_field']}[] = array('value' => $value);
         }
       }
-      node_save($node);
+      listmixer_utilities_save_target_node($node);
     }
   }
 

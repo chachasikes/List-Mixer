@@ -328,7 +328,7 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
       }
     }
     catch(err3) {
-      alert(Drupal.t('ListMixer Error: Interactive region and main container conflict: admin/build/listmixer/' + preset.preset_id + ''));
+      alert(Drupal.t('ListMixer Error: Interactive region and main container conflict in preset ' + preset.preset_name + '. Edit: admin/build/listmixer/' + preset.preset_id + ''));
     }
 };
 /**
@@ -427,10 +427,8 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
       // @TODO See if there is any possible way to get this function to load.
       // Otherwise, maybe store the function in the php??
       if (preset.interactFunction == 'sortInteract') {
-
         Interact.sortInteract(preset);
       }
-  
       $.each($(preset.interactions.interactions_region + ' ' + preset.interactions.interactions_inclusions), function() {
         var sourceValue = null;
         var sourceElement = null;
@@ -491,7 +489,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
       });
     }
     catch(err2) {
-      alert(Drupal.t('ListMixer Error: Inclusion & input validation problem. Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
+      alert(Drupal.t('ListMixer Error: Inclusion & input validation problem  in preset ' + preset.preset_name + '. Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
     }
     // ********* Set up Submit button
     var Submit = new Drupal.behaviors.listmixer.submitBehavior();

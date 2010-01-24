@@ -11,9 +11,15 @@
  */
 
 function listmixer_behaviors_listmixer_push_taxonomy_term($data) {
-  // If POST data has been set, save the node
-  // $_POST['input'] = 'Bananas,Goats,Monkeys';
-  // $_POST['target_id'] = '/6x/node/6,/6x/node/7,/6x/node/8,/6x/node/30';
+  // Test data
+  // @TODO Move into actual tests.
+  // $data->name = "test";  $callback = "admin/ajax/listmixer/behavior/push/listmixer_push_taxonomy_term/push_taxonomy_term";
+  if ($data->name == "test") {
+    // If POST data has been set, save the node
+    $_POST['input'] = 'Bananas,Goat,Monkeys, Lions, Gators, heliocopters';
+    $_POST['target_id'] = '/6x/node/6,/6x/node/7,/6x/node/8,/6x/node/30';
+  }
+
   if (isset($_POST['target_id']) && isset($_POST['input'])) {
     $nodes = listmixer_utilities_load_target_node($_POST['target_id']);
       // @TODO if content taxonomy? (or D7)
@@ -27,19 +33,20 @@ function listmixer_behaviors_listmixer_push_taxonomy_term($data) {
         foreach (split(',', $_POST['input']) as $name) {
           $term = taxonomy_get_term_by_name($name);
           if (empty($node->taxonomy[$term[0]->tid])) {
+            // @TODO add new terms: http://api.drupal.org/api/function/taxonomy_save_term
             // $node->taxonomy[$term[0]->tid] = $term;
             $tags[] = $term[0]->name;
           }
         }
         $tags = implode(',', $tags);
         $node->taxonomy['tags'][1] = $tags;
-        node_save($node);
+        listmixer_utilities_save_target_node($node);
       }
   }
 
   $markup = '';
   $return = array(
-    'message' => t('Text saved.'),
+    'message' => t('Term saved.'),
     'markup' => $markup,
     );
   return $return;

@@ -11,6 +11,16 @@
  */
 
 function listmixer_behaviors_listmixer_push_link($data) {
+  // Test data
+  // @TODO Move into actual tests.
+  // $data->name = "test";
+  $callback = "admin/ajax/listmixer/behavior/push/listmixer_push_link/push_link";
+  if ($data->name == "test") {
+    // If POST data has been set, save the node
+    $_POST['target_id'] = '9';
+    $_POST['input'] = 'node/8, node/10, http://google.com';
+    $_POST['target_field'] = 'field_link';
+  }
   // If POST data has been set, save the node
   if (isset($_POST['target_id']) && isset($_POST['input']) && isset($_POST['target_field'])) {
     $nodes = listmixer_utilities_load_target_node($_POST['target_id']);
@@ -26,7 +36,7 @@ function listmixer_behaviors_listmixer_push_link($data) {
         // $value = listmixer_utilities_convert_url_to_nid($value);
         $node->{$_POST['target_field']}[] = array('url' => listmixer_utilities_convert_url_to_path($value));
       }
-      node_save($node);
+      listmixer_utilities_save_target_node($node);
     }
   }
 

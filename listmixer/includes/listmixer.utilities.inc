@@ -88,7 +88,20 @@ function listmixer_utilities_load_target_node($target_id_array) {
   return $nodes;
 }
 
-
+/**
+ * Save a target node, if current user has proper permissions
+ */
+function listmixer_utilities_save_target_node($node) {
+  global $user;
+  $access = node_access('update', $node, $user);
+  if ($access) {
+    node_save($node);
+    drupal_set_message("Node " . $node->title . " saved. " . l(t("View"), "node/" . $node->nid) . "| " . l(t("Edit"), "node/" . $node->nid . "/edit") . " " . date("F j, Y, g:i:s a"), "status");
+  }
+  else {
+    drupal_set_message("Node not saved. User does not have permission to update node " . $node->title. " " . date("F j, Y, g:i:s a"), "status");
+  }
+}
 
 function listmixer_behaviors_check_duplicate($field, $field_target, $input, $data) {
   $return = TRUE;

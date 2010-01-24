@@ -164,6 +164,19 @@ class ListMixerTest extends DrupalWebTestCase {
    */
 
 
+  /**
+   * Test that User can view list mixer build page.
+   */
+  function testPushTextCallback() {
+    $post = array(
+      'target_field' => "field_text_babble",
+      'target_id' => "1", // @TODO Replace with test generated node.
+      'input' => "Test input" . date("F j, Y, g:i:s a"));
+    );
+    $callback = "admin/ajax/listmixer/behavior/push/listmixer_push_text/push_text";
+    $this->drupalPost($callback, $post);
+//    $this->assertResponse(200, t('User can load listmixer build page.'));
+  }
 
   /* ********** Javascript tests ************** */
 
