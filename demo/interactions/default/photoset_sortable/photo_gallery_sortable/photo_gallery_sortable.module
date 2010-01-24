@@ -1,3 +1,0 @@
-<?php
-
-include_once('photo_gallery_sortable.features.inc');

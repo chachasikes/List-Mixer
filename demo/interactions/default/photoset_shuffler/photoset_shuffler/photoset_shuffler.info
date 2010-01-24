@@ -1,7 +1,0 @@
-core = "6.x"
-dependencies[] = "content"
-dependencies[] = "views"
-features[views][] = "photoset_shuffler"
-name = "photoset_shuffler"
-package = "Features"
-project = "photoset_shuffler"

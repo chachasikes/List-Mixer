@@ -192,6 +192,7 @@ function listmixer_init() {
 
   // Add JQuery User Interface
   jquery_ui_add('ui.sortable');
+  jquery_ui_add('ui.selectable');
 
   // Add all interaction presets and callback settings to every Drupal page.
   // This array includes only presets that should always be available.

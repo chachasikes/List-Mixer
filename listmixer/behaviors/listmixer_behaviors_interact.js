@@ -41,7 +41,7 @@ Drupal.behaviors.listmixer.interactBehavior = function(preset) {
     // Get index number for this element.
     // @TODO really this isn't the right index - we want the index for the source id...since it will be some sort of list.
     var sort = $('*').index($(element));
-    $(element).find('div.listmixer-source-sort').html(sort);
+    // $(element).find('div.listmixer-source-sort').html(sort);
     Drupal.behaviors.listmixer.sortDrag(preset);
   }
   // @TODO This could connect with jQuery UI library, or even jQuery selectors. Might need more markup though.

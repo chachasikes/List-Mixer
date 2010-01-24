@@ -8,7 +8,7 @@
 function listmixer_behaviors_listmixer_activate_load($data) {
   $markup = '';
   $return = array(
-    'message' => t('Mousedown added.'),
+    'message' => t('Load added.'),
     'markup' => $markup,
     );
   return $return;

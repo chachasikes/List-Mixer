@@ -116,7 +116,6 @@ Drupal.behaviors.listmixer.push = function(preset) {
   Interact.init();
   preset.interactFunction = preset.behaviors.interact.settings.behavior_function; 
   // Get value from interact element.
-console.log(Interact.validation[preset.interactFunction]);
   $.each($(preset.interactions.interactions_region + ' ' + Interact.validation[preset.interactFunction]), function(){
     // Collect the value from each of the interactive elements.
     // Store values in data object in preset.
@@ -152,6 +151,9 @@ Drupal.behaviors.listmixer.behaviorBuildCallback = function(preset, type) {
       if (type == 'push') {
         if (preset.data.inputArray.length > 0) {
           preset.data.input = preset.data.inputArray.toString();
+        }
+        if (preset.data.targetId.length > 0) {
+          preset.data.target_id = preset.data.targetId.toString();
         }
       }
       $.ajax({
@@ -218,15 +220,29 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
     preset.targetValueAttribute = preset.interactions.interactions_target_id_attr;
     try {
       // If an attribute has been set by user, get the value.
-      if(preset.targetValueAttribute !== '') {
-         preset.targetId = $(preset.interactions.interactions_target_id).attr(preset.targetValueAttribute);
-      }
-      else {
-         preset.targetId = $(preset.interactions.interactions_target_id).html();
-         $(preset.interactions.interactions_target_id).hide();
-      }
+        preset.targetId = new Array();
+        var targetValue;
+        if(preset.targetValueAttribute !== '') {
+          $(preset.interactions.interactions_target_id).each( function() {
+            targetValue = $(this).attr(preset.targetValueAttribute);
+            if(targetValue !== undefined) {
+              preset.targetId.push(targetValue);
+            }  
+          });
+        }
+        else {
+          $(preset.interactions.interactions_target_id).each( function() { 
+            targetValue = $(this).html();
+            if(targetValue !== undefined) {
+              preset.targetId.push(targetValue);
+            }  
+          });
+          $(preset.interactions.interactions_target_id).hide();
+        }   
+      console.log("tid2: " + preset.targetId);
       // Make sure that the target id has a value
-      if(preset.targetId.length > 0) {
+      // @TODO If selectable ... figure out what to do here
+      if((preset.targetId.length > 0) || (preset.behaviors.activate.settings.behavior_function === 'selectActivate')) {
       }
       else {
         throw 'error';
@@ -234,7 +250,7 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
     }
     catch(err) {
       // @TODO If user has permissions to edit the preset, give them an error.
-      alert(Drupal.t('ListMixer Interaction Preset Error: Target Value could not be found. Did you enter the right CSS Selector for "' + preset.preset_name + '"? Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
+      alert(Drupal.t('ListMixer Interaction Preset Error: Target Value "' + preset.interactions.interactions_target_id + '" could not be found. Did you enter the right CSS Selector for "' + preset.preset_name + '"? Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
       // @TODO Else, break out of this function  return false;
     }
 
@@ -328,10 +344,11 @@ Drupal.behaviors.listmixer.setupActivateWidget = function(preset) {
   // On activate widget click, set up the interaction.
   var Activate = new Drupal.behaviors.listmixer.activateBehavior();
   Activate.init();
-  var activateFunction = preset.behaviors.activate.settings.behavior_function;
-  preset.activate = Activate.markup[activateFunction];
+  preset.activateFunction = preset.behaviors.activate.settings.behavior_function;
+  preset.activate = Activate.markup[preset.activateFunction];
+  if (preset.interactFunction == 'buttonActivate') {
   // Add activate button to form.
-  $('form#' + preset.targetFormId).append(Activate.markup[activateFunction]);
+  $('form#' + preset.targetFormId).append(Activate.markup[preset.activateFunction]);
   // Hide deactivate button.
   $('form#' + preset.targetFormId + ' div.listmixer-deactivate-button').hide();
   $('form#' + preset.targetFormId + ' div.listmixer-activate-button').children(".button").click(function() {
@@ -357,6 +374,10 @@ Drupal.behaviors.listmixer.setupActivateWidget = function(preset) {
       return false;
     }
   });
+  }
+  else if (preset.activateFunction == 'selectActivate') {
+    Activate.selectActivate(preset);
+  }
   // Set deactivate on initial load.
  $('form#' + preset.targetFormId + ' div.listmixer-deactivate-button').children(".button").trigger('click');
 };
