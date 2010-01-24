@@ -6,20 +6,16 @@ Drupal.behaviors.listmixer.activateBehavior = function(preset) {
 
   /* Library Functions */  
   this.buttonActivate = function() {
-    alert(Drupal.t('activate button'));
   }
   
   this.selectActivate = function(preset) {
     Drupal.behaviors.listmixer.selectable(preset);
-    // alert(Drupal.t('activate select'));
   }
     
   this.dragActivate = function() {
-    alert(Drupal.t('activate drag'));
   }
   
   this.loadActivate = function() {
-    alert(Drupal.t('Activate Load'));
   }
   this.markup = { 
     loadActivate : '',

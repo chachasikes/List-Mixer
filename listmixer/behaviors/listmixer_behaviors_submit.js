@@ -2,17 +2,20 @@
 
 Drupal.behaviors.listmixer.submitBehavior = function() {
   this.init = function() {
-   // alert('Submit Library Loaded');
   }
 
   /* Library Functions */ 
   
-  this.buttonSubmit = function() {
-    alert(Drupal.t('submit button'));
+  this.buttonSubmit = function() {  
+    if(preset.administerSettings === true) {
+      alert(Drupal.t('submit button'));
+    }
   }
    
   this.checkboxSubmit = function() {
-    alert(Drupal.t('submit checkbox'));
+    if(preset.administerSettings === true) {
+      alert(Drupal.t('submit checkbox'));
+    }
   }
   this.markup = { 
     // @TODO checkboxSubmit not quite figured out yet.

@@ -9,25 +9,20 @@
 
 Drupal.behaviors.listmixer.interactBehavior = function(preset) {
   this.init = function() {
-  // alert('Interact Library Loaded');
   }
 
   /* Library Functions */ 
   // @TODO Can't figure out how to call these functions...didn't work as i expected it to
   this.selectInteract = function() {
-    alert(Drupal.t('interact select'));
   }
    
   this.inputInteract = function() {
-    alert(Drupal.t('interact input'));
   }
   
   this.clickInteract = function() {
-    alert(Drupal.t('interact click'));
   }
 
   this.checkboxInteract = function() {
-    alert(Drupal.t('interact click'));
   }
 
   this.sortInteract = function(preset) {
@@ -79,7 +74,9 @@ Drupal.behaviors.listmixer.sortInteract = function(preset) {
     }
   }
   catch(err3) {
-   alert(Drupal.t("Could not add sort to" + preset.preset_name + "."));
+    if(preset.administerSettings === true) {
+      alert(Drupal.t("Could not add sort to" + preset.preset_name + "."));
+    }  
   }
 }
 

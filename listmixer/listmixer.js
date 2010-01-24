@@ -156,7 +156,7 @@ Drupal.behaviors.listmixer.behaviorBuildCallback = function(preset, type) {
           preset.data.target_id = preset.targetIdArray.toString();
         }
       }
-      //console.log(preset.data);
+      // console.log(preset.data);
       $.ajax({
         type: "POST",
         url: callback,
@@ -258,10 +258,11 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
     }
     catch(err) {
       // @TODO If user has permissions to edit the preset, give them an error.
-      alert(Drupal.t('ListMixer Interaction Preset Error: Target Value "' + preset.interactions.interactions_target_id + '" could not be found. Did you enter the right CSS Selector for "' + preset.preset_name + '"? Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
+      if(preset.administerSettings === true) {
+        alert(Drupal.t('ListMixer Interaction Preset Error: Target Value "' + preset.interactions.interactions_target_id + '" could not be found. Did you enter the right CSS Selector for "' + preset.preset_name + '"? Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
+      }
       // @TODO Else, break out of this function  return false;
     }
-
     // Set up target region.
     // Make sure it contains markup.
     // If undefined, set to a default of 'body.'
@@ -279,7 +280,9 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
     }
     catch(err1) {
       // @TODO If this is set to body, are there any other chances that this would be empty? This check maybe unnecessary for anything except debugging this JS file.
-      alert(Drupal.t('ListMixer Error: Interactive region not found. Did you enter the right CSS Selector for "' + preset.preset_name + '"? Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
+      if(preset.administerSettings === true) {
+        alert(Drupal.t('ListMixer Error: Interactive region not found. Did you enter the right CSS Selector for "' + preset.preset_name + '"? Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
+      }
     }
 
     // *********** Create interaction form and target classes
@@ -328,7 +331,9 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
       }
     }
     catch(err3) {
-      alert(Drupal.t('ListMixer Error: Interactive region and main container conflict in preset ' + preset.preset_name + '. Edit: admin/build/listmixer/' + preset.preset_id + ''));
+      if(preset.administerSettings === true) {
+        alert(Drupal.t('ListMixer Error: Interactive region and main container conflict in preset ' + preset.preset_name + '. Edit: admin/build/listmixer/' + preset.preset_id + ''));
+      }
     }
 };
 /**
@@ -489,7 +494,9 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
       });
     }
     catch(err2) {
-      alert(Drupal.t('ListMixer Error: Inclusion & input validation problem  in preset ' + preset.preset_name + '. Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
+      if(preset.administerSettings === true) {
+        alert(Drupal.t('ListMixer Error: Inclusion & input validation problem  in preset ' + preset.preset_name + '. Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
+      }
     }
     // ********* Set up Submit button
     var Submit = new Drupal.behaviors.listmixer.submitBehavior();

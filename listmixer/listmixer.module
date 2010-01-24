@@ -53,10 +53,9 @@ function listmixer_help($section) {
  */
 function listmixer_perm() {
   $perms = array('administer list mixer', 'access list mixer');
-  /* @TODO re-enable when permissions hooked up to preset building function.
-    foreach (listmixer_presets() as $preset) {
+  foreach (listmixer_presets() as $preset) {
     $perms[] =  'view listmixer '. $preset['preset_name'];
-  }*/
+  }
   return $perms;
 }
 
@@ -177,37 +176,53 @@ function listmixer_behaviors_redirect_callback($type, $name, $root) {
  * based on specifications in settings.
  */
 function listmixer_init() {
-  $path = drupal_get_path('module', 'listmixer');
-  // Add main javascript file.
-  drupal_add_js($path .'/listmixer.js', 'footer');
-
-  // Add behavior JS libraries
-  drupal_add_js($path .'/behaviors/listmixer_behaviors_activate.js', 'footer');
-  drupal_add_js($path .'/behaviors/listmixer_behaviors_push.js', 'footer');
-  drupal_add_js($path .'/behaviors/listmixer_behaviors_submit.js', 'footer');
-  drupal_add_js($path .'/behaviors/listmixer_behaviors_interact.js', 'footer');
-
-  // Add custom style sheet.
-  drupal_add_css($path .'/listmixer.css');
-
-  // Add JQuery User Interface
-  jquery_ui_add('ui.sortable');
-  jquery_ui_add('ui.selectable');
-
-  // Add all interaction presets and callback settings to every Drupal page.
-  // This array includes only presets that should always be available.
-  $presets = listmixer_presets(TRUE);
-
-  // Build array of settings for Drupal.settings javascript
-  $settings = array();
-  foreach ($presets as $preset) {
-    // Only add presets that are enabled
-    // @TODO Add user permissions here - view blah preset
-    if ($preset['preset_enabled']) {
-      $settings[$preset['preset_name']] = $preset;
+  global $user;
+  $access = user_access('access list mixer', $user);
+  if ($access) {
+    $path = drupal_get_path('module', 'listmixer');
+    // Add main javascript file.
+    drupal_add_js($path .'/listmixer.js', 'footer');
+  
+    // Add behavior JS libraries
+    drupal_add_js($path .'/behaviors/listmixer_behaviors_activate.js', 'footer');
+    drupal_add_js($path .'/behaviors/listmixer_behaviors_push.js', 'footer');
+    drupal_add_js($path .'/behaviors/listmixer_behaviors_submit.js', 'footer');
+    drupal_add_js($path .'/behaviors/listmixer_behaviors_interact.js', 'footer');
+  
+    // Add custom style sheet.
+    drupal_add_css($path .'/listmixer.css');
+  
+    // Add JQuery User Interface
+    jquery_ui_add('ui.sortable');
+    jquery_ui_add('ui.selectable');
+  
+    // Add all interaction presets and callback settings to every Drupal page.
+    // This array includes only presets that should always be available.
+    $presets = listmixer_presets(TRUE);
+    // Set administer list mixer value.
+    $administer_access = user_access('administer list mixer', $user);  
+    // Build array of settings for Drupal.settings javascript
+    $settings = array();
+    foreach ($presets as $preset) {
+      // Only add presets that are enabled
+      if ($preset['preset_enabled']) {
+        // Only add preset if user has permissions to view it.
+        $preset_access = user_access('view listmixer ' . $preset['preset_name'], $user);
+        if ($preset_access) {
+          // If user can administer list mixer, add JS setting 
+          // This will control whether or not error alerts display.
+          if ($administer_access) {
+            $preset['administerSettings'] = true;
+          }
+          else {
+            $preset['administerSettings'] = false;
+          }
+          $settings[$preset['preset_name']] = $preset;
+         }
+      }
     }
+    drupal_add_js(array('listmixer' => $settings), 'setting');
   }
-  drupal_add_js(array('listmixer' => $settings), 'setting');
 }
 
 /**
