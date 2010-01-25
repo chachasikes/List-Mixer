@@ -9,22 +9,22 @@
 /**
  * Implementation of hook_install().
  */
-function listmixer_storage_nodes_install() {
-  drupal_install_schema('listmixer_storage_nodes');
+function listmixer_storage_default_install() {
+  drupal_install_schema('listmixer_storage_default');
 }
 
 /**
  * Implementation of hook_uninstall().
  */
-function listmixer_storage_nodes_uninstall() {
-  drupal_uninstall_schema('listmixer_storage_nodes');
+function listmixer_storage_default_uninstall() {
+  drupal_uninstall_schema('listmixer_storage_default');
 }
 
 /**
  * Implementation of hook_schema().
  */
-function listmixer_storage_nodes_schema() {
-  $schema['listmixer_storage_nodes'] = array(
+function listmixer_storage_default_schema() {
+  $schema['listmixer_storage_default'] = array(
     'fields' => array(
       'id' => array(
         'description' => t('The primary identifier for an interaction.'),

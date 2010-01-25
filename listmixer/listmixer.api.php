@@ -30,7 +30,7 @@ function hook_listmixer_listmixer_default_preset() {
   $preset = array (
   'preset_name' => 'sample name' . date("g_i_s_a"),
   'preset_description' => 'sample description',
-  'preset_method' => 'listmixer_storage_nodes',
+  'preset_method' => 'listmixer_storage_default',
   'preset_enabled' => '0',
   'behaviors' => 
    array (

@@ -23,9 +23,9 @@ function listmixer_ui_help($section) {
 /**
  * Implementation of hook_perm().
  */
-  function listmixer_ui_perm() {
-    return array('create list mixer presets');
-  }
+function listmixer_ui_perm() {
+  return array('create list mixer presets');
+}
 
 /**
  * Implementation of hook_menu().

@@ -1,6 +1,6 @@
 ; $Id$
 name = List Mixer Demo: Favorite Links
 description = Demostration
-package = List Mixer
+package = List Mixer Demos
 core = 6.x
 dependencies[] = listmixer

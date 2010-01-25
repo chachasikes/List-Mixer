@@ -5,7 +5,7 @@
  * @file
  * Tests for listmixer module
  */
-class ListMixerStorageNodes extends DrupalWebTestCase {
+class ListMixerStorageDefault extends DrupalWebTestCase {
   public static function getInfo() {
     return array(
       'name' => t('List Mixer Storage Nodes'),
@@ -16,7 +16,7 @@ class ListMixerStorageNodes extends DrupalWebTestCase {
   // @TODO see why storage nodes not loading for tests
   function setUp() {
     // Enable all the necessary modules.
-    parent::setUp('listmixer_ui', 'listmixer', 'listmixer_storage_nodes', 'content', 'views', 'nodereference', 'features');
+    parent::setUp('listmixer_ui', 'listmixer', 'listmixer_storage_default', 'content', 'views', 'nodereference', 'features');
 
     // Create a user with permissions determined by our module.
     $no_listmixer_permissions = array();
@@ -57,7 +57,7 @@ class ListMixerStorageNodes extends DrupalWebTestCase {
     $edit['preset_name'] = "test";
     $edit['preset_description'] = "description";
     $edit['preset_enabled'] = "1";
-    $edit['preset_method'] = "listmixer_storage_nodes";
+    $edit['preset_method'] = "listmixer_storage_default";
     // Call the post function on the path that contains the form.
     // Click the 'submit' button, which in this case is called 'Save configuration'
     $this->drupalPost('admin/build/listmixer/add', $edit, t('Save Preset'));

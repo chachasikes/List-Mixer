@@ -17,3 +17,16 @@ function listmixer_listmixer_storage_register_load() {
   }
   return $storage_methods;
 }
+
+/**
+ * Load presets from modules
+ */
+function listmixer_default_presets_load() {
+  $methods = module_invoke_all('listmixer_default_preset');
+
+  $presets = array();
+  foreach ($methods as $method) {
+    $presets[$method['preset_name']] = $method;
+  }
+  return $presets;
+}

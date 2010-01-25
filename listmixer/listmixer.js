@@ -58,7 +58,7 @@ Drupal.behaviors.listmixer = function() {
     // Read through each preset and set up the first time the page is loaded.
     $.each(Drupal.settings.listmixer, function() {
       // If interaction involves saving content to target nodes.
-      if (this.preset_method == 'listmixer_storage_nodes') {
+      if (this.preset_method == 'listmixer_storage_default') {
         var preset = this;
         // *********** Set up behaviors.
         Drupal.behaviors.listmixer.interact(this);

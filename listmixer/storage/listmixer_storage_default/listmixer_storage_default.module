@@ -11,11 +11,11 @@
  *  Return this type to the list of storage methods available to the preset selector.
  */
 
-function listmixer_storage_nodes_listmixer_storage_register() {
+function listmixer_storage_default_listmixer_storage_register() {
   return array(
     array(
-    'name' => 'Nodes',
-    'module' => 'listmixer_storage_nodes',
+    'name' => 'Default',
+    'module' => 'listmixer_storage_default',
     'weight' => '-10',
     ),
   );
@@ -23,9 +23,9 @@ function listmixer_storage_nodes_listmixer_storage_register() {
 /**
  * Create form to update interactions
  */
-function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $preset = array()) {
+function listmixer_storage_default_load_interactions_form(&$form, &$form_state, $preset = array()) {
   // @TODO: use interaction preset load function instead
-  $results = db_query("SELECT * FROM {listmixer_storage_nodes} WHERE preset_id = %d", $preset['preset_id']);
+  $results = db_query("SELECT * FROM {listmixer_storage_default} WHERE preset_id = %d", $preset['preset_id']);
   while ($row = db_fetch_array($results)) {
     $interactions = $row;
   }
@@ -305,10 +305,10 @@ function listmixer_storage_nodes_load_interactions_form(&$form, &$form_state, $p
  * @return
  *   a preset array.  In the case of a new preset, 'preset_id' will be populated.
  */
-function listmixer_storage_nodes_listmixer_storage_load($preset) {
+function listmixer_storage_default_listmixer_storage_load($preset) {
   $interactions = array();
   if (!empty($preset['preset_id'])) {
-    $result = db_query("SELECT * FROM {listmixer_storage_nodes} WHERE preset_id = %d", $preset['preset_id']);
+    $result = db_query("SELECT * FROM {listmixer_storage_default} WHERE preset_id = %d", $preset['preset_id']);
     while ($row = db_fetch_array($result)) {
       $interactions = $row;
     }
@@ -324,15 +324,15 @@ function listmixer_storage_nodes_listmixer_storage_load($preset) {
  * @return
  *   a preset array.  In the case of a new preset, 'preset_id' will be populated.
  */
-function listmixer_storage_nodes_listmixer_storage_save($form, $form_state) {
+function listmixer_storage_default_listmixer_storage_save($form, $form_state) {
   $form_store = $form_state['values']['interactions'][0];
   $form_store['preset_id'] = $form_state['values']['preset_id'];
   // If an id already exists
   if (!empty($form['interactions'][0]['id']['#value'])) {
-    drupal_write_record('listmixer_storage_nodes', $form_store, array('preset_id'));
+    drupal_write_record('listmixer_storage_default', $form_store, array('preset_id'));
   }
   else {
-    drupal_write_record('listmixer_storage_nodes', $form_store);
+    drupal_write_record('listmixer_storage_default', $form_store);
   }
   return $behavior;
 }
@@ -340,7 +340,7 @@ function listmixer_storage_nodes_listmixer_storage_save($form, $form_state) {
 /**
  * Delete interaction preset.
  */
-function listmixer_storage_nodes_listmixer_storage_delete($preset) {
-  db_query("DELETE FROM {listmixer_storage_nodes} WHERE preset_id = '%d'", $preset['preset_id']);
+function listmixer_storage_default_listmixer_storage_delete($preset) {
+  db_query("DELETE FROM {listmixer_storage_default} WHERE preset_id = '%d'", $preset['preset_id']);
   return TRUE;
 }

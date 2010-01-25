@@ -1,6 +1,6 @@
 ; $Id$
 name = List Mixer Demo: Photoset Sortable: Sort
 description = Demostration
-package = List Mixer
+package = List Mixer Demos
 core = 6.x
 dependencies[] = listmixer

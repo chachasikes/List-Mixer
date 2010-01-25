@@ -13,7 +13,7 @@ function listmixer_demo_categorizer_listmixer_default_preset() {
   $preset = array (
     'preset_name' => 'categorizer',
     'preset_description' => 'Select nodes and assign terms to those nodes.',
-    'preset_method' => 'listmixer_storage_nodes',
+    'preset_method' => 'listmixer_storage_default',
     'preset_enabled' => '1',
     'behaviors' => 
     array (
@@ -45,5 +45,5 @@ function listmixer_demo_categorizer_listmixer_default_preset() {
       ),
     ),
   );
-  return $preset;
+  return array($preset);
 }

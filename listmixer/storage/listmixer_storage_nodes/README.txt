@@ -1,3 +1,0 @@
-List Mixer Storage Nodes
-------------------------
-

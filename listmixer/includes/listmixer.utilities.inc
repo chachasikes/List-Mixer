@@ -108,3 +108,48 @@ function listmixer_behaviors_check_duplicate($field, $field_target, $input, $dat
 
   return $return;
 }
+
+/**
+ * Save an listmixer preset.
+ *
+ * @param preset
+ *   an listmixer preset array.
+ * @return
+ *   a preset array.  In the case of a new preset, 'preset_id' will be populated.
+ */
+function listmixer_preset_save($preset) {
+  if (isset($preset['preset_id']) && is_numeric($preset['preset_id'])) {
+    drupal_write_record('listmixer_preset', $preset, 'preset_id');
+  }
+  else {
+    drupal_write_record('listmixer_preset', $preset);
+  }
+
+  // Reset presets cache.
+  listmixer_presets(TRUE);
+
+  // Rebuild Theme Registry
+  drupal_rebuild_theme_registry();
+
+  // User feedback
+  drupal_set_message(t('List Mixer preset saved'), 'status');
+  return $preset;
+}
+
+/**
+ * Delete a listmixer preset.
+ *
+ * @param preset
+ *   an listmixer preset array.
+ * @return
+ *   boolean
+ */
+function listmixer_preset_delete($preset) {
+  db_query('DELETE FROM {listmixer_preset} where preset_id = %d', $preset['preset_id']);
+
+  listmixer_behavior_delete($preset);
+  listmixer_interactions_delete($preset);
+
+  listmixer_presets(TRUE);
+  return TRUE;
+}

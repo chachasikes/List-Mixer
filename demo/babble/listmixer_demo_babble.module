@@ -13,7 +13,7 @@ function listmixer_demo_babble_listmixer_default_preset() {
   $preset = array (
     'preset_name' => 'babble',
     'preset_description' => 'This preset adds an input field to a page. Typing in the box saves text to a node.',
-    'preset_method' => 'listmixer_storage_nodes',
+    'preset_method' => 'listmixer_storage_default',
     'preset_enabled' => '1',
     'behaviors' => 
     array (
@@ -45,5 +45,5 @@ function listmixer_demo_babble_listmixer_default_preset() {
       ),
     ),
   );
-  return $preset;
+  return array($preset);
 }
