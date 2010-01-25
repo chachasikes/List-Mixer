@@ -1,0 +1,49 @@
+<?php
+// $Id$
+
+/*
+ * @file 
+ */
+
+/**
+ * Implementation of hook_listmixer_default_preset
+ * Generate a default listmixer preset setting.
+ */
+function listmixer_demo_todo_list_add_listmixer_default_preset() {
+  $preset = array (
+    'preset_name' => 'photoset_sortable_sort',
+    'preset_description' => 'This connects the node ids from a gallery view to a view attachment.',
+    'preset_method' => 'listmixer_storage_nodes',
+    'preset_enabled' => '0',
+    'behaviors' => 
+    array (
+      'activate' => 'activate_load',
+      'interact' => 'interact_checkbox',
+      'push' => 'push_nodereference',
+      'submit' => 'submit_button',
+    ),
+    'interactions' => 
+    array (
+      0 => 
+      array (
+        'interactions_target_id' => 'div.view-photo-gallery-sortable div.attachment div.view-content h2 a',
+        'interactions_region' => 'div.view-photo-gallery-sortable div.view-content',
+        'interactions_inclusions' => 'table.views-view-grid td',
+        'interactions_container' => 'div.view-photo-gallery-sortable',
+        'interactions_source_id' => 'div.views-field-nid span.field-content',
+        'interactions_target_field' => 'field_reference_photo',
+        'interactions_help' => 'You are making a photoset. Click the checkboxes to select images to save into your photo set. Then click save.',
+        'interactions_source_content_types' => '',
+        'interactions_label' => 'Make a photoset',
+        'interactions_interact_label' => '',
+        'interactions_push_label' => '',
+        'interactions_submit_label' => '',
+        'interactions_activate_label' => '',
+        'interactions_source_id_attr' => '',
+        'interactions_target_id_attr' => 'href',
+        'interactions_target_id_element' => '',
+      ),
+    ),
+  );
+  return $preset;
+}

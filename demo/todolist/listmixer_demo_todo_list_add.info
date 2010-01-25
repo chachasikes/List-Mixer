@@ -1,0 +1,6 @@
+; $Id$
+name = List Mixer Demo: ToDo List: Add
+description = Demostration
+package = List Mixer
+core = 6.x
+dependencies[] = listmixer

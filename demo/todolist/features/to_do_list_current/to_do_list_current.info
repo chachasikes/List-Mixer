@@ -1,0 +1,6 @@
+core = "6.x"
+dependencies[] = "views"
+features[views][] = "to_do_list_current"
+name = "to_do_list_current"
+package = "Features"
+project = "to_do_list_current"

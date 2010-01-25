@@ -1,0 +1,8 @@
+core = "6.x"
+dependencies[] = "features"
+dependencies[] = "text"
+features[content][] = "to_do_list-field_item"
+features[node][] = "to_do_list"
+name = "to_do_list"
+package = "Features"
+project = "to_do_list"
