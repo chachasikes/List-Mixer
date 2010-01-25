@@ -19,7 +19,7 @@ function listmixer_interactions_form(&$form, &$form_state, $preset = array()) {
   );
 
   // The preset method is stored as the module name for the storage method.
-  if (!empty($form['preset_method']['#default_value'])) {
+  if (!empty($form['preset_method']['#default_value']) && ($form != NULL)) {
     $form_load_function = $form['preset_method']['#default_value'] . '_load_interactions_form';
     if (function_exists($form_load_function)) {
       $form['interactions'][] = call_user_func($form_load_function, $form, $form_state, $preset);

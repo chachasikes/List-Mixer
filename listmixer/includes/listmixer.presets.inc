@@ -223,11 +223,12 @@ function listmixer_ui_preset_form_submit($form, &$form_state) {
   $preset = listmixer_preset_save($form_state['values']);
   // Save Behaviors
   if (isset($form_state['values']['behaviors'])) {
-      listmixer_behavior_save($form, &$form_state);
+    listmixer_behavior_save($form, &$form_state);
   }
   // Save Interactions
   if (isset($form_state['values']['interactions'])) {
-      listmixer_interactions_save($form, &$form_state);
+    $form['preset_method']['#default_value'] = $form_state['values']['preset_method'];
+    listmixer_interactions_save($form, &$form_state);
   }
 
   // Push back to the preset form
@@ -269,11 +270,64 @@ function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
     $form_state['redirect'] = 'admin/build/listmixer';
   }
 
-  $exported = '$presets = array();';
-  $exported .= "\n";
-  $exported .= '$presets[\''. $preset['preset_name'] .'\'] = ';
+  $preset_export = array(
+    'preset_name' => $preset['preset_name'],
+    'preset_description' => $preset['preset_description'],
+    'preset_method' => $preset['preset_method'],
+    'preset_enabled' => $preset['preset_enabled'],
+  );
 
-  $exported .= var_export($preset, TRUE) .';';
+  $preset_export['behaviors'] = array(
+    'activate' => $preset['behaviors']['activate']['behavior_name'],
+    'interact' => $preset['behaviors']['interact']['behavior_name'],
+    'push' => $preset['behaviors']['push']['behavior_name'],
+    'submit' => $preset['behaviors']['submit']['behavior_name'],
+  );
+  
+  $preset_export['interactions'][0] = $preset['interactions'];
+/*#
+interactions_target_id (String, 52 characters ) div.view-id-to_do_list_current div.view-content...
+
+    *
+      div.view-id-to_do_list_current div.view-content h2 a
+
+#
+interactions_region (String, 30 characters ) div.view-id-to_do_list_current
+#
+interactions_inclusions (String, 35 characters ) form#listmixer-target-todo_list_add
+#
+interactions_container (String, 30 characters ) div.view-id-to_do_list_current
+#
+interactions_source_id (String, 0 characters )
+#
+interactions_target_field (String, 10 characters ) field_item
+#
+interactions_help (String, 45 characters ) Type your to do list item, then click 'Save.'
+#
+interactions_source_content_types (String, 0 characters )
+#
+interactions_label (String, 21 characters ) Add a to do list item
+#
+interactions_interact_label (String, 0 characters )
+#
+interactions_push_label (String, 0 characters )
+#
+interactions_submit_label (String, 0 characters )
+#
+interactions_activate_label (String, 0 characters )
+#
+interactions_source_id_attr (String, 0 characters )
+#
+interactions_target_id_attr (String, 4 characters ) href
+#
+interactions_target_id_element (String, 0 characters ) */
+
+  unset($preset_export['interactions']['preset_id']);
+  unset($preset_export['interactions']['id']);
+
+  $exported = '$preset = ';
+
+  $exported .= var_export($preset_export, TRUE) .';';
   $rows = substr_count($exported, "\n") + 1;
 
   $form = array();
@@ -281,7 +335,7 @@ function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
     '#type' => 'textarea',
     '#default_value' => $exported,
     '#rows' => $rows,
-    '#resizable' => FALSE,
+    '#resizable' => TRUE,
   );
   $form['submit'] = array(
     '#type' => 'submit',
@@ -308,12 +362,51 @@ function listmixer_ui_preset_clone_form(&$form_state, $preset = array()) {
  */
 function listmixer_ui_preset_import_form(&$form_state, $preset = array()) {
   // @TODO ignore preset_id
-  $form = array();
+  $form = listmixer_ui_preset_form($form_state, $preset);
+$preset = array (
+  'preset_name' => 'todo_list_adaaad' . date("g_i_s_a") ,
+  'preset_description' => 'Add items to a to do list node',
+  'preset_method' => 'listmixer_storage_nodes',
+  'preset_enabled' => '0',
+  'behaviors' => 
+  array (
+    'activate' => 'activate_load',
+    'interact' => 'interact_input',
+    'push' => 'push_text',
+    'submit' => 'submit_button',
+  ),
+  'interactions' => 
+  array (
+    0 => 
+    array (
+      'id' => '8',
+      'preset_id' => '8',
+      'interactions_target_id' => 'div.view-id-to_do_list_current div.view-content h2 a',
+      'interactions_region' => 'div.view-id-to_do_list_current',
+      'interactions_inclusions' => 'form#listmixer-target-todo_list_add',
+      'interactions_container' => 'div.view-id-to_do_list_current',
+      'interactions_source_id' => '',
+      'interactions_target_field' => 'field_item',
+      'interactions_help' => 'Type your to do list item, then click \'Save.\'',
+      'interactions_source_content_types' => '',
+      'interactions_label' => 'Add a to do list item',
+      'interactions_interact_label' => '',
+      'interactions_push_label' => '',
+      'interactions_submit_label' => '',
+      'interactions_activate_label' => '',
+      'interactions_source_id_attr' => '',
+      'interactions_target_id_attr' => 'href',
+      'interactions_target_id_element' => '',
+    ),
+  ),
+);
+
   $form['import'] = array(
     '#type' => 'textarea',
-    '#default_value' => '',
+    '#default_value' => '$' . 'preset=' . var_export($preset, TRUE) .';',
     '#rows' => 15,
     '#resizable' => TRUE,
+    '#weight' => -100,
   );
   $form['submit'] = array(
     '#type' => 'submit',
@@ -324,50 +417,17 @@ function listmixer_ui_preset_import_form(&$form_state, $preset = array()) {
   return $form;
 }
 function listmixer_ui_preset_import_form_validate(&$form, &$form_state) {
-
+  // Convert data from field (this method suppresses errors.
+  // This is the same method used by cck content copy.
   @eval($form_state['values']['import']);
-
-  foreach($presets as $preset) {
-    // Unset preset_id so it cannot be stored.
-    unset($preset['preset_id']);
-    unset($preset['behaviors']['activate']['preset_id']);
-    unset($preset['behaviors']['interact']['preset_id']);
-    unset($preset['behaviors']['submit']['preset_id']);
-    unset($preset['behaviors']['push']['preset_id']);
-    unset($preset['behaviors']['activate']['id']);
-    unset($preset['behaviors']['interact']['id']);
-    unset($preset['behaviors']['submit']['id']);
-    unset($preset['behaviors']['push']['id']);
-    unset($preset['interactions']['id']);
-    unset($preset['interactions']['preset_id']);
-  }
-  $form_state['values']['preset'] = $preset;
-
-  // Check for duplicates
-  foreach (listmixer_presets() as $preset_existing) {
-    if ($preset['preset_name'] == $preset_existing['preset_name'] && $values['preset_id'] != $preset_existing['preset_id']) {
-      form_set_error('preset_name', t('The preset name you have chosen is already in use.'));
-      break;
-    }
-  }
-
-  // Check for illegal characters in preset names
-  if (preg_match('/[^0-9a-zA-Z_\-]/', $preset['preset_name'])) {
-    form_set_error('preset_name', t('Please only use alphanumeric characters, underscores (_), and hyphens (-) for preset names.'));
-  }
+  $form_state['values'] = $preset;
+  listmixer_ui_preset_form_validate(&$form, &$form_state);
 }
 function listmixer_ui_preset_import_form_submit(&$form, &$form_state) {
-  $preset = listmixer_preset_save($form_state['values']['preset']);
-  // Save Behaviors
-  $subform = array('values' => $preset);
-  // Empty out the form.  
-  $form_state['submitted'] = FALSE;
-  $preset_form = listmixer_ui_preset_form($form_state, $preset);
-  listmixer_behavior_save($preset_form, &$subform);
-  listmixer_interactions_save($preset_form, &$subform);
-
-  // Push back to the preset form
-  $form_state['redirect'] = 'admin/build/listmixer/'. $preset['preset_id'];
+  // Save the preset first to retrieve the preset_id when overriding
+  $preset = listmixer_preset_save($form_state['values']);
+  $form_state['values']['preset_id'] = $preset['preset_id'];
+  listmixer_ui_preset_form_submit(&$form, &$form_state);
 }
 
 /**

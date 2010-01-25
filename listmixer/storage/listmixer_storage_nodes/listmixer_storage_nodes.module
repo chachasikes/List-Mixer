@@ -324,7 +324,7 @@ function listmixer_storage_nodes_listmixer_storage_load($preset) {
  * @return
  *   a preset array.  In the case of a new preset, 'preset_id' will be populated.
  */
-function listmixer_storage_nodes_listmixer_storage_save($form, &$form_state) {
+function listmixer_storage_nodes_listmixer_storage_save($form, $form_state) {
   $form_store = $form_state['values']['interactions'][0];
   $form_store['preset_id'] = $form_state['values']['preset_id'];
   // If an id already exists

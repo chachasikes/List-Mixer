@@ -10,6 +10,7 @@
  * Create options list of types of behaviors to select from.
  */
 function listmixer_behaviors_form(&$form, &$form_state, $preset = array()) {
+
   $preset_behaviors = array();
   $preset_behaviors['activate'] = listmixer_behaviors_load( array('preset_id' => $preset['preset_id'], 'behavior_type' => 'activate'));
   $preset_behaviors['interact'] = listmixer_behaviors_load( array('preset_id' => $preset['preset_id'], 'behavior_type' => 'interact'));
@@ -75,7 +76,6 @@ function listmixer_behaviors_form(&$form, &$form_state, $preset = array()) {
  *   a preset array.  In the case of a new preset, 'preset_id' will be populated.
  */
 function listmixer_behaviors_load($behavior_key = array()) {
-
   if (!empty($behavior_key['id'])) {
     $behaviors = array();
     $result = db_query("SELECT * FROM {listmixer_behaviors} WHERE id = %d", $behavior_key['id']);
@@ -93,6 +93,7 @@ function listmixer_behaviors_load($behavior_key = array()) {
   elseif (!empty($behavior_key['preset_id']) && !empty($behavior_key['behavior_type'])) {
     $behaviors = array();
     $result = db_query("SELECT * FROM {listmixer_behaviors} WHERE preset_id = %d AND behavior_type = '%s'",  $behavior_key['preset_id'], $behavior_key['behavior_type']);
+
     while ($row = db_fetch_array($result)) {
       $behaviors[$row['behavior_type']] = $row;
     }
@@ -114,7 +115,6 @@ function listmixer_behaviors_load($behavior_key = array()) {
  */
 function listmixer_behavior_save($form, $form_state) {
   // Allow one type of behavior per behavior preset.
-
   // Copy $form_state.
   $form_state_store = $form_state['values']['behaviors'];
   // Format behavior for database.
