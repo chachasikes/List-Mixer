@@ -1,0 +1,49 @@
+<?php
+// $Id$
+
+/*
+ * @file 
+ */
+
+/**
+ * Implementation of hook_listmixer_default_preset
+ * Generate a default listmixer preset setting.
+ */
+function listmixer_demo_favorite_links_listmixer_default_preset() {
+  $preset = array (
+    'preset_name' => 'categorizer',
+    'preset_description' => 'Select nodes and assign terms to those nodes.',
+    'preset_method' => 'listmixer_storage_nodes',
+    'preset_enabled' => '1',
+    'behaviors' => 
+    array (
+      'activate' => 'activate_select',
+      'interact' => 'interact_checkbox',
+      'push' => 'push_taxonomy_term',
+      'submit' => 'submit_button',
+    ),
+    'interactions' => 
+    array (
+      0 => 
+      array (
+        'interactions_target_id' => 'div.view-categorizer div.view-content',
+        'interactions_region' => 'div.view-categorizer',
+        'interactions_inclusions' => 'div.attachment div.terms li',
+        'interactions_container' => 'div.view-categorizer',
+        'interactions_source_id' => 'a',
+        'interactions_target_field' => '',
+        'interactions_help' => 'categorizer help',
+        'interactions_source_content_types' => '',
+        'interactions_label' => 'Categorizer',
+        'interactions_interact_label' => '',
+        'interactions_push_label' => '',
+        'interactions_submit_label' => '',
+        'interactions_activate_label' => '',
+        'interactions_source_id_attr' => '',
+        'interactions_target_id_attr' => 'href',
+        'interactions_target_id_element' => 'div.views-row div.views-field-title span.field-content a',
+      ),
+    ),
+  );
+  return $preset;
+}
