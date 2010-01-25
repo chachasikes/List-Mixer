@@ -10,40 +10,100 @@
  * Generate a default listmixer preset setting.
  */
 function listmixer_demo_babble_listmixer_default_preset() {
-  $preset = array (
-    'preset_name' => 'babble',
-    'preset_description' => 'This preset adds an input field to a page. Typing in the box saves text to a node.',
-    'preset_method' => 'listmixer_storage_default',
-    'preset_enabled' => '1',
-    'behaviors' => 
+$preset = array (
+  'preset_name' => 'babble',
+  'preset_description' => 'This preset adds an input field to a page. Typing in the box saves text to a node.',
+  'preset_method' => 'listmixer_storage_default',
+  'preset_enabled' => '1',
+  'behaviors' => 
+  array (
+    'activate' => 
     array (
-      'activate' => 'activate_load',
-      'interact' => 'interact_input',
-      'push' => 'push_nodereference',
-      'submit' => 'submit_button',
-    ),
-    'interactions' => 
-    array (
-      0 => 
+      'behavior_name' => 'activate_load',
+      'settings' => 
       array (
-        'interactions_target_id' => 'div#block-views-babble-block_1 div.views-field-nid span.field-content',
-        'interactions_region' => 'div#block-views-babble-block_1',
-        'interactions_inclusions' => 'form#listmixer-target-babble',
-        'interactions_container' => 'div#block-views-babble-block_1',
-        'interactions_source_id' => '',
-        'interactions_target_field' => 'field_text_babble',
-        'interactions_help' => 'Enter some text.',
-        'interactions_source_content_types' => '',
-        'interactions_label' => 'Say something',
-        'interactions_interact_label' => '',
-        'interactions_push_label' => '',
-        'interactions_submit_label' => '',
-        'interactions_activate_label' => '',
-        'interactions_source_id_attr' => '',
-        'interactions_target_id_attr' => '',
-        'interactions_target_id_element' => '',
+        'behavior_name' => 'activate_load',
+        'behavior_label' => 'Load',
+        'behavior_enabled' => NULL,
+        'behavior_type' => 'activate',
+        'behavior_include' => 'sites/all/modules/custom/listmixer/listmixer/behaviors/activate/load/listmixer_activate_load.inc',
+        'behavior_function' => 'loadActivate',
+        'behavior_callback' => 'admin/ajax/listmixer/behavior/activate/listmixer_activate_load/activate_load',
+        'behavior_redirect' => 'admin/ajax/listmixer/redirect/activate/listmixer_activate_load/activate_load',
+        'behavior_description' => 'Activate Load',
       ),
     ),
-  );
+    'interact' => 
+    array (
+      'behavior_name' => 'interact_input',
+      'settings' => 
+      array (
+        'behavior_name' => 'interact_input',
+        'behavior_label' => 'Input',
+        'behavior_enabled' => NULL,
+        'behavior_type' => 'interact',
+        'behavior_include' => 'sites/all/modules/custom/listmixer/listmixer/behaviors/interact/input/listmixer_interact_input.inc',
+        'behavior_function' => 'inputInteract',
+        'behavior_callback' => 'admin/ajax/listmixer/behavior/interact/listmixer_interact_input/interact_input',
+        'behavior_redirect' => 'admin/ajax/listmixer/redirect/interact/listmixer_interact_input/interact_input',
+        'behavior_description' => 'Input interaction',
+      ),
+    ),
+    'push' => 
+    array (
+      'behavior_name' => 'push_text',
+      'settings' => 
+      array (
+        'behavior_name' => 'push_text',
+        'behavior_label' => 'Store Text',
+        'behavior_enabled' => NULL,
+        'behavior_type' => 'push',
+        'behavior_include' => 'sites/all/modules/custom/listmixer/listmixer/behaviors/push/content/text/listmixer_push_text.inc',
+        'behavior_function' => 'textPush',
+        'behavior_callback' => 'admin/ajax/listmixer/behavior/push/listmixer_push_text/push_text',
+        'behavior_redirect' => 'admin/ajax/listmixer/redirect/push/listmixer_push_text/push_text',
+        'behavior_description' => 'Store Text',
+      ),
+    ),
+    'submit' => 
+    array (
+      'behavior_name' => 'submit_button',
+      'settings' => 
+      array (
+        'behavior_name' => 'submit_button',
+        'behavior_label' => 'Submit Button',
+        'behavior_enabled' => NULL,
+        'behavior_type' => 'submit',
+        'behavior_include' => 'sites/all/modules/custom/listmixer/listmixer/behaviors/submit/button/listmixer_submit_button.inc',
+        'behavior_function' => 'buttonSubmit',
+        'behavior_callback' => 'admin/ajax/listmixer/behavior/submit/listmixer_submit_button/submit_button',
+        'behavior_redirect' => 'admin/ajax/listmixer/redirect/submit/listmixer_submit_button/submit_button',
+        'behavior_description' => 'Submit Button',
+      ),
+    ),
+  ),
+  'interactions' => 
+  array (
+    0 => 
+    array (
+      'interactions_target_id' => 'div#block-views-babble-block_1 div.views-field-nid span.field-content',
+      'interactions_region' => 'div#block-views-babble-block_1',
+      'interactions_inclusions' => 'form#listmixer-target-babble',
+      'interactions_container' => 'div#block-views-babble-block_1',
+      'interactions_source_id' => '',
+      'interactions_target_field' => 'field_text_babble',
+      'interactions_help' => 'Enter some text.',
+      'interactions_source_content_types' => '',
+      'interactions_label' => 'Say something',
+      'interactions_interact_label' => '',
+      'interactions_push_label' => '',
+      'interactions_submit_label' => '',
+      'interactions_activate_label' => '',
+      'interactions_source_id_attr' => '',
+      'interactions_target_id_attr' => '',
+      'interactions_target_id_element' => '',
+    ),
+  ),
+);
   return array($preset);
 }

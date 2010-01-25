@@ -276,51 +276,31 @@ function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
     'preset_enabled' => $preset['preset_enabled'],
   );
 
-  $preset_export['behaviors'] = array(
+  /*$preset_export['behaviors'] = array(
     'activate' => $preset['behaviors']['activate']['behavior_name'],
     'interact' => $preset['behaviors']['interact']['behavior_name'],
     'push' => $preset['behaviors']['push']['behavior_name'],
     'submit' => $preset['behaviors']['submit']['behavior_name'],
+  );*/
+  $preset_export['behaviors'] = array(
+    'activate' => array(
+      'behavior_name' => $preset['behaviors']['activate']['behavior_name'],
+      'settings' => $preset['behaviors']['activate']['settings'],
+    ),
+    'interact' => array(
+      'behavior_name' => $preset['behaviors']['interact']['behavior_name'],
+      'settings' => $preset['behaviors']['interact']['settings'],
+    ),
+    'push' => array(
+      'behavior_name' => $preset['behaviors']['push']['behavior_name'],
+      'settings' => $preset['behaviors']['push']['settings'],
+    ),
+    'submit' => array(
+      'behavior_name' => $preset['behaviors']['submit']['behavior_name'],
+      'settings' => $preset['behaviors']['submit']['settings'],
+    ),
   );
-  
   $preset_export['interactions'][0] = $preset['interactions'];
-/*#
-interactions_target_id (String, 52 characters ) div.view-id-to_do_list_current div.view-content...
-
-    *
-      div.view-id-to_do_list_current div.view-content h2 a
-
-#
-interactions_region (String, 30 characters ) div.view-id-to_do_list_current
-#
-interactions_inclusions (String, 35 characters ) form#listmixer-target-todo_list_add
-#
-interactions_container (String, 30 characters ) div.view-id-to_do_list_current
-#
-interactions_source_id (String, 0 characters )
-#
-interactions_target_field (String, 10 characters ) field_item
-#
-interactions_help (String, 45 characters ) Type your to do list item, then click 'Save.'
-#
-interactions_source_content_types (String, 0 characters )
-#
-interactions_label (String, 21 characters ) Add a to do list item
-#
-interactions_interact_label (String, 0 characters )
-#
-interactions_push_label (String, 0 characters )
-#
-interactions_submit_label (String, 0 characters )
-#
-interactions_activate_label (String, 0 characters )
-#
-interactions_source_id_attr (String, 0 characters )
-#
-interactions_target_id_attr (String, 4 characters ) href
-#
-interactions_target_id_element (String, 0 characters ) */
-
   unset($preset_export['interactions'][0]['preset_id']);
   unset($preset_export['interactions'][0]['id']);
 

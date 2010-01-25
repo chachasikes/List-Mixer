@@ -69,7 +69,6 @@ Drupal.behaviors.listmixer = function() {
         // This should be done first, as nothing else will happen if there is no container on the page.
         var interactionsContainerExists = $.find(this.interactions.interactions_container);
         // console.log(interactionsContainerExists);
-        // console.log(preset);
         // Interaction container not found, do nothing, other wise, proceed.
         if (interactionsContainerExists == '') {
           // No container found, do nothing. Go find the next preset.
@@ -139,7 +138,7 @@ Drupal.behaviors.listmixer.behaviorBuildCallback = function(preset, type) {
   // Create an array of the settings for the current behavior.
   var behavior = preset.behaviors[type];
   if (behavior.settings !== null) {
-    callback = behavior.settings.behavior_callback;
+    callback = Drupal.settings.basePath + behavior.settings.behavior_callback;
     behaviorFunction = behavior.settings.behavior_function;
     behaviorName =  behavior.settings.behavior_name;
 
@@ -182,7 +181,7 @@ Drupal.behaviors.listmixer.behaviorSubmitCallback = function(preset, type) {
   var behavior = preset.behaviors[type];
   if (behavior.settings !== null) {
     // @TODO rename _redirect to _submit_callback, and _callback to _build_callback
-    callback = behavior.settings.behavior_redirect;
+    callback = Drupal.settings.basePath + behavior.settings.behavior_redirect;
     behaviorName =  behavior.settings.behavior_name;
 
     // Load data from settings array contained in each behavior.

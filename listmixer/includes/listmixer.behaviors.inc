@@ -22,6 +22,7 @@ function listmixer_behaviors_form(&$form, &$form_state, $preset = array()) {
     '#tree' => TRUE,
     '#weight' => 7,
   );
+  // @TODO Make function that generates behavior types based on an array.
   $form['behaviors']['activate'] = array(
     '#type' => 'select',
     '#title' => t('Activate'),
@@ -269,8 +270,8 @@ function listmixer_behaviors_registry_build_behavior($type, $label, $enabled = T
     'behavior_type' => $type,
     'behavior_include' => $path . '/behaviors/' . $type . $folder_path . '/' . $folder_root . '/listmixer_' . $name . '.inc',
     'behavior_function' => $function,
-    'behavior_callback' => base_path() . 'admin/ajax/listmixer/behavior/' . $type . '/listmixer_' . $name . '/' . $name,
-    'behavior_redirect' => base_path() . 'admin/ajax/listmixer/redirect/' . $type . '/listmixer_' . $name . '/' . $name,
+    'behavior_callback' => 'admin/ajax/listmixer/behavior/' . $type . '/listmixer_' . $name . '/' . $name,
+    'behavior_redirect' => 'admin/ajax/listmixer/redirect/' . $type . '/listmixer_' . $name . '/' . $name,
     'behavior_description' => t($description),
   );
   return $element;
