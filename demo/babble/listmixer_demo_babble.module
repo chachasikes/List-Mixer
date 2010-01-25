@@ -1,0 +1,49 @@
+<?php
+// $Id$
+
+/*
+ * @file 
+ */
+
+/**
+ * Implementation of hook_listmixer_default_preset
+ * Generate a default listmixer preset setting.
+ */
+function listmixer_demo_babble_listmixer_default_preset() {
+  $preset = array (
+    'preset_name' => 'babble',
+    'preset_description' => 'This preset adds an input field to a page. Typing in the box saves text to a node.',
+    'preset_method' => 'listmixer_storage_nodes',
+    'preset_enabled' => '1',
+    'behaviors' => 
+    array (
+      'activate' => 'activate_load',
+      'interact' => 'interact_input',
+      'push' => 'push_nodereference',
+      'submit' => 'submit_button',
+    ),
+    'interactions' => 
+    array (
+      0 => 
+      array (
+        'interactions_target_id' => 'div#block-views-babble-block_1 div.views-field-nid span.field-content',
+        'interactions_region' => 'div#block-views-babble-block_1',
+        'interactions_inclusions' => 'form#listmixer-target-babble',
+        'interactions_container' => 'div#block-views-babble-block_1',
+        'interactions_source_id' => '',
+        'interactions_target_field' => 'field_text_babble',
+        'interactions_help' => 'Enter some text.',
+        'interactions_source_content_types' => '',
+        'interactions_label' => 'Say something',
+        'interactions_interact_label' => '',
+        'interactions_push_label' => '',
+        'interactions_submit_label' => '',
+        'interactions_activate_label' => '',
+        'interactions_source_id_attr' => '',
+        'interactions_target_id_attr' => '',
+        'interactions_target_id_element' => '',
+      ),
+    ),
+  );
+  return $preset;
+}

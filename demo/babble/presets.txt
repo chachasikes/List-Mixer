@@ -24,4 +24,4 @@ Selector: Interactive Region: div#block-views-babble-block_1
 Selector: Interactive Element Receivers: form#listmixer-target-babble
 Selector: Source Value Selector: {nothing entered}
 Selector: Source Value Attribute Selector: {nothing entered}
-Fieldname: Target Field: ffield_text_babble
+Fieldname: Target Field: field_text_babble

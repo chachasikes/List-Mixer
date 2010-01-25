@@ -2,10 +2,9 @@
 // $Id$
 
 /*
- *******************************************************************************
- * @file listmixer_ui.module
+ * @file 
+ * listmixer_ui.module
  * User Interface for List Mixer module
- *******************************************************************************
  */
  
 /**
@@ -23,12 +22,10 @@ function listmixer_ui_help($section) {
 
 /**
  * Implementation of hook_perm().
-
-  function listmixer_ui_perm() {
-    return array('administer list mixer');
-  }
-
  */
+  function listmixer_ui_perm() {
+    return array('create list mixer presets');
+  }
 
 /**
  * Implementation of hook_menu().
