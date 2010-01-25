@@ -199,11 +199,10 @@ function listmixer_ui_preset_form($form_state, $preset = array()) {
   if (empty($preset['preset_id'])) {
     return $form;
   }
-
   return $form;
 }
 
-function listmixer_ui_preset_form_validate($form, &$form_state) {
+function listmixer_ui_preset_form_validate(&$form, &$form_state) {
   $values = $form_state['values'];
   // Check for duplicates
   foreach (listmixer_presets() as $preset) {
@@ -231,13 +230,11 @@ function listmixer_ui_preset_form_submit($form, &$form_state) {
       listmixer_interactions_save($form, &$form_state);
   }
 
-
   // Push back to the preset form
   $form_state['redirect'] = 'admin/build/listmixer/'. $preset['preset_id'];
 }
 
 function listmixer_ui_preset_delete_form($form_state, $preset = array()) {
-
   if (empty($preset)) {
     drupal_set_message(t('The specified preset was not found'), 'error');
     drupal_goto('admin/build/listmixer');
@@ -293,6 +290,84 @@ function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
   );
   $form_state['redirect'] = 'admin/build/listmixer';
   return $form;
+}
+/**
+ * Listmixer preset clone form.
+ */
+function listmixer_ui_preset_clone_form(&$form_state, $preset = array()) {
+  if (empty($preset)) {
+    drupal_set_message(t('The specified preset was not found'), 'error');
+    $form_state['redirect'] = 'admin/build/listmixer';
+  }
+
+  $form = listmixer_ui_preset_form($form_state, $preset);
+  return $form;
+}
+/**
+ * Listmixer preset import form.
+ */
+function listmixer_ui_preset_import_form(&$form_state, $preset = array()) {
+  // @TODO ignore preset_id
+  $form = array();
+  $form['import'] = array(
+    '#type' => 'textarea',
+    '#default_value' => '',
+    '#rows' => 15,
+    '#resizable' => TRUE,
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Done'),
+    '#weight' => 9,
+  );
+  $form_state['redirect'] = 'admin/build/listmixer';
+  return $form;
+}
+function listmixer_ui_preset_import_form_validate(&$form, &$form_state) {
+
+  @eval($form_state['values']['import']);
+
+  foreach($presets as $preset) {
+    // Unset preset_id so it cannot be stored.
+    unset($preset['preset_id']);
+    unset($preset['behaviors']['activate']['preset_id']);
+    unset($preset['behaviors']['interact']['preset_id']);
+    unset($preset['behaviors']['submit']['preset_id']);
+    unset($preset['behaviors']['push']['preset_id']);
+    unset($preset['behaviors']['activate']['id']);
+    unset($preset['behaviors']['interact']['id']);
+    unset($preset['behaviors']['submit']['id']);
+    unset($preset['behaviors']['push']['id']);
+    unset($preset['interactions']['id']);
+    unset($preset['interactions']['preset_id']);
+  }
+  $form_state['values']['preset'] = $preset;
+
+  // Check for duplicates
+  foreach (listmixer_presets() as $preset_existing) {
+    if ($preset['preset_name'] == $preset_existing['preset_name'] && $values['preset_id'] != $preset_existing['preset_id']) {
+      form_set_error('preset_name', t('The preset name you have chosen is already in use.'));
+      break;
+    }
+  }
+
+  // Check for illegal characters in preset names
+  if (preg_match('/[^0-9a-zA-Z_\-]/', $preset['preset_name'])) {
+    form_set_error('preset_name', t('Please only use alphanumeric characters, underscores (_), and hyphens (-) for preset names.'));
+  }
+}
+function listmixer_ui_preset_import_form_submit(&$form, &$form_state) {
+  $preset = listmixer_preset_save($form_state['values']['preset']);
+  // Save Behaviors
+  $subform = array('values' => $preset);
+  // Empty out the form.  
+  $form_state['submitted'] = FALSE;
+  $preset_form = listmixer_ui_preset_form($form_state, $preset);
+  listmixer_behavior_save($preset_form, &$subform);
+  listmixer_interactions_save($preset_form, &$subform);
+
+  // Push back to the preset form
+  $form_state['redirect'] = 'admin/build/listmixer/'. $preset['preset_id'];
 }
 
 /**

@@ -18,6 +18,18 @@ function listmixer_admin_settings() {
     '#description' => t('True or false.'),
     '#default_value' => variable_get('listmixer_debugging', '0'),
   );
+  $form['listmixer_hide_target'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Hide target values used by target value selectors'),
+    '#description' => t('True or false.'),
+    '#default_value' => variable_get('listmixer_hide_target', '1'),
+  );
+  $form['listmixer_hide_source'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Hide source values used by source value selectors'),
+    '#description' => t('True or false.'),
+    '#default_value' => variable_get('listmixer_hide_source', '1'),
+  );
   // Make system settings form
   return system_settings_form($form);
 }

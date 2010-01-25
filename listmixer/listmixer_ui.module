@@ -91,14 +91,30 @@ function listmixer_ui_menu() {
   // @TODO Test this function with default preset when hook_listmixer_preset_default is set up.
   $items['admin/build/listmixer/%listmixer_ui_preset/override'] = array(
     'title callback' => 'listmixer_preset_title_callback',
-    'title arguments' => array('Export interaction preset: !preset_name', 3),
+    'title arguments' => array('Override interaction preset: !preset_name', 3),
     'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('listmixer_ui_preset_form', 3),
     'access arguments' => array('administer list mixer'),
     'type' => MENU_CALLBACK,
   );
-  // @TODO: Test: create export tests
+  $items['admin/build/listmixer/%listmixer_ui_preset/clone'] = array(
+    'title callback' => 'listmixer_preset_title_callback',
+    'title arguments' => array('Export interaction preset: !preset_name', 3),
+    'file' => 'includes/listmixer_ui.pages.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('listmixer_ui_preset_clone_form', 3),
+    'access arguments' => array('administer list mixer'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/build/listmixer/import'] = array(
+    'title' => 'Import interaction preset',
+    'file' => 'includes/listmixer_ui.pages.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('listmixer_ui_preset_import_form'),
+    'access arguments' => array('administer list mixer'),
+    'type' => MENU_LOCAL_TASK,
+  );
   return $items;
 }
 /**

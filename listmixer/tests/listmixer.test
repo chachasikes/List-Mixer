@@ -174,7 +174,8 @@ class ListMixerTest extends DrupalWebTestCase {
       'input' => "Test input" . date("F j, Y, g:i:s a"));
     );
     $callback = "admin/ajax/listmixer/behavior/push/listmixer_push_text/push_text";
-    $this->drupalPost($callback, $post);
+    // @TODO Figure out how to test the callbacks 
+//    $this->drupalPost($callback, $post);
 //    $this->assertResponse(200, t('User can load listmixer build page.'));
   }
 
