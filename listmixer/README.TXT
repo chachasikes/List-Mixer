@@ -1,293 +1,426 @@
 // $Id$
-                                                                           
-List Mixer
---------------------------------------------------------------------------------
-Make presets for interactions that allow users to push Drupal data into a list.
+
+ListMixer
+---------
+ListMixer allows you to add an interactive layer on top of 
+rendered Drupal pages. A library of behaviors are available
+which allow a user to store data out of the context of forms
+and node-edit screen. See below for Use Cases.
+
+This module would be useful to people with sites that have
+a large amount of content that is processed and recontextualized.
+For example, an art museum that has thousands of paintings,
+users could make lists of paintings they would like to see
+on a visit, or for a school project.
+
+This project comes with some out-of-the box settings, but
+it is mainly designed for flexibility in creating interactions.
+
+Good to know
+------------
+An understanding of site configuration and themeing will be
+beneficial. If you have that, then you should be able to do
+some crazy awesome things with this module.
+
 
 Version
 -------
-listmixer-0.1-dev
-DEVELOPMENT VERSION, for demonstration purposes.
+DEVELOPMENT VERSION, I will add this to Drupal CVS as soon as I can get a CVS account.
 
 Installation
 ------------
 To install place the entire listmixer module in your modules directory.
-Go to Administer -> Site building -> Modules and enable the List Mixer module.
+Go to Administer -> Site building -> Modules and enable the List Mixer module (API), User interface (UI), and  List Mixer Storage Type: Default (Nodes).
 
-Go to Administer -> [admin/settings/listmixer] to configure settings.
-Go to Administer -> [admin/build/listmixer] to make presets.
+Go to Administer -> Site Configuration -> List Mixer Settings [admin/settings/listmixer] to configure settings.
+Go to Administer -> User management -> Permissions -> [admin/build/listmixer] to set up permissions.
+Go to Administer -> Site building -> List Mixer [admin/build/listmixer] to make presets.
 
 Git hub: git@github.com:chachasikes/List-Mixer.git
 Web site: http://www.chachaville.com/content/list-mixer
 
+Demos
+-----
+GitHub List-Mixer page has a folder called 'demo', which contain working examples of ListMixer settings. (In development)
 
 Maintainer
 -----------
 Chach Sikes, chachasikes
 http://drupal.org/user/50674
 
-(Since 12/30/2009)
+(Development on this module began 12/30/2009)
 
-* NOTE: I am trying to apply for a Drupal CVS account with this module
-to contribute it to drupal.org
+Use cases
+---------
+* You can select nodes in a view and convert a
+tagadelic block into 'taxonomy checkboxes' - clicking save
+will add the terms to all of the selected nodes.
 
-How to Use ListMixer
+* You can add an input field to a block which will save to
+a field in the content type of your choice, for a quick and 
+simple 'twitter-like' interaction.
+
+* You can display a list of nodes with multiple textfields
+in a view. Click a button and sorting buttons will appear,
+allowing you to rearrange your fields without visiting the
+node-edit screen. This is similar to the 'to-do list' function
+in Basecamp. You can apply this to any element (<li>, <td>, <div>).)
+This means you can theme views and nodes and convert them to
+interactives.
+
+*You can show a view of photos in a photogallery. Click a 
+button and checkboxes will be added to all of the photos.
+Select the values and click save, and the nodereferences
+to the photos can be saved into a 'photoset' content type.
+Allowing you to make photo albums, and still use all of
+the normal tools of drupal.
+
+*You can add checkboxes to all of the links on a page, and
+then store those links to a link field. This could be 
+useful for making lists of paths to audio mp3 files that 
+could then be then converted into an xml playlist.
+
+*If you are a content administrator who has a large number
+of pages to edit, you could use listmixer to create tools
+that you can apply to all of your Drupal websites. For example,
+if you had hundreds of photos and videos on a site, you
+could make a view that shows tiny thumbnails and titles, and
+another view that shows all the nodes that need content assigned
+to them, and you could then click around on one page and edit
+all of the nodes instead of going into the node-edit screen for
+each one. This could be generic for all of your Drupal sites,
+or customized for a particular project.
+
+Normally it is way too much work to set up these tools and customize
+ajax-based forms, but ListMixer is relatively quick to use.
+You can create interactive content-editing tools for yourself
+and your users.
+(In progress: exporting presets as features.)
+
+How it works
+------------
+
+ListMixer gives you certain tools, which you can combine to
+invent new interactions.
+
+Tools: Behaviors
+----------------
+Activate: Start your interaction with different tools
+  *Currently available: 
+  **Load: Start interaction on page load
+  **Button: Click a button to activate the interaction
+  **Select: Click or drag select the nodes that data will be stored into
+
+Interact
+  *Currently available:
+  **Checkbox: Add a checkbox to whatever you want to be saved.
+  **Input: Add an input field, whose data will be saved to your selected node.
+  **Sort: Make elements on the page sortable (for example, the rendered contents of a plain text field.) 
+    Saving will store the data rearranged.
+
+Submit
+  *Currently available:
+  **Button: Click to save button.
+
+Push
+  *Nodereference: Save an nid to a nodereference field
+  *Text: Save text to a text field
+  *Link: Save a path to a link field
+  *Term: Save terms to a node's taxonomy data
+
+
+How to Use ListMixer User Interface
+-----------------------------------
+
+Screencasts
+-----------
+(currently out of date)
+
+1. Introduction Demo: http://screencast.com/t/MjY5MzlmZGMt
+Shows 'babble' and 'photoset_maker' in action
+
+2. ListMixer User Interface Demo: http://screencast.com/t/ZjBmMmJk
+Show the edit screens for babble and photoset_maker
+
+3. 'Selectors' demo: http://screencast.com/t/ZDk3N2NmOWY
+Talking a bit about finding/making jQuery compatible selectors using Firefox's Firebug extension 
+
+Overview
+--------
+Step one: Think of what you want to make.
+Step two: Configure your site, add content to site.
+Step three: Download Firebug, or use 'Inspect Element' in safari. 
+
+
+Things you will need
 --------------------
 
-ListMixer lets you create 'interaction presets' that help a user
-save data from a Drupal page into nodes.
 
-ListMixer requires
-*a site with content
-*you probably will want CCK, Views, Taxonomy installed
-*you will probably want to have FireBug loaded into FireBug to 
-figure out which data you are scraping.
-*knowledge of jQuery very helpful for targeting complex data
-*javascript
-
-An example:
-The module is sort of abstract, so here is a description 
-of what you can do with the module. When I finish a few
-more features I will make a screencast of how to use it.
-
-
-Babble:
-So, you want to make an input box that lives on every page
-of a Drupal site. Typing text into the box will save it
-to a text field.
-
-You can make this interaction without any more code than
-a few jQuery class definitions. 
-
-Demos
------
-
-In the /demos folder there are two demostrations that
-work with the available behaviors. 
-
-Babble and Photoset maker.
-
-
-
-Brief overview of what you can do with the module
--------------------------------------------------
-
-To create this, install and configure ListMixer.
-Create a new ListMixer setting.
-
-You then can choose different behaviors: 
-Activate
-Interact
-Push
-Submit
-
-
-These behavior settings are used to connect markup
-on a rendered Drupal page (you will probably not
-be on the node edit page.) 
-
-
-You then look at the page that is supposed to have 
-the interactive text box, and find the #id of the block.
-List Mixer lets you provide class definitions
-that will connect parts of the page.
-
-@TODO: Rename these containers to words that make sense.
-
-They are:
-Container: Where the submit button and help text 
-should go
-
-Target interaction id: jQuery compatible class
-definition that will point to html containing the
-nid of the node where the content should be stored.
-
-Inclusions id: selectors that will receive interactive
-elements (example, td in a views grid, or the container
-if the interaction should be in the container.)
-
-Source id: selector that will provide the node id or
-other value information that should be saved. You 
-will need to make sure that data is compatible with
-the field you are trying to save it to.
-
-Known issues and Bugs
----------------------
-This module is very new. It works well if you only
-have one enabled preset. Debugging the javascript
-to allow multiple interactions on a given page.
-
-Planned Features
-----------------
-*push: select field from a list (like in views) which will automatically store the field name and field type
-*delete | edit: these are more dangerous and complicated so we'll be dealing with this later
-*weight: make <ul> markup into re-weightable interactive. (like draggable views) (though, maybe if you have a view that is draggable, it will work anyways)
-*tag content with a special token based term
-*timestamp: a way of storing and accessing interaction history. probably just a watchdog setting with some sort of filter
-
-Dangers
--------
-*This is a development version of the site. Not recommended for 
-production sites.
-
-
-Example
--------
-A good example of List Mixer in action is 'Babble' (see /demos)
-
-Babble acts like Twitter, or DevelopmentSeeds 'Shoutbox' module. 
-1. Set up Drupal environment.
-  *You make a content type called 'BabbleStream.'
-  *You create a views block that displays a user's BabbleStream.
-  *You create a node of the type BabbleStream.
-  *You enable that block on every page of the Drupal Site.
-2. Make an interaction preset.
-  *Then, you make it interactive using ListMixer.
-  *You create a new ListMixer preset   /admin/build/listmixer
-  *You choose 'Nodes' as the storage type.
-  *Save.
-
-3. Select Behaviors.
-
-You will want:
-  *Interact: Input (This will provide an input field) 
-  *Activate: MouseDown (When you click on the Interact field, it will become active. The other options make you click a button to activate interactivity.)
-  *Submit: Button (Create a button that will save your data.)
-  *Push: field_text_babble, a text field in the content type BabbleStream. (Where and what kind of data are you storing to.)
-
-4. Select Interaction.
-
-These are the target and source fields and classes.
-
-
-
-Updated 12-30-09
-
-Organization of the module
+1. An 'Interaction Design'
 --------------------------
-*Demo (/demo)
-  Demo contains an early prototype of this module which was created for a test
-  writing workshop. It became obvious that the module should be abstracted 
-  into something more useful, and so List Mixer is the resulting idea.
-  
-  *Interactions
-  Interactions are the way that presets are stored, and List Mixer
-  comes with some demonstrations of interactions.
-  
-  Examples:
-  *'Babble' (included)
-    Like DevSeed's 'shoutbox' module, which acts like Yammer - 
-    intranet twitter. 
-    Demonstrates of text field node saving to a list functionality.  
-  *'Photo set' (almost there)
-    Provides a simple view + image content type that demonstrates adding 
-    a checkbox to nodes and allows for subsets of a gallery view to be created 
-    for many users, many lists. 
-    Similar to Flickr Batch Organizer's functionality for making sets 
-    from collections.  
-    
-  *'Front Page Featured List' (not yet created)
-    Just a simple list of things people might want on a homepage.
-    There are about 10,000 ways to do this in Drupal already.
-    *Demonstrates saving nodereferences to a list.    
-  *'To-Do List' (not yet created)
-    Provides a text field for adding items to a to-do list. 
-    Provides list <li> and weight rearrangement to store reordered fields.
+You will need to be able to state what you want to achieve.
+Something like this:
 
-  * Other ideas...  
-        
-*List Mixer listmixer.module and includes (/includes)
-  The actual listmixer module sets up the administration interface for list
-  mixer. An important part of this is the preset generator.    
-  
-  *Presets (/includes/listmixer.presets.inc)
-  Allow users to create presets for interactions. 
-  
-  For example, a user might pick a block that contains a view that shows
-  a node that a user is allowed to edit on certain pages (ex. in a gallery.)
-  The administrator can set a field, block id, and chose different methods
-  for how interactions should take place, and on what. Whenever that block
-  displays, it will contain javascript that is only allows to interact with
-  certain content.
+I want all of my content editors to be able to see a list
+of news feeds in a column on the left. They will also be 
+able to see a column of recent photos. The interaction tool
+will allow the editor to select a news story, and apply the image
+to the news story. The goal is to speed up their process and
+make the experience more pleasurable.
 
-*Behaviors (/behaviors)
-  Javascript library
-  Various types of interactions provided to users. They are organized by
-  the utilities they provide for interacting with drupal content.
+From this idea, you would figure out what parts you need.
 
-  *NOTE: The folders in behaviors represent ideas for functions.
-  The will be used for early javascript development (as includes)
-  and then rolled into functions as appropriate as the module approaches
-  a stable build.
+Configuration you would need.
 
-  *listmixer.activate.js
-   Functions that makes the content on a page ready for storing
-   
-  *listmixer.interact.js
-   Functions that apply interaction elements to data that is allowed
-   to be pushed or assigned a a list.
-  
-  *listmixer.push.js
-   Functions that take data about a piece of content and convert it
-   to a standarized format that Drupal node_save will accepts.
-  
-  *listmixer.submit.js
-   Functions that trigger selected data to be pushed or assigned.
+* a view showing news feeds
+* a view showing photos
+* news and photo content (both could come from feeds, or just
+  normal content types)
+* only allow content editors to see a page with two views
 
-
-  Example of what behaviors do include:
-    *when a button is clicked, turn all links on a site to 'storable'
-    *create a checkbox on all drupal system images which will allow them 
-      to be stored.
-    *enable text to be selected on a site, selected text will be stored to a node
-    *allow text input into a box, which will be stored to a node
-    *create on/off button which will add or remove an item from a list
-    *drag an item into or out of a list
-    *rearrange items in a list
-  
-  
-*Storage Systems (/storage)
-  These are the various callback functions that take data from the
-  ajax behavior functions and allow data to be created, loaded, updated
-  and removed.
-  
-  The main storage systems include 'node' and 'taxonomy.' 
-  *listmixer.node.inc
-   Provides functions that prepare javascript data to be stored to 
-   various types of content (nodes, fields, taxonomy terms.)
-  *listmixer.taxonomy.inc
-   Provides functions that generate special terms and vocabularies for
-   lists, and will store those machine-generated terms in the node
-   that should be listed.
-   
-  Storage systems is the area where callbacks that interact with other
-  kinds of data would be stored. So, if someone wanted something to
-  makes lists of comments, or users, or geo data...those could be added.
-  Ideally, the callbacks would accept the data from all of the ajax functions.
-  
-  Examples of what can be accomplished with the storage systems:
-    *store nodereferences
-    *add links to a link field
-    *store text to a text field
-    *create interaction history (when an element was updated)
-    *assign taxonomy term (machine term)
-    *drop file into download bucket  
- 
- 
-Support and Development plan
+2. Listmixer widget settings
 ----------------------------
-*This module requires Javascript. 
+Then, you figure out what you will set up with Listmixer.
 
-*Firefox 3.5+, Safari 4+, Internet Explorer 7+ will be supported.
+First, create a new listmixer and give is a name and
+description. 
 
-*Initial development for proof of concept for Drupal 6, with most development
-for Drupal 7 (and occasionally backporting to Drupal 6.)
+* Title:  Add photos to recent news items
+* Activate: you want your user to select a node first
+  Choose 'select'
+* Input: you want a checkbox to show up on the photos
+  Choose 'checkbox'
+* Submit: you want a save button
+  Choose 'submit button'
+* Push: you want to store the node id of the photo node.
+  Choose 'nodereference'
 
-*When this project has a Drupal page, will welcome discussion about how best
-to design javascript functions and callbacks to work with existing tools.
+  You will use the name of the nodereference field in the news type.
 
-*Will work on exporting presets, integrating with chaos tools, features 
-and drush.
 
-*Will determine what sort of hooks and api functions might allow widgets
-and new field types to become available to the preset maker.
+Now, look at your page. You will have two views blocks on a page
+(unless you have done some weird themeing)
+
+Look at the page markup
+-----------------------
+
+*Listmixer uses the presence of CSS selectors to trigger the interactions.*
+
+If you are already a themer, this is your lifeblood, so you 
+may feel ecstatic that all you have to do is peek into Firebug to
+see which elements you want to use. You will just enter them into
+a form, add some labels if you like, click buttons to choose behaviors.
+In a few minutes you will have set up an interaction.
+ 
+
+Brief overview of CSS selectors and jQuery
+------------------------------------------
+
+If you are not a themer, here is a bit more explanation.
+In brief, webpages have lots of 'containers' for all the content.
+CSS targets those containers to apply colors, images, and spacing
+which lays out your webpage.
+
+These can have unique names (IDs) or reusable names (classes.)
+These elements can also have attributes. 'href' in a normal
+HTML link is an attribute.
+<a href="http://mywebsite.com">Website</a>
+
+Listmixer makes extensive use of these.
+
+jQuery is the javascript library that comes with Drupal, and
+it lets you select elements on a page if you tell it the right path.
+It works a little differently from normal CSS that people write.
+It requires that you give it your selector as well as the class.
+
+div.field-item, not .field-item
+
+jQuery accepts pseudo-classes. So, you can use any of these
+to target anything on the page, even things generated on the page after
+an interaction has started. (You can use listmixers own markup.)
+
+Here's a trick that I have found handy in making listmixer settings.
+Say you wanted to use a view that had a page display and an
+attachment (two views on one page.)
+
+You will notice that by default there are two div.view-contents
+inside your view. This could screw up your interaction. You can use
+div.view-myviewname(has:table.views-view-grid) to specify exactly which
+element you want.
+
+
+2. 'Targets'
+------------
+
+Target: the path to the node that you want to update.
+
+Now for the magical moments. You want to identify your targets,
+or which nodes you want data to be saved into.
+
+Open firebug, and look at the view that contains news. You
+want to grab the path to the node. Use the Firebug inspector
+to select a node title. For the purposes of this demonstration,
+the path to the href='content/news/disaster-haiti' is what you want.
+
+So...there is a little bit of subtly to how to choose the elements
+that will work for the 'Select' activation (but in my honest opinion
+it is the coolest.)
+
+For the "Selector: Target Node ID Value" you can do two things.
+First, you can enter a straight up path to the link.
+
+Like this:
+div.view-photo-assigner div.view-content div.views-row div.views-field-title span.field-content a
+
+
+How to select multiple targets
+------------------------------
+But!
+The select feature is way fancier and super-cooler-awesomer.
+So, I have set it up so that you can do a fancy little trick.
+
+First, enter:
+div.view-photo-assigner div.view-content
+
+This is the parent container that contains the repeating elements that you will want
+to select. 
+
+Next, enter
+Selector: Target Element Receiver: 
+div.views-row div.views-field-title span.field-content a
+
+This is the path to the link that has the path you want,
+but it is just the part that repeats.
+
+If this were a normal list:
+
+Selector: Target Node ID Value: 
+ul
+
+Selector: Target Element Receiver: 
+li a
+
+Finally, since you do actually want the path, enter the name of the attribute
+that contains the exact value that should be stored.
+
+Selector: Target Value Attribute: 
+href
+
+If you leave this blank, Listmixer will assume that the html content inside
+the Node ID or Element Receiver contains either the path or the node id value.
+
+Like this,
+Selector: Target Node ID Value: 
+span.field-content
+
+<span.field-content>253</span>
+
+This will create a value of: 253
+
+Listmixer converts a Drupal path to an nid value, ultimately you are trying
+to find the path to the node that you want to update.
+
+3. 'Sources'
+------------
+Ok, now that you understand the 'targets' - source will be easy. It's basically
+the same thing, except you are finding the data that you actually want to store
+into the node. The data needs to be compatible with the data that your node
+accepts.
+
+
+Nodereferences as sources
+-------------------------
+For example, if you are saving a nodereference, your source needs to be a
+path to something in Drupal, or the number of the node id.
+
+These would all work:
+153
+node/1241
+content/blog/january-2010
+
+Of course, you will need to make sure these are all valid, and that
+your users can only target nodes that actually have a nodereference field
+with the name that you set in your form. There are some permissions to
+control who sees your ListMixer setting. 
+
+Text as a source
+----------------
+
+Links as a source
+-----------------
+
+Terms as a source
+-----------------
+
+
+4. Last, but MOST IMPORTANT, a 'Container'
+------------------------------------------
+Listmixer looks for certain CSS elements to exist on a page. If it finds them,
+it will add the interaction.
+
+An easy example: if you have a block on a page, the block will have an ID. 
+That ID will only live on pages with the block, which you can set up according 
+to your own taste in roles, permissions etc.
+
+You can actually have whatever you want. It could be the id for a node, the 
+footer, content inside the contents of a node, something on a node edit screen.
+If it is a class or ID, Listmixer will use it. 
+
+** You will want your container to be unique **
+You wouldn't want to use 'div.view-content' as your container unless you
+were absolutely certain that you wanted an interaction to show up on
+every single kind of view. Drupal will generate a unique class for your view
+which you can use to good effect.
+
+
+
+Why do this?
+------------
+
+This may take some getting used to if you are not familiar with building
+Drupal sites, but its way easier than writing ajax functions and 
+themeing forms, or shopping for modules that do something obscure. 
+
+I think it is fun. You could create some bizarre interactions by combining
+different pieces of drupal. It's also theoretically possible to make some 
+simple interactions without needing to add a ton of modules.
+
+
+For Developers
+--------------
+ListMixer provides and API which will allow you to create simple settings 
+which will generate AJAX and interactive jQuery elements.
+
+These are the main parts:
+*Presets: settings that are passed to javascript. 
+**These include the names of the behaviors to use, the css selectors that
+jQuery should target, and the callback function paths that will handle
+the data storage to Drupal.
+
+API
+---
+See listmixer.api.php for implementations of available hooks.
+
+It would be possible to write functions and modules that would generate
+the markup that would be used by the main javascript file. For example,
+if certain kinds of views and block settings are used to create interactions
+you could write a module that takes a view name and field name and 
+generate a preset. This would make it easier for site configurers to set
+up interactions if they do not understand the Drupal markup.
+
+Behaviors
+---------
+It is intended to make the behaviors extendable through code, though
+there may be some limitations to how these actually work with the javascript.
+
+
+User interface: settings storage
+--------------------------------
+It is theoretically possible to create other storage methods for saving the
+listmixer preset settings. The default user interface form allows a user to
+save every kind of value that is used by the main javascript file. 
+
+Export/Import
+-------------
+Save your settings, provide custom presets.
+Export/Import, hook_listmixer_default_preset, (and eventually drush/features exports)
