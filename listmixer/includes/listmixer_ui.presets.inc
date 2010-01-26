@@ -194,12 +194,6 @@ function listmixer_ui_preset_form_submit($form, &$form_state) {
   if ($form_state['values']['#preset_copy']) {
     $form_state['values']['preset_id'] = $preset['preset_id'];
     foreach ($form_state['values']['behaviors'] as $behavior) {
-     /* $behavior_array = array(
-        'behavior_name' => $behavior,
-        'preset_id' => $preset['preset_id'],
-      );
-      $behavior = $behavior_array;*/
-dpm($behavior);
       $behavior = array();
       $behavior['preset_id'] = $preset['preset_id'];
       $behavior['behavior_name'] = $behavior;

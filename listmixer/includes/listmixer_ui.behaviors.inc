@@ -90,13 +90,11 @@ function listmixer_behavior_save($form, $form_state) {
       'behavior_name' => $form_state['values']['behaviors'][$type],
       'behavior_type' => $type,
     );
-dpm($form_store);
     if (!empty($form['behaviors'][$type]['#default_value']) && !$form_state['values']['#preset_copy']) {
       // Skip saving id field, just save behaviors
       drupal_write_record('listmixer_behaviors', $form_store, array('id'));
     }
     else {
-dpm("in else");
       drupal_write_record('listmixer_behaviors', $form_store);
     }
   }
