@@ -24,8 +24,7 @@ function listmixer_demo_photoset_sortable_sort_listmixer_default_preset() {
     ),
     'interactions' => 
     array (
-      0 => 
-      array (
+
         'interactions_target_id' => 'div.view-photo-gallery-sortable div.attachment div.view-content h2 a',
         'interactions_region' => 'div.view-photo-gallery-sortable div.view-content',
         'interactions_inclusions' => 'table.views-view-grid td',
@@ -42,7 +41,7 @@ function listmixer_demo_photoset_sortable_sort_listmixer_default_preset() {
         'interactions_source_id_attr' => '',
         'interactions_target_id_attr' => 'href',
         'interactions_target_id_element' => '',
-      ),
+
     ),
   );
   return array($preset);

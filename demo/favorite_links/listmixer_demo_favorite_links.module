@@ -24,8 +24,7 @@ function listmixer_demo_favorite_links_listmixer_default_preset() {
     ),
     'interactions' => 
     array (
-      0 => 
-      array (
+
         'interactions_target_id' => 'div#block-views-favorite_links-block_1 div.views-field-nid span.field-content',
         'interactions_region' => 'body:has(div#block-views-favorite_links-block_1)',
         'interactions_inclusions' => 'div#center div.node div.field-item:has(a.imagecache)',
@@ -42,7 +41,7 @@ function listmixer_demo_favorite_links_listmixer_default_preset() {
         'interactions_source_id_attr' => 'href',
         'interactions_target_id_attr' => '',
         'interactions_target_id_element' => '',
-      ),
+
     ),
   );
   return array($preset);

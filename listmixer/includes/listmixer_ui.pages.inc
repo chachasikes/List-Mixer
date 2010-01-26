@@ -20,19 +20,21 @@ function listmixer_ui_overview() {
     switch ($preset['storage']) {
       case LISTMIXER_STORAGE_DEFAULT:
         $row[] = t('Default');
-        $links[] = l(t('View'), 'admin/build/listmixer/'. $preset['preset_id']);
+        $links[] = l(t('View'), 'admin/build/listmixer/'. $preset['preset_name'] . '/override');
         break;
       case LISTMIXER_STORAGE_OVERRIDE:
         $row[] = t('Override');
         $links[] = l(t('Edit'), 'admin/build/listmixer/'. $preset['preset_id']);
-        $links[] = l(t('Revert'), 'admin/build/listmixer/'. $preset['preset_id'] .'/delete');
-        $links[] = l(t('Export'), 'admin/build/listmixer/'. $preset['preset_id'] .'/export' );
+        $links[] = l(t('Revert'), 'admin/build/listmixer/'. $preset['preset_id'] . '/delete');
+        $links[] = l(t('Export'), 'admin/build/listmixer/'. $preset['preset_id'] . '/export' );
+        $links[] = l(t('Clone'), 'admin/build/listmixer/'. $preset['preset_id'] . '/clone' );
         break;
       case LISTMIXER_STORAGE_NORMAL:
         $row[] = t('Normal');
         $links[] = l(t('Edit'), 'admin/build/listmixer/'. $preset['preset_id']);
-        $links[] = l(t('Delete'), 'admin/build/listmixer/'. $preset['preset_id'] .'/delete');
-        $links[] = l(t('Export'), 'admin/build/listmixer/'. $preset['preset_id'] .'/export' );
+        $links[] = l(t('Delete'), 'admin/build/listmixer/'. $preset['preset_id'] . '/delete');
+        $links[] = l(t('Export'), 'admin/build/listmixer/'. $preset['preset_id'] . '/export' );
+        $links[] = l(t('Clone'), 'admin/build/listmixer/'. $preset['preset_id'] . '/clone' );
         break;
     }
     $row[] = implode('&nbsp;&nbsp;&nbsp;&nbsp;', $links);

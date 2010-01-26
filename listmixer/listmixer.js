@@ -64,6 +64,7 @@ Drupal.behaviors.listmixer = function() {
         Drupal.behaviors.listmixer.interact(this);
         Drupal.behaviors.listmixer.activate(this);
         Drupal.behaviors.listmixer.submit(this);
+console.log(preset);
         // ************ Use variables set by user.
         // Make sure that a container is found. 
         // This should be done first, as nothing else will happen if there is no container on the page.

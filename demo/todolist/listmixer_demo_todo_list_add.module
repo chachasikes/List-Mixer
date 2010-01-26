@@ -24,8 +24,7 @@ function listmixer_demo_todo_list_add_listmixer_default_preset() {
     ),
     'interactions' => 
     array (
-      0 => 
-      array (
+
         'interactions_target_id' => 'div.view-id-to_do_list_current div.view-content h2 a',
         'interactions_region' => 'div.view-id-to_do_list_current',
         'interactions_inclusions' => 'form#listmixer-target-todo_list_add',
@@ -42,7 +41,7 @@ function listmixer_demo_todo_list_add_listmixer_default_preset() {
         'interactions_source_id_attr' => '',
         'interactions_target_id_attr' => 'href',
         'interactions_target_id_element' => '',
-      ),
+
     ),
   );
   return array($preset);

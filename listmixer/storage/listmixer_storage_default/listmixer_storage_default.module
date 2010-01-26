@@ -24,13 +24,16 @@ function listmixer_storage_default_listmixer_storage_register() {
  * Create form to update interactions
  */
 function listmixer_storage_default_load_interactions_form(&$form, &$form_state, $preset = array()) {
-  // @TODO: use interaction preset load function instead
-  $results = db_query("SELECT * FROM {listmixer_storage_default} WHERE preset_id = %d", $preset['preset_id']);
-  while ($row = db_fetch_array($results)) {
-    $interactions = $row;
+  if (!$preset['#preset_copy']) {
+    $results = db_query("SELECT * FROM {listmixer_storage_default} WHERE preset_id = %d", $preset['preset_id']);
+    while ($row = db_fetch_array($results)) {
+      $interactions = $row;
+    }
+  }
+  else{
+    $interactions = $preset['interactions'];
   }
   $form = array();
-
   $form['id'] = array(
     '#type' => 'value',
     '#value' => $interactions['id'],

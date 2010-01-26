@@ -84,8 +84,7 @@ $preset = array (
   ),
   'interactions' => 
   array (
-    0 => 
-    array (
+
       'interactions_target_id' => 'div#block-views-babble-block_1 div.views-field-nid span.field-content',
       'interactions_region' => 'div#block-views-babble-block_1',
       'interactions_inclusions' => 'form#listmixer-target-babble',
@@ -102,7 +101,7 @@ $preset = array (
       'interactions_source_id_attr' => '',
       'interactions_target_id_attr' => '',
       'interactions_target_id_element' => '',
-    ),
+
   ),
 );
   return array($preset);

@@ -33,5 +33,3 @@ function listmixer_admin_settings() {
   // Make system settings form
   return system_settings_form($form);
 }
-
-// @TODO: get list of allowed behaviors, all selected by default, able to turn unwanted ones off

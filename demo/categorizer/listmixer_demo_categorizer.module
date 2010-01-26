@@ -24,8 +24,7 @@ function listmixer_demo_categorizer_listmixer_default_preset() {
     ),
     'interactions' => 
     array (
-      0 => 
-      array (
+
         'interactions_target_id' => 'div.view-categorizer div.view-content',
         'interactions_region' => 'div.view-categorizer',
         'interactions_inclusions' => 'div.attachment div.terms li',
@@ -42,7 +41,7 @@ function listmixer_demo_categorizer_listmixer_default_preset() {
         'interactions_source_id_attr' => '',
         'interactions_target_id_attr' => 'href',
         'interactions_target_id_element' => 'div.views-row div.views-field-title span.field-content a',
-      ),
+
     ),
   );
   return array($preset);
