@@ -8,6 +8,7 @@
  */
 include('includes/listmixer_ui.presets.inc');
 include('includes/listmixer_ui.behaviors.inc');
+include('includes/listmixer_ui.interactions.inc');
 
 /**
  * Implementation of hook_help().

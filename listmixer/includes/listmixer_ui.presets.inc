@@ -159,7 +159,7 @@ function listmixer_preset_delete($preset) {
   db_query('DELETE FROM {listmixer_preset} where preset_id = %d', $preset['preset_id']);
 
   listmixer_ui_behavior_delete($preset);
-  listmixer_interactions_delete($preset);
+  listmixer_ui_interactions_delete($preset);
 
   listmixer_presets(TRUE);
   return TRUE;
@@ -202,7 +202,7 @@ function listmixer_ui_preset_form_submit($form, &$form_state) {
   // Save Interactions
   if (isset($form_state['values']['interactions'])) {
     $form['preset_method']['#default_value'] = $form_state['values']['preset_method'];
-    listmixer_interactions_save($form, &$form_state);
+    listmixer_ui_interactions_save($form, &$form_state);
   }
 
   // Push back to the preset form
