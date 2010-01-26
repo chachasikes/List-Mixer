@@ -168,12 +168,7 @@ function listmixer_behaviors_load($preset) {
 }
 
 /**
- * Save an listmixer preset.
- *
- * @param preset
- *   an listmixer preset array.
- * @return
- *   a preset array.  In the case of a new preset, 'preset_id' will be populated.
+ * Save each type of behavior to the database.
  */
 function listmixer_behavior_save($form, $form_state) {
   // Allow one type of behavior per behavior preset.
@@ -184,68 +179,28 @@ function listmixer_behavior_save($form, $form_state) {
   $id = $form_state_store['id'];
   // Set the id from the main preset.
   $preset_id = $form_state['values']['preset_id'];
-
-  // Store activate button.
-  $form_store = array(
-    'id' => $form['behaviors']['activate']['id']['#value'],
-    'preset_id' => $preset_id,
-    'behavior_name' => $form_state['values']['behaviors']['activate'],
-    'behavior_type' => 'activate',
-  );
-  if (!empty($form['behaviors']['activate']['#default_value'])) {
-    // Skip saving id field, just save behaviors
-    drupal_write_record('listmixer_behaviors', $form_store, array('id'));
-  }
-  else {
-    drupal_write_record('listmixer_behaviors', $form_store);
-  }
-
-  // Store interact button.
-  $form_store = array(
-    'id' => $form['behaviors']['interact']['id']['#value'],
-    'preset_id' => $preset_id,
-    'behavior_name' => $form_state['values']['behaviors']['interact'],
-    'behavior_type' => 'interact',
-  );
-  if (!empty($form['behaviors']['interact']['#default_value'])) {
-    // Skip saving id field, just save behaviors
-    drupal_write_record('listmixer_behaviors', $form_store, array('id'));
-  }
-  else {
-    drupal_write_record('listmixer_behaviors', $form_store);
-  }
-
-  // Store push button.
-  $form_store = array(
-    'id' => $form['behaviors']['push']['id']['#value'],
-    'preset_id' => $preset_id,
-    'behavior_name' => $form_state['values']['behaviors']['push'],
-    'behavior_type' => 'push',
-  );
-  if (!empty($form['behaviors']['push']['#default_value'])) {
-    // Skip saving id field, just save behaviors
-    drupal_write_record('listmixer_behaviors', $form_store, array('id'));
-  }
-  else {
-    drupal_write_record('listmixer_behaviors', $form_store);
-  }
-
-  // Store submit button.
-  $form_store = array(
-    'id' => $form['behaviors']['submit']['id']['#value'],
-    'preset_id' => $preset_id,
-    'behavior_name' => $form_state['values']['behaviors']['submit'],
-    'behavior_type' => 'submit',
-  );
-  if (!empty($form['behaviors']['submit']['#default_value'])) {
-    // Skip saving id field, just save behaviors
-    drupal_write_record('listmixer_behaviors', $form_store, array('id'));
-  }
-  else {
-    drupal_write_record('listmixer_behaviors', $form_store);
+  $behavior_types = listmixer_behaviors_types();
+  foreach ($behavior_types['types'] as $behavior_type_setting) {
+    $type = $behavior_type_setting['type'];
+   // Store data.
+    $form_store = array(
+      'id' => $form['behaviors'][$type]['id']['#value'],
+      'preset_id' => $preset_id,
+      'behavior_name' => $form_state['values']['behaviors'][$type],
+      'behavior_type' => $type,
+    );
+    if (!empty($form['behaviors'][$type]['#default_value'])) {
+      // Skip saving id field, just save behaviors
+      drupal_write_record('listmixer_behaviors', $form_store, array('id'));
+    }
+    else {
+      drupal_write_record('listmixer_behaviors', $form_store);
+    }
   }
 }
-
+/**
+ * Delete preset behaviors from the database.
+ */
 function listmixer_behavior_delete($preset) {
   db_query('DELETE FROM {listmixer_behaviors} where preset_id = %d', $preset['preset_id']);
   return TRUE;
