@@ -5,16 +5,30 @@ ListMixer
 ListMixer allows you to add an interactive layer on top of 
 rendered Drupal pages. A library of behaviors are available
 which allow a user to store data out of the context of forms
-and node-edit screen. See below for Use Cases.
+and node-edit screen. See below for use cases.
 
-This module would be useful to people with sites that have
-a large amount of content that is processed and recontextualized.
-For example, an art museum that has thousands of paintings,
-users could make lists of paintings they would like to see
-on a visit, or for a school project.
+This module is designed to allow users to create re-useable
+settings that describe interactions.
 
-This project comes with some out-of-the box settings, but
-it is mainly designed for flexibility in creating interactions.
+Examples of interactions: 
+*add an input field to a block that will save to a text field
+ of a certain content type.
+
+*drag select nodes and convert a list of terms into a pseudo-form.
+provide a save button so that when clicked, terms will save
+to all the selected nodes.
+
+*make all links on a page interactive so they can be stored to
+a content type that has a link field.
+
+
+What is the module useful for?
+------------------------------
+* sites with a lot of content
+* managing user-generated content
+* remixing an archive into cherry-picked lists
+* creating widgets for an intranet like site
+* creating tools to quickly add content from an interface
 
 Good to know
 ------------
