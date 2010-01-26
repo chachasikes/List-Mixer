@@ -79,6 +79,7 @@ function listmixer_behavior_save($form, $form_state) {
   $id = $form_state_store['id'];
   // Set the id from the main preset.
   $preset_id = $form_state['values']['preset_id'];
+  // Save each behavior type.
   $behavior_types = listmixer_behaviors_types();
   foreach ($behavior_types['types'] as $behavior_type_setting) {
     $type = $behavior_type_setting['type'];
@@ -89,12 +90,13 @@ function listmixer_behavior_save($form, $form_state) {
       'behavior_name' => $form_state['values']['behaviors'][$type],
       'behavior_type' => $type,
     );
-//dpm($form_store);
-    if (!empty($form['behaviors'][$type]['#default_value'])) {
+dpm($form_store);
+    if (!empty($form['behaviors'][$type]['#default_value']) && !$form_state['values']['#preset_copy']) {
       // Skip saving id field, just save behaviors
       drupal_write_record('listmixer_behaviors', $form_store, array('id'));
     }
     else {
+dpm("in else");
       drupal_write_record('listmixer_behaviors', $form_store);
     }
   }
