@@ -6,7 +6,7 @@
  */
 
 /**
- * Call form save function from module
+ * Load interactions
  */
 function listmixer_interactions_load($preset) {
   $interactions = array();

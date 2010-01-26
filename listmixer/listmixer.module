@@ -71,6 +71,7 @@ function listmixer_menu() {
     'page arguments' => array('listmixer_admin_settings'),
     'access arguments' => array('administer list mixer'),
     'file' => 'includes/listmixer.admin.inc',
+    'type' => MENU_LOCAL_TASK,
   );
   $items['admin/settings/behaviors/update/registry'] = array(
     'title' => 'Update Registry',
