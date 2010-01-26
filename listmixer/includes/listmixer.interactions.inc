@@ -9,7 +9,7 @@
 /**
  * Load form from module
  */
-function listmixer_interactions_form(&$form, &$form_state, $preset = array()) {
+function listmixer_ui_interactions_form(&$form, &$form_state, $preset = array()) {
   // Based on the type of interaction $preset['preset_method'] load data from the table to be used with the interaction form.
   $form['interactions'] = array(
     '#type' => 'fieldset',

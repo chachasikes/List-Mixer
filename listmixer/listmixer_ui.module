@@ -6,7 +6,9 @@
  * listmixer_ui.module
  * User Interface for List Mixer module
  */
- 
+include('includes/listmixer_ui.presets.inc');
+include('includes/listmixer_ui.behaviors.inc');
+
 /**
  * Implementation of hook_help().
  */
@@ -57,7 +59,7 @@ function listmixer_ui_menu() {
   );
   // @TODO: Test: check that add page loads, make sure permissions make sense, check that it adds and redirects properly
   $items['admin/build/listmixer/%listmixer_ui_preset'] = array(
-    'title callback' => 'listmixer_preset_title_callback',
+    'title callback' => 'listmixer_ui_preset_title_callback',
     'title arguments' => array('Edit preset: !preset_name', 3),
     'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
@@ -67,7 +69,7 @@ function listmixer_ui_menu() {
   );
   // @TODO: Test: check what happens if no argument, or bad argument
   $items['admin/build/listmixer/%listmixer_ui_preset/delete'] = array( 
-    'title callback' => 'listmixer_preset_title_callback',
+    'title callback' => 'listmixer_ui_preset_title_callback',
     'title arguments' => array('Delete interaction preset: !preset_name', 3),
     'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
@@ -77,7 +79,7 @@ function listmixer_ui_menu() {
   );
   // @TODO: Test: create deletion tests
   $items['admin/build/listmixer/%listmixer_ui_preset/export'] = array(
-    'title callback' => 'listmixer_preset_title_callback',
+    'title callback' => 'listmixer_ui_preset_title_callback',
     'title arguments' => array('Export interaction preset: !preset_name', 3),
     'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
@@ -87,7 +89,7 @@ function listmixer_ui_menu() {
   );
   // @TODO Test this function with default preset when hook_listmixer_preset_default is set up.
   $items['admin/build/listmixer/%listmixer_ui_preset/override'] = array(
-    'title callback' => 'listmixer_preset_title_callback',
+    'title callback' => 'listmixer_ui_preset_title_callback',
     'title arguments' => array('Override interaction preset: !preset_name', 3),
     'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
@@ -96,7 +98,7 @@ function listmixer_ui_menu() {
     'type' => MENU_CALLBACK,
   );
   $items['admin/build/listmixer/%listmixer_ui_preset/clone'] = array(
-    'title callback' => 'listmixer_preset_title_callback',
+    'title callback' => 'listmixer_ui_preset_title_callback',
     'title arguments' => array('Clone interaction preset: !preset_name', 3),
     'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
@@ -118,7 +120,7 @@ function listmixer_ui_menu() {
  * Menu wildcard loader.
  */
 function listmixer_ui_preset_load($preset_id) {
-  return listmixer_preset($preset_id, TRUE);
+  return listmixer_ui_preset($preset_id, TRUE);
 }
 
 // Theming functions

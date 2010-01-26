@@ -28,7 +28,6 @@ define('LISTMIXER_STORAGE_OVERRIDE', 2);
  */
 include('includes/listmixer.utilities.inc');
 include('includes/listmixer.hooks.inc');
-include('includes/listmixer.presets.inc');
 include('includes/listmixer.interactions.inc');
 include('includes/listmixer.behaviors.inc');
 

@@ -60,6 +60,91 @@ function listmixer_behaviors_callback($type, $name, $root) {
   // return '';
 }
 
+
+/*
+ * Load list of all presets
+ * @TODO: Cache needs to be updated when the edit page is loaded
+ */
+function listmixer_presets($reset = TRUE) {
+  static $presets = array();
+
+  // Clear  caches if $reset is TRUE;
+  if ($reset) {
+    $presets = array();
+    cache_clear_all('listmixer:presets', 'cache');
+  }
+  // Return presets if the array is populated.
+  if (!empty($presets)) {
+    return $presets;
+  }
+
+  // Grab from cache or build the array. To ensure that the Drupal 5 upgrade
+  // path works, we also check whether the presets list is an array.
+  /* if (($cache = cache_get('listmixer:presets', 'cache')) && is_array($cache->data)) {
+    $presets = $cache->data;
+  }*/
+  else {
+    $normal_presets = array();
+
+    $result = db_query('SELECT * FROM {listmixer_preset} ORDER BY preset_name');
+
+    while ($preset = db_fetch_array($result)) {
+      $presets[$preset['preset_id']] = $preset;
+     // $presets[$preset['preset_id']]['behaviors'] = listmixer_behaviors_load(array('preset_id' => $preset['preset_id']));
+      $presets[$preset['preset_id']]['behaviors'] = listmixer_behaviors_load($preset, array('activate', 'interact', 'push', 'submit'));
+      $presets[$preset['preset_id']]['interactions'] = listmixer_interactions_load($preset);
+
+      $presets[$preset['preset_id']]['storage'] = LISTMIXER_STORAGE_NORMAL;
+
+      // Collect normal preset names so we can skip defaults and mark overrides accordingly
+      $normal_presets[$preset['preset_name']] = $preset['preset_id'];
+    }
+
+    // Collect default presets and allow modules to modify them.
+    $default_presets = listmixer_default_presets_load();
+    drupal_alter('listmixer_default_presets', $default_presets);
+
+    // Add in default presets if they don't conflict with any normal presets.
+    // Mark normal presets that take the same preset namespace as overrides.
+    foreach ($default_presets as $preset) {
+      if (!empty($preset['preset_name'])) {
+        if (!isset($normal_presets[$preset['preset_name']])) {
+          $preset['storage'] = LISTMIXER_STORAGE_DEFAULT;
+          // Use a string preset identifier
+          $preset['preset_id'] = $preset['preset_name'];
+          $presets[$preset['preset_name']] = $preset;
+        }
+        else {
+          $preset_id = $normal_presets[$preset['preset_name']];
+          $presets[$preset_id]['storage'] = LISTMIXER_STORAGE_OVERRIDE;
+        }
+      }
+    }
+    // Set the cache for the complete preset object.
+    // cache_set('listmixer:presets', $presets);
+  }
+  return $presets;
+}
+
+/**
+ * Load a preset by name.
+ *
+ * @param preset_name
+ *
+ * @return
+ *   preset array( 'preset_name' => string, 'preset_id' => integer)
+ *   empty array if preset_name is an invalid preset
+ */
+function listmixer_preset_by_name($preset_name) {
+  static $presets_by_name = array();
+  if (!$presets_by_name &&  $presets = listmixer_presets()) {
+    foreach ($presets as $preset) {
+      $presets_by_name[$preset['preset_name']] = $preset;
+    }
+  }
+  return (isset($presets_by_name[$preset_name])) ? $presets_by_name[$preset_name] : array();
+}
+
 /**
  * Determine which listmixer behavior function should be run based on arguments
  * @TEST: Create test for each callback
@@ -167,51 +252,6 @@ function listmixer_behaviors_check_duplicate($field, $field_target, $input, $dat
 }
 
 /**
- * Save an listmixer preset.
- *
- * @param preset
- *   an listmixer preset array.
- * @return
- *   a preset array.  In the case of a new preset, 'preset_id' will be populated.
- */
-function listmixer_preset_save($preset) {
-  if (isset($preset['preset_id']) && is_numeric($preset['preset_id'])) {
-    drupal_write_record('listmixer_preset', $preset, 'preset_id');
-  }
-  else {
-    drupal_write_record('listmixer_preset', $preset);
-  }
-
-  // Reset presets cache.
-  listmixer_presets(TRUE);
-
-  // Rebuild Theme Registry
-  drupal_rebuild_theme_registry();
-
-  // User feedback
-  drupal_set_message(t('List Mixer preset saved'), 'status');
-  return $preset;
-}
-
-/**
- * Delete a listmixer preset.
- *
- * @param preset
- *   an listmixer preset array.
- * @return
- *   boolean
- */
-function listmixer_preset_delete($preset) {
-  db_query('DELETE FROM {listmixer_preset} where preset_id = %d', $preset['preset_id']);
-
-  listmixer_behavior_delete($preset);
-  listmixer_interactions_delete($preset);
-
-  listmixer_presets(TRUE);
-  return TRUE;
-}
-
-/**
  * Adjust $preset before it is given to javascript
  */
 function listmixer_adjust_preset_for_js($preset) {
@@ -220,4 +260,37 @@ function listmixer_adjust_preset_for_js($preset) {
   }
   // Remove behavior include
   return $preset;
+}
+
+/**
+ * Establish which behavior types are allowed for listmixer.
+ * @TODO This may get extended eventually.
+ * Possibilities: delete, deactivate, undo.
+ */
+function listmixer_behaviors_types() {
+  $behaviors_types = array(
+    'types' => array(
+      'activate' => array(
+        'type' => 'activate',
+        '#title' => t('Activate'),
+        '#description' => t('Choose activate behaviors.'),
+      ), 
+      'interact' => array(
+        'type' => 'interact',
+        '#title' => t('Interact'),
+        '#description' => t('Choose interact behaviors.'),
+      ),
+      'push' => array(
+        'type' => 'push',
+        '#title' => t('Push'),
+        '#description' => t('Choose push behaviors.'),
+      ),
+      'submit' => array(
+        'type' => 'submit',
+        '#title' => t('Submit'),
+        '#description' => t('Choose submit behaviors.'),
+      ),
+    ),
+  );
+  return $behaviors_types;
 }
