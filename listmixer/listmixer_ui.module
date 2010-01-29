@@ -100,7 +100,7 @@ function listmixer_ui_menu() {
   );
   $items['admin/build/listmixer/%listmixer_ui_preset/clone'] = array(
     'title callback' => 'listmixer_ui_preset_title_callback',
-    'title arguments' => array('Clone interaction preset: !preset_name', 3),
+    'title arguments' => array('Override interaction preset: !preset_name', 3),
     'file' => 'includes/listmixer_ui.pages.inc',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('listmixer_ui_preset_clone_form', 3),
