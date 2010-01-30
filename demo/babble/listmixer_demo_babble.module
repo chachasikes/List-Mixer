@@ -2,26 +2,26 @@
 // $Id$
 
 /*
- * @file 
+ * @file
  */
 
 /**
- * Implementation of hook_listmixer_default_preset
+ * Implementation of hook_listmixer_default_preset().
  * Generate a default listmixer preset setting.
  */
 function listmixer_demo_babble_listmixer_default_preset() {
-$preset = array (
+$preset = array(
   'preset_name' => 'babble',
   'preset_description' => 'This preset adds an input field to a page. Typing in the box saves text to a node.',
   'preset_method' => 'listmixer_storage_default',
   'preset_enabled' => '1',
-  'behaviors' => 
-  array (
-    'activate' => 
-    array (
+  'behaviors' =>
+  array(
+    'activate' =>
+    array(
       'behavior_name' => 'activate_load',
-      'settings' => 
-      array (
+      'settings' =>
+      array(
         'behavior_name' => 'activate_load',
         'behavior_label' => 'Load',
         'behavior_enabled' => NULL,
@@ -33,11 +33,11 @@ $preset = array (
         'behavior_description' => 'Activate Load',
       ),
     ),
-    'interact' => 
-    array (
+    'interact' =>
+    array(
       'behavior_name' => 'interact_input',
-      'settings' => 
-      array (
+      'settings' =>
+      array(
         'behavior_name' => 'interact_input',
         'behavior_label' => 'Input',
         'behavior_enabled' => NULL,
@@ -49,11 +49,11 @@ $preset = array (
         'behavior_description' => 'Input interaction',
       ),
     ),
-    'push' => 
-    array (
+    'push' =>
+    array(
       'behavior_name' => 'push_text',
-      'settings' => 
-      array (
+      'settings' =>
+      array(
         'behavior_name' => 'push_text',
         'behavior_label' => 'Store Text',
         'behavior_enabled' => NULL,
@@ -65,11 +65,11 @@ $preset = array (
         'behavior_description' => 'Store Text',
       ),
     ),
-    'submit' => 
-    array (
+    'submit' =>
+    array(
       'behavior_name' => 'submit_button',
-      'settings' => 
-      array (
+      'settings' =>
+      array(
         'behavior_name' => 'submit_button',
         'behavior_label' => 'Submit Button',
         'behavior_enabled' => NULL,
@@ -82,8 +82,8 @@ $preset = array (
       ),
     ),
   ),
-  'interactions' => 
-  array (
+  'interactions' =>
+  array(
 
       'interactions_target_id' => 'div#block-views-babble-block_1 div.views-field-nid span.field-content',
       'interactions_region' => 'div#block-views-babble-block_1',

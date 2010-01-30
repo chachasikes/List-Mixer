@@ -21,7 +21,7 @@ function listmixer_behaviors_listmixer_push_text($data) {
     $_POST['input'] = 'Test content generated at: ' . date("F j, Y, g:i:s a");
     $_POST['target_field'] = 'field_text_babble';
   }
-  
+
   if (isset($_POST['target_id']) && isset($_POST['input']) && isset($_POST['target_field'])) {
     $nodes = listmixer_utilities_load_target_node($_POST['target_id']);
     foreach ($nodes as $node) {

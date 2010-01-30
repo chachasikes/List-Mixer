@@ -2,28 +2,28 @@
 // $Id$
 
 /*
- * @file 
+ * @file
  */
 
 /**
- * Implementation of hook_listmixer_default_preset
+ * Implementation of hook_listmixer_default_preset().
  * Generate a default listmixer preset setting.
  */
 function listmixer_demo_favorite_links_listmixer_default_preset() {
-  $preset = array (
+  $preset = array(
     'preset_name' => 'favorite_links',
     'preset_description' => 'Save links from any Drupal page into a link node.',
     'preset_method' => 'listmixer_storage_default',
     'preset_enabled' => '1',
-    'behaviors' => 
-    array (
+    'behaviors' =>
+    array(
       'activate' => 'activate_button',
       'interact' => 'interact_checkbox',
       'push' => 'push_link',
       'submit' => 'submit_button',
     ),
-    'interactions' => 
-    array (
+    'interactions' =>
+    array(
 
         'interactions_target_id' => 'div#block-views-favorite_links-block_1 div.views-field-nid span.field-content',
         'interactions_region' => 'body:has(div#block-views-favorite_links-block_1)',

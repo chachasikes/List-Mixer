@@ -23,7 +23,7 @@ function listmixer_ui_behaviors_form(&$form, &$form_state, $preset = array()) {
 }
 
 /**
- * This function listmixer_ui_behaviors_form_elements creates 
+ * This function listmixer_ui_behaviors_form_elements creates
  * the form elements for the user interface.
  *
  * @param &$form
@@ -48,7 +48,7 @@ function listmixer_ui_behaviors_form_elements(&$form, $preset) {
     '#default_value' => $behavior_name,
     '#options' => listmixer_ui_behaviors_load_form_options($preset, $type),
     '#description' => $description,
-    '#id' => $type . '-' . $id 
+    '#id' => $type . '-' . $id
               . ' interaction-preset-id-' . $preset['preset_id']
               . ' ' . $type . '-name-' . $behavior_name,
     'id' => array('#value' => $id),
@@ -64,7 +64,7 @@ function listmixer_ui_behaviors_form_elements(&$form, $preset) {
 function listmixer_ui_behaviors_load_form_options($preset = NULL, $type) {
   // Load behaviors from the behavior registry table
   $behaviors = listmixer_behavior_registry_load();
- 
+
   // Add behavior information into array
   // @TODO Maybe this should never be allowed to be null
   // $behaviors_options = array('none' => '--None--');
@@ -92,30 +92,28 @@ function listmixer_behavior_save($form, $form_state) {
   // Save each behavior type.
   $behavior_types = listmixer_behaviors_types();
   // @NOTE This part is confusing.
+  /*
+    The behaviors can only be saved in this format.
+    Validator function needs to process the values.
+  */
   foreach ($behavior_types['types'] as $behavior_type_setting) {
     $type = $behavior_type_setting['type'];
     // Store data.
-    if(!is_array($form_state['values']['behaviors'][$type])) {
-        $form_store = array(
-          'id' => $form['behaviors'][$type]['id']['#value'],
-          'preset_id' => $preset_id,
-          'behavior_name' => $form_state['values']['behaviors'][$type],
-          'behavior_type' => $type,
-        );
-    }
-    else {
-        $form_store = array(
-          'id' => $form['behaviors'][$type]['id']['#value'],
-          'preset_id' => $preset_id,
-          'behavior_name' => $form_state['values']['behaviors'][$type]['behavior_name'],
-          'behavior_type' => $form_state['values']['behaviors'][$type]['behavior_type'],
-        );
-    }
-    if (!empty($form['behaviors'][$type]['#default_value']) && !empty($form_state['values']['#preset_copy'])) {
+    $form_store = array(
+      // Make the ID available for resaving presets.
+      'id' => $form['behaviors'][$type]['id']['#value'],
+      'preset_id' => $preset_id,
+      'behavior_name' => $form_state['values']['behaviors'][$type]['behavior_name'],
+      'behavior_type' => $form_state['values']['behaviors'][$type]['behavior_type'],
+    );
+
+    if (!empty($form['behaviors'][$type]['#default_value']) && !$form_state['values']['#preset_copy']) {
       // Skip saving id field, just save behaviors
       drupal_write_record('listmixer_behaviors', $form_store, array('id'));
     }
     else {
+/*   dpm("form store"); */
+/*     dpm($form_store); */
       drupal_write_record('listmixer_behaviors', $form_store);
     }
   }

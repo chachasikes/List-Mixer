@@ -2,28 +2,28 @@
 // $Id$
 
 /*
- * @file 
+ * @file
  */
 
 /**
- * Implementation of hook_listmixer_default_preset
+ * Implementation of hook_listmixer_default_preset().
  * Generate a default listmixer preset setting.
  */
 function listmixer_demo_todo_list_sort_listmixer_default_preset() {
-  $preset = array (
+  $preset = array(
     'preset_name' => 'todo_list_sort',
     'preset_description' => 'Sort a node that has text fields',
     'preset_method' => 'listmixer_storage_default',
     'preset_enabled' => '1',
-    'behaviors' => 
-    array (
+    'behaviors' =>
+    array(
       'activate' => 'activate_button',
       'interact' => 'interact_sort',
       'push' => 'push_text',
       'submit' => 'submit_button',
     ),
-    'interactions' => 
-    array (
+    'interactions' =>
+    array(
 
         'interactions_target_id' => 'div.view-id-to_do_list_current div.view-content h2 a',
         'interactions_region' => 'div.field-items',

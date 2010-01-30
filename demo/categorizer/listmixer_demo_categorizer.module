@@ -2,28 +2,28 @@
 // $Id$
 
 /*
- * @file 
+ * @file
  */
 
 /**
- * Implementation of hook_listmixer_default_preset
+ * Implementation of hook_listmixer_default_preset().
  * Generate a default listmixer preset setting.
  */
 function listmixer_demo_categorizer_listmixer_default_preset() {
-  $preset = array (
+  $preset = array(
     'preset_name' => 'categorizer',
     'preset_description' => 'Select nodes and assign terms to those nodes.',
     'preset_method' => 'listmixer_storage_default',
     'preset_enabled' => '1',
-    'behaviors' => 
-    array (
+    'behaviors' =>
+    array(
       'activate' => 'activate_select',
       'interact' => 'interact_checkbox',
       'push' => 'push_taxonomy_term',
       'submit' => 'submit_button',
     ),
-    'interactions' => 
-    array (
+    'interactions' =>
+    array(
 
         'interactions_target_id' => 'div.view-categorizer div.view-content',
         'interactions_region' => 'div.view-categorizer',

@@ -238,10 +238,10 @@ function listmixer_utilities_save_target_node($node) {
   $access = node_access('update', $node, $user);
   if ($access) {
     node_save($node);
-    drupal_set_message("Node " . $node->title . " saved. " . l(t("View"), "node/" . $node->nid) . "| " . l(t("Edit"), "node/" . $node->nid . "/edit") . " " . date("F j, Y, g:i:s a"), "status");
+    drupal_set_message(t("Node " . $node->title . " saved.") . " " . l(t("View"), "node/" . $node->nid) . "| " . l(t("Edit"), "node/" . $node->nid . "/edit") . " " . date("F j, Y, g:i:s a"), "status");
   }
   else {
-    drupal_set_message("Node not saved. User does not have permission to update node " . $node->title. " " . date("F j, Y, g:i:s a"), "status");
+    drupal_set_message(t("Node not saved. User does not have permission to update node") . " " . $node->title . " " . date("F j, Y, g:i:s a"), "status");
   }
 }
 
@@ -274,7 +274,7 @@ function listmixer_behaviors_types() {
         'type' => 'activate',
         '#title' => t('Activate'),
         '#description' => t('Choose activate behaviors.'),
-      ), 
+      ),
       'interact' => array(
         'type' => 'interact',
         '#title' => t('Interact'),

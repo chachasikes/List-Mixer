@@ -2,7 +2,7 @@
 // $Id$
 
 /*
- * @file 
+ * @file
  * listmixer_ui.module
  * User Interface for List Mixer module
  */
@@ -18,7 +18,7 @@ function listmixer_ui_help($section) {
     // @TODO: Should this be one line or in lines of 80 characters?
     case 'admin/help#listmixer_ui':
     return '<p>'. t('How do use List Mixer to create interaction presets.') .'</p>';
-    /*case 'admin/build/listmixer/%listmixer_preset/export':
+    /* case 'admin/build/listmixer/%listmixer_preset/export':
       return t('Place the following snippet in your module as part of <code>hook_listmixer_default_presets()</code>.');*/
   }
 }
@@ -33,7 +33,7 @@ function listmixer_ui_perm() {
 /**
  * Implementation of hook_menu().
  */
-function listmixer_ui_menu() { 
+function listmixer_ui_menu() {
   $items = array();
   // @TODO: Test: Check that settings load, test any settings created
   $items['admin/build/listmixer'] = array(
@@ -69,7 +69,7 @@ function listmixer_ui_menu() {
     'type' => MENU_CALLBACK,
   );
   // @TODO: Test: check what happens if no argument, or bad argument
-  $items['admin/build/listmixer/%listmixer_ui_preset/delete'] = array( 
+  $items['admin/build/listmixer/%listmixer_ui_preset/delete'] = array(
     'title callback' => 'listmixer_ui_preset_title_callback',
     'title arguments' => array('Delete interaction preset: !preset_name', 3),
     'file' => 'includes/listmixer_ui.pages.inc',

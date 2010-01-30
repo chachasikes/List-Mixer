@@ -92,7 +92,7 @@ function listmixer_behavior_registry_load($name = NULL) {
     return $behaviors;
   }
 }
- 
+
 /**
  * @TODO
  * For each allowed behavior (admin/settings/listmixer)
@@ -102,8 +102,8 @@ function listmixer_behavior_registry_load($name = NULL) {
  * Javascript contains transformation from data to form
  * Add utlities for behaviors (php,js)
  */
- 
- 
+
+
 /**
  * Create behavior registry
  * Every new behavior must be added to this array.
@@ -137,7 +137,7 @@ function listmixer_behaviors_registry_build_behavior($type, $label, $enabled = T
   );
   return $element;
 }
- 
+
 /**
  * Form for updating the registry
  * @TODO move this from systems to cache system
@@ -147,11 +147,11 @@ function listmixer_behaviors_registry_build_behavior($type, $label, $enabled = T
 function listmixer_behaviors_registry_form($form_state, $behavior = array(), $op = NULL) {
   $enabled = TRUE;
   $listmixer_behaviors_registry = listmixer_behaviors_registry_build();
- 
+
   if (function_exists('dpm')) {
     dpm($listmixer_behaviors_registry);
   }
- 
+
   // Registry stores a serialized array of all of the registry settings.
   $form['listmixer_behavior_registry'] = array(
     '#type' => 'textarea',
@@ -159,30 +159,30 @@ function listmixer_behaviors_registry_form($form_state, $behavior = array(), $op
     '#description' => t('Registered behaviors'),
     '#default_value' => serialize($listmixer_behaviors_registry),
   );
- 
+
   return system_settings_form($form);
 }
- 
+
 /**
  * Build behavior registry array
  */
 function listmixer_behaviors_registry_build() {
   $listmixer_behaviors_registry = array();
- 
+
   /* ACTIVATE functions */
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Load', $enabled, '', 'load', 'activate_load', 'Activate Load', 'loadActivate');
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Button', $enabled, '', 'button', 'activate_button', 'Activate Button', 'buttonActivate');
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Select', $enabled, '', 'select', 'activate_select', 'Activate Select', 'selectActivate');
   //$listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Radio Button', $enabled, '', 'radio', 'activate_radio', 'Activate Radio', 'radioActivate');
   // $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('activate', 'Drag', $enabled, '', 'drag', 'activate_drag', 'Activate Drag description', 'dragActivate');
- 
+
   /* INTERACT functions */
   // $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('interact', 'Click Links', $enabled, '', 'click', 'interact_click', 'Click interaction', 'clickInteract');
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('interact', 'Input', $enabled, '', 'input', 'interact_input', 'Input interaction', 'inputInteract');
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('interact', 'Checkbox', $enabled, '', 'checkbox', 'interact_checkbox', 'Checkbox interaction', 'checkboxInteract');
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('interact', 'Sort', $enabled, '', 'sort', 'interact_sort', 'Sort interaction', 'sortInteract');
   // $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('interact', 'Select', $enabled, '', 'select', 'interact_select', 'Select interaction', 'selectInteract');
- 
+
   /* PUSH functions */
   /* Content push functions */
   // $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store File', $enabled, '/content', 'filefield', 'push_filefield', 'Store File', 'filefieldPush');
@@ -190,16 +190,16 @@ function listmixer_behaviors_registry_build() {
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Text', $enabled, '/content', 'text', 'push_text', 'Store Text', 'textPush');
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Link', $enabled, '/content', 'link', 'push_link', 'Store Link', 'linkPush');
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Term', $enabled, '/taxonomy', 'term', 'push_taxonomy_term', 'Store Term', 'termPush');
- 
+
   /* Taxonomy push functions */
   // $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('push', 'Store Term', $enabled, '/taxonomy', 'term', 'push_taxonomy_term', 'Push Taxonomy Term', 'termPush');
- 
+
   /* SUBMIT functions */
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('submit', 'Submit Button', $enabled, '', 'button', 'submit_button', 'Submit Button', 'buttonSubmit');
   // $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('submit', 'Submit Checkbox', $enabled, '', 'checkbox', 'submit_checkbox', 'Submit Checkbox', 'checkboxSubmit');
- 
+
   // Reset preset cache.
   // $presets = listmixer_presets(TRUE);
- 
+
   return $listmixer_behaviors_registry;
 }
