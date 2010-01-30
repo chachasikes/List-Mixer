@@ -10,38 +10,52 @@
  * Generate a default listmixer preset setting.
  */
 function listmixer_demo_todo_list_add_listmixer_default_preset() {
-  $preset = array(
+  $preset = array (
     'preset_name' => 'todo_list_add',
     'preset_description' => 'Add items to a to do list node',
     'preset_method' => 'listmixer_storage_default',
-    'preset_enabled' => '0',
-    'behaviors' =>
-    array(
-      'activate' => 'activate_load',
-      'interact' => 'interact_input',
-      'push' => 'push_text',
-      'submit' => 'submit_button',
+    'preset_enabled' => '1',
+    'behaviors' => 
+    array (
+      'activate' => 
+      array (
+        'behavior_name' => 'activate_select',
+        'behavior_type' => 'activate',
+      ),
+      'interact' => 
+      array (
+        'behavior_name' => 'interact_input',
+        'behavior_type' => 'interact',
+      ),
+      'push' => 
+      array (
+        'behavior_name' => 'push_text',
+        'behavior_type' => 'push',
+      ),
+      'submit' => 
+      array (
+        'behavior_name' => 'submit_button',
+        'behavior_type' => 'submit',
+      ),
     ),
-    'interactions' =>
-    array(
-
-        'interactions_target_id' => 'div.view-id-to_do_list_current div.view-content h2 a',
-        'interactions_region' => 'div.view-id-to_do_list_current',
-        'interactions_inclusions' => 'form#listmixer-target-todo_list_add',
-        'interactions_container' => 'div.view-id-to_do_list_current',
-        'interactions_source_id' => '',
-        'interactions_target_field' => 'field_item',
-        'interactions_help' => 'Type your to do list item, then click \'Save.\'',
-        'interactions_source_content_types' => '',
-        'interactions_label' => 'Add a to do list item',
-        'interactions_interact_label' => '',
-        'interactions_push_label' => '',
-        'interactions_submit_label' => '',
-        'interactions_activate_label' => '',
-        'interactions_source_id_attr' => '',
-        'interactions_target_id_attr' => 'href',
-        'interactions_target_id_element' => '',
-
+    'interactions' => 
+    array (
+      'interactions_target_id' => 'div#center div.view-to-do-list-current div.views-row',
+      'interactions_region' => 'div#center div.view-to-do-list-current',
+      'interactions_inclusions' => 'form#listmixer-target-todo_list_add',
+      'interactions_container' => 'div#center div.view-to-do-list-current',
+      'interactions_source_id' => '',
+      'interactions_source_id_attr' => '',
+      'interactions_target_id_element' => 'h2 a',
+      'interactions_target_id_attr' => 'href',
+      'interactions_target_field' => 'field_item',
+      'interactions_label' => 'Add a to do list item',
+      'interactions_help' => 'Type your to do list item, then click \'Save.\'',
+      'interactions_push_label' => '',
+      'interactions_submit_label' => 'Save',
+      'interactions_activate_label' => 'Select a to-do list',
+      'interactions_interact_label' => '',
+      'interactions_source_content_types' => '',
     ),
   );
   return array($preset);

@@ -413,13 +413,13 @@ function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
   foreach ($preset_export['behaviors'] as &$behavior) {
     unset($behavior['preset_id']);
     unset($behavior['id']);
-    // Unset the settings because they will always be called dynamically.
+    // Unset the settings because they will always be loaded dynamically.
     unset($behavior['settings']);
   }
 
-  $preset_export['interactions'][0] = $preset['interactions'];
-  unset($preset_export['interactions'][0]['preset_id']);
-  unset($preset_export['interactions'][0]['id']);
+  $preset_export['interactions'] = $preset['interactions'];
+  unset($preset_export['interactions']['preset_id']);
+  unset($preset_export['interactions']['id']);
 
   $exported = '$preset = ';
   $exported .= var_export($preset_export, TRUE) .';';

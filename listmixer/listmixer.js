@@ -64,12 +64,10 @@ Drupal.behaviors.listmixer = function() {
         Drupal.behaviors.listmixer.interact(this);
         Drupal.behaviors.listmixer.activate(this);
         Drupal.behaviors.listmixer.submit(this);
-console.log(preset);
         // ************ Use variables set by user.
         // Make sure that a container is found. 
         // This should be done first, as nothing else will happen if there is no container on the page.
         var interactionsContainerExists = $.find(this.interactions.interactions_container);
-        // console.log(interactionsContainerExists);
         // Interaction container not found, do nothing, other wise, proceed.
         if (interactionsContainerExists == '') {
           // No container found, do nothing. Go find the next preset.
@@ -122,7 +120,6 @@ Drupal.behaviors.listmixer.push = function(preset) {
     // Collect the value from each of the interactive elements.
     // Store values in data object in preset.
     preset.data.inputArray.push($(this).val());
-    // console.log(preset.data);
   });
   Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'push');
   // @TODO Check that the callback isn't reloading the page. 
@@ -158,7 +155,6 @@ Drupal.behaviors.listmixer.behaviorBuildCallback = function(preset, type) {
           preset.data.target_id = preset.targetIdArray.toString();
         }
       }
-      // console.log(preset.data);
       $.ajax({
         type: "POST",
         url: callback,
@@ -191,7 +187,7 @@ Drupal.behaviors.listmixer.behaviorSubmitCallback = function(preset, type) {
     // The data might need to be cleaned up if the funciton is used several times before submitting
     //var data_label = 'data_' + behavior_name;
     //$(this).attr('drag_list_value')
-    var data = {data_label : 'test data content'};
+    var data = {data_label : ''};
        
     // Ajax call to callback for this behavior.
     // @TODO currently this runs automatically, make push happen after submit behavior is activated.
@@ -248,8 +244,7 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
             });
             $(preset.interactions.interactions_target_id).hide();
           } 
-        } 
-      // console.log("tid2: " + preset.targetIdArray);
+        }
       // Make sure that the target id has a value
       // @TODO If selectable ... figure out what to do here
       if((preset.targetIdArray.length > 0) || (preset.behaviors.activate.settings.behavior_function === 'selectActivate')) {
@@ -303,7 +298,6 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
     // Only one form is allowed, if the form should be applied to the 
     // region container, but not the container if the container is a 
     // child of the region container.
-    // console.log('target container: ' + preset.interactions.interactions_container);
     try {
       // Create the pointer to the container for where the form should be added.
       // If the main container is the same as the interactive region, apply the form to the main container.
@@ -516,7 +510,6 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
     }
   
     // ********* Find the button (which might not be a button) and add a click function to it.
-  
     // Set up data object on page load.
     preset.data = {
       'inputArray' : [],
@@ -526,11 +519,11 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
       'interact_function' : preset.interactFunction
       // @TODO Collect other data here if necessary
     };
-    // Activate push callback
+    // Activate push callback. (For example, click a button.)
     $('form#' + preset.targetFormId + ' div.listmixer-push-submit').children(".button").click(function() {
       Drupal.behaviors.listmixer.push(preset); 
       //@TODO make sure target_id is available to push function
-  
+
       // If page stayed loaded, clear out the data array.
       preset.data = {
       'inputArray' : [],
@@ -539,6 +532,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
       'target_field' : preset.targetField,
       'interact_function' : preset.interactFunction
       };
+
       // @TODO Change input val clearing.
       // $('form.listmixer-target-form div.listmixer-interact-input input').val('');
   

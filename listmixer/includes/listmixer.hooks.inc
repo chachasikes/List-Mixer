@@ -23,10 +23,12 @@ function listmixer_listmixer_storage_register_load() {
  */
 function listmixer_default_presets_load() {
   $methods = module_invoke_all('listmixer_default_preset');
-
   $presets = array();
   foreach ($methods as $method) {
     $presets[$method['preset_name']] = $method;
+
+    // Add settings back into array.
+    $presets[$method['preset_name']]['behaviors'] = listmixer_behaviors_load($presets[$method['preset_name']]);
   }
   return $presets;
 }

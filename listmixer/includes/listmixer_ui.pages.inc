@@ -20,7 +20,7 @@ function listmixer_ui_overview() {
     switch ($preset['storage']) {
       case LISTMIXER_STORAGE_DEFAULT:
         $row[] = t('Default');
-        $links[] = l(t('View'), 'admin/build/listmixer/'. $preset['preset_name'] . '/override');
+        $links[] = l(t('Override'), 'admin/build/listmixer/'. $preset['preset_name'] . '/override');
         break;
       case LISTMIXER_STORAGE_OVERRIDE:
         $row[] = t('Override');

@@ -14,7 +14,7 @@ function listmixer_demo_todo_list_sort_listmixer_default_preset() {
     'preset_name' => 'todo_list_sort',
     'preset_description' => 'Sort a node that has text fields',
     'preset_method' => 'listmixer_storage_default',
-    'preset_enabled' => '1',
+    'preset_enabled' => '0',
     'behaviors' =>
     array(
       'activate' => 'activate_button',

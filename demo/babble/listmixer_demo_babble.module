@@ -14,7 +14,7 @@ $preset = array(
   'preset_name' => 'babble',
   'preset_description' => 'This preset adds an input field to a page. Typing in the box saves text to a node.',
   'preset_method' => 'listmixer_storage_default',
-  'preset_enabled' => '1',
+  'preset_enabled' => '0',
   'behaviors' =>
   array(
     'activate' =>
@@ -84,11 +84,12 @@ $preset = array(
   ),
   'interactions' =>
   array(
-
-      'interactions_target_id' => 'div#block-views-babble-block_1 div.views-field-nid span.field-content',
-      'interactions_region' => 'div#block-views-babble-block_1',
-      'interactions_inclusions' => 'form#listmixer-target-babble',
       'interactions_container' => 'div#block-views-babble-block_1',
+      'interactions_region' => 'div#block-views-babble-block_1',
+      'interactions_target_id' => 'div#block-views-babble-block_1 div.views-field-nid span.field-content',
+
+      'interactions_inclusions' => 'form#listmixer-target-babble',
+
       'interactions_source_id' => '',
       'interactions_target_field' => 'field_text_babble',
       'interactions_help' => 'Enter some text.',
