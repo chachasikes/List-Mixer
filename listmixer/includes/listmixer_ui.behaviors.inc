@@ -22,6 +22,16 @@ function listmixer_ui_behaviors_form(&$form, &$form_state, $preset = array()) {
   return $form;
 }
 
+/**
+ * This function listmixer_ui_behaviors_form_elements creates 
+ * the form elements for the user interface.
+ *
+ * @param &$form
+ *   Form object.
+ *
+ * @param  $preset
+ *   Preset.
+ */
 function listmixer_ui_behaviors_form_elements(&$form, $preset) {
   $behavior_types = listmixer_behaviors_types();
   foreach ($behavior_types['types'] as $behavior_type_setting) {
@@ -81,16 +91,27 @@ function listmixer_behavior_save($form, $form_state) {
   $preset_id = $form_state['values']['preset_id'];
   // Save each behavior type.
   $behavior_types = listmixer_behaviors_types();
+  // @NOTE This part is confusing.
   foreach ($behavior_types['types'] as $behavior_type_setting) {
     $type = $behavior_type_setting['type'];
-   // Store data.
-    $form_store = array(
-      'id' => $form['behaviors'][$type]['id']['#value'],
-      'preset_id' => $preset_id,
-      'behavior_name' => $form_state['values']['behaviors'][$type],
-      'behavior_type' => $type,
-    );
-    if (!empty($form['behaviors'][$type]['#default_value']) && !$form_state['values']['#preset_copy']) {
+    // Store data.
+    if(!is_array($form_state['values']['behaviors'][$type])) {
+        $form_store = array(
+          'id' => $form['behaviors'][$type]['id']['#value'],
+          'preset_id' => $preset_id,
+          'behavior_name' => $form_state['values']['behaviors'][$type],
+          'behavior_type' => $type,
+        );
+    }
+    else {
+        $form_store = array(
+          'id' => $form['behaviors'][$type]['id']['#value'],
+          'preset_id' => $preset_id,
+          'behavior_name' => $form_state['values']['behaviors'][$type]['behavior_name'],
+          'behavior_type' => $form_state['values']['behaviors'][$type]['behavior_type'],
+        );
+    }
+    if (!empty($form['behaviors'][$type]['#default_value']) && !empty($form_state['values']['#preset_copy'])) {
       // Skip saving id field, just save behaviors
       drupal_write_record('listmixer_behaviors', $form_store, array('id'));
     }

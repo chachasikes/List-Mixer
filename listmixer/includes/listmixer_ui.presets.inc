@@ -183,7 +183,7 @@ function listmixer_ui_preset_form_validate(&$form, &$form_state) {
   }
   if (($values['#preset_copy']) && (!empty($values['#preset_clone']))) {
       $values['preset_id'] = NULL;
-  } 
+  }
   // Check for duplicates.
   foreach (listmixer_presets(TRUE) as $preset) {
     if ($values['preset_name'] == $preset['preset_name'] && $values['preset_id'] != $preset['preset_id'] && empty($values['#preset_override'])) {
@@ -214,13 +214,26 @@ function listmixer_ui_preset_form_submit($form, &$form_state) {
     else {
     }
     $form_state['values']['preset_id'] = $preset['preset_id'];
-    foreach ($form_state['values']['behaviors'] as $behavior) {
-      $behavior = array();
-      $behavior['preset_id'] = $preset['preset_id'];
-      $behavior['behavior_name'] = $behavior;
+    // Assign form state values from form.
+    $form_state['values']['behaviors'] = $preset['behaviors'];
+
+    // @NOTE This part is confusing.
+    foreach ($form_state['values']['behaviors'] as &$behavior) {
+      // If behavior is just a string, do nothing. Otherwise clear our some
+      // extra variables because the preset has been cloned or imported.
+      if(is_array($behavior)) {
+        $form_store = array(
+          /*       'id' => $form['behaviors'][$type]['id']['#value'], */
+          'preset_id' => $preset['preset_id'],
+          'behavior_name' => $behavior['behavior_name'],
+          'behavior_type' => $behavior['behavior_type'],
+        );
+        $behavior = $form_store;
+      }
     }
     $form_state['values']['interactions'][0]['preset_id'] = $preset['preset_id'];
   }
+
   // Save Behaviors
   if (isset($form_state['values']['behaviors'])) {
     listmixer_behavior_save($form, &$form_state);
@@ -319,6 +332,7 @@ function listmixer_ui_preset_clone_form_submit(&$form, &$form_state) {
  */
 function listmixer_ui_preset_import_form(&$form_state, $preset = array()) {
   // @TODO ignore preset_id
+/*   $preset['#preset_import'] = TRUE;   */
   $form = listmixer_ui_preset_form($form_state, $preset);
   $form['import'] = array(
     '#type' => 'textarea',
@@ -345,11 +359,24 @@ function listmixer_ui_preset_import_form_validate(&$form, &$form_state) {
   // This is the same method used by cck content copy.
   @eval($form_state['values']['import']);
   $form_state['values'] = $preset;
+/*   listmixer_ui_preset_form_validate(&$form, &$form_state); */
+  $form_state['values']['#preset_copy'] = TRUE;
+  // If preset id is not empty, it means we are cloning an existing preset.
+  //if (($form_state['values']['#preset_copy']) && (is_numeric($form_state['values']['preset_id']))) {
+    $form_state['values']['#preset_clone'] = TRUE;  
+  //}
+  $form_state['redirect'] = 'admin/build/listmixer';
   listmixer_ui_preset_form_validate(&$form, &$form_state);
 }
 
 function listmixer_ui_preset_import_form_submit(&$form, &$form_state) {
+/*   $form_state['values']['#preset_copy'] = TRUE; */
   $form_state['values']['#preset_copy'] = TRUE;
+  // If preset id is not empty, it means we are cloning an existing preset.
+  if (!empty($preset['#preset_clone'])) {
+    $form_state['values']['#preset_clone'] = TRUE;  
+  }
+  $form_state['redirect'] = 'admin/build/listmixer';
   listmixer_ui_preset_form_submit(&$form, &$form_state);
 }
 
@@ -369,6 +396,7 @@ function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
     'preset_enabled' => $preset['preset_enabled'],
   );
   // @TODO Condense.
+/*
   $preset_export['behaviors'] = array(
     'activate' => array(
       'behavior_name' => $preset['behaviors']['activate']['behavior_name'],
@@ -387,12 +415,20 @@ function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
       'settings' => $preset['behaviors']['submit']['settings'],
     ),
   );
+*/
+  $preset_export['behaviors'] = $preset['behaviors'];
+  foreach ($preset_export['behaviors'] as &$behavior) {
+    unset($behavior['preset_id']);
+    unset($behavior['id']);
+    // Unset the settings because they will always be called dynamically.
+    unset($behavior['settings']);
+  }
+
   $preset_export['interactions'][0] = $preset['interactions'];
   unset($preset_export['interactions'][0]['preset_id']);
   unset($preset_export['interactions'][0]['id']);
-
+  
   $exported = '$preset = ';
-
   $exported .= var_export($preset_export, TRUE) .';';
   $rows = substr_count($exported, "\n") + 1;
 
@@ -411,8 +447,6 @@ function listmixer_ui_preset_export_form(&$form_state, $preset = array()) {
   $form_state['redirect'] = 'admin/build/listmixer';
   return $form;
 }
-
-
 
 /**
  *
