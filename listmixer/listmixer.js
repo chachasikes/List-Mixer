@@ -63,10 +63,7 @@ Drupal.behaviors.listmixer = function() {
       // will work.
       if (this.preset_method == 'listmixer_storage_default') {
         var preset = this;
-        // *********** Set up behaviors.
-        Drupal.behaviors.listmixer.interact(this);
-        Drupal.behaviors.listmixer.activate(this);
-        Drupal.behaviors.listmixer.submit(this);
+
         // ************ Use variables set by user.
         // Make sure that a container is found. 
         // This should be done first, as nothing else will happen if there is no container on the page.
@@ -77,6 +74,9 @@ Drupal.behaviors.listmixer = function() {
           // @TODO return false was escaping the each() loop completely.
         }
         else {
+          // *********** Set up behaviors.
+          Drupal.behaviors.listmixer.interact(this);
+          Drupal.behaviors.listmixer.activate(this);
           Drupal.behaviors.listmixer.listmixerSetup(preset);
         }
       }
@@ -126,10 +126,12 @@ Drupal.behaviors.listmixer.push = function(preset) {
   preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
   preset.interactMarkupArray = Interact.markup(preset);
   preset.interactMarkup = preset.interactMarkupArray[preset.interactFunction];
+  preset.interactValidationArray = Interact.validation(preset);
+  preset.interactValidation = preset.interactValidationArray[preset.interactFunction];
   Interact.init();
 
   // Get value from interact element.
-  $.each($(preset.interactions.interactions_region + ' ' + Interact.validation[preset.interactFunction]), function(){
+  $.each($(preset.interactions.interactions_region + ' ' + preset.interactValidation), function(){
     // Collect the value from each of the interactive elements.
     // Store values in data object in preset.
     preset.data.inputArray.push($(this).val());
@@ -237,6 +239,16 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
     preset.activationComplete = false;
     preset.targetId = '';
     preset.targetIdArray = [];
+
+    // *********** Create interaction form and target classes
+    preset.targetFormId = 'listmixer-target-'+ preset.preset_name;
+    preset.targetFormClass = 'class="listmixer-' + preset.targetFormId + '-target-form listmixer-target-form"';
+    // @TODO Should form be a 'wrap()' function?
+    // @TODO Should this be available to Drupal theme? It's pretty important and shouldn't be messed with.
+    preset.targetForm = '<form id="' + preset.targetFormId + '" ' + preset.targetFormClass + '></form>';
+    preset.form = preset.targetForm;
+    preset.container = preset.interactions.interactions_container;
+    Drupal.behaviors.listmixer.submit(preset);
     try {
       // If an attribute has been set by user, get the value.
       var targetValue;
@@ -292,14 +304,6 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
       }
     }
 
-    // *********** Create interaction form and target classes
-    preset.targetFormId = 'listmixer-target-'+ preset.preset_name;
-    preset.targetFormClass = 'class="listmixer-' + preset.targetFormId + '-target-form listmixer-target-form"';
-    // @TODO Should form be a 'wrap()' function?
-    // @TODO Should this be available to Drupal theme? It's pretty important and shouldn't be messed with.
-    preset.targetForm = '<form id="' + preset.targetFormId + '" ' + preset.targetFormClass + '></form>';
-    preset.form = preset.targetForm;
-    preset.container = preset.interactions.interactions_container;
     // Set up interactivity.
     // This is region here. If the user just wants a form field in block,
     // Then they need to set it to just the block. Default is 'body' so 
@@ -441,11 +445,12 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
         var sourceValue = null;
         var sourceElement = null;
         var Interact = new Drupal.behaviors.listmixer.interactBehavior();
+        preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
+        preset.interactMarkupArray = Interact.markup(preset);
+        preset.interactMarkup = preset.interactMarkupArray[preset.interactFunction];
         Interact.init();
         var sourceValueMarkup = 'div.listmixer-' + preset.targetFormId + '-source-value';
         var sourceValueMarkupProcessed = 'listmixer-' + preset.targetFormId + '-processed-value-' + preset.preset_name;
-        preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
-  
         // @TODO check sourceValue is numeric
         // The selector might be empty if user enters nothing, if so, just use the default input.
         if(preset.sourceValueSelector != '') {
@@ -470,7 +475,8 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
             // Only add interactive elements if a valid value is present.
             if(preset.activation === true) {
               $(this).addClass(sourceValueMarkupProcessed);
-              $(this).prepend(Interact.markupInteract);
+              $(this).prepend(preset.interactMarkup);
+
               $(this).find(sourceValueMarkup).addClass(sourceValueMarkupProcessed);
             }
             else{
@@ -483,7 +489,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
           // Only add interactive elements if a valid value is present.
           if(preset.activation === true) {
             $(this).addClass(sourceValueMarkupProcessed);
-            $(this).append(Interact.markupInteract);
+            $(this).prepend(preset.interactMarkup);
             $(this).find(sourceValueMarkup).addClass(sourceValueMarkupProcessed);
           }
           else{
@@ -501,15 +507,11 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
         alert(Drupal.t('ListMixer Error: Inclusion & input validation problem  in preset ' + preset.preset_name + '. Edit preset: admin/build/listmixer/' + preset.preset_id + ''));
       }
     }
-    // ********* Set up Submit button
-    var Submit = new Drupal.behaviors.listmixer.submitBehavior();
-    Submit.init();
-    var submitFunction = preset.behaviors.submit.settings.behavior_function;
-    preset.submit = Submit.markupSubmit;
+
     // Add button to form/containter
     // Only add interactive elements if a valid value is present.
     if(preset.activation === true) {
-      $('form#' + preset.targetFormId).append(preset.submit);
+      $('form#' + preset.targetFormId).append(preset.submitMarkup);
     }
     else{
       // @TODO test that remove works

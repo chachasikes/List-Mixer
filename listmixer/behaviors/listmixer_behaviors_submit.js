@@ -1,6 +1,6 @@
 // $Id$
 
-Drupal.behaviors.listmixer.submitBehavior = function() {
+Drupal.behaviors.listmixer.submitBehavior = function(preset) {
   this.init = function() {
   }
 
@@ -21,7 +21,7 @@ Drupal.behaviors.listmixer.submitBehavior = function() {
     return { 
       // @TODO checkboxSubmit not quite figured out yet.
       // checkboxSubmit : '<div class="listmixer-' + preset.targetFormId + 'push-submit"><button class="button">Save</button></div>',
-      buttonSubmit : '<div class="listmixer-' + preset.targetFormId + 'push-submit listmixer-push-submit"><button class="button">Save</button></div>'
+      buttonSubmit : '<div class="listmixer-' + preset.targetFormId + '-push-submit listmixer-push-submit"><button class="button">Save</button></div>'
     }
   };
 }
