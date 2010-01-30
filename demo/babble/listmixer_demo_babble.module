@@ -14,7 +14,7 @@ $preset = array(
   'preset_name' => 'babble',
   'preset_description' => 'This preset adds an input field to a page. Typing in the box saves text to a node.',
   'preset_method' => 'listmixer_storage_default',
-  'preset_enabled' => '1',
+  'preset_enabled' => '0',
   'behaviors' =>
   array(
     'activate' =>

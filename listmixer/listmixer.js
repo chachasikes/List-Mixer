@@ -75,8 +75,6 @@ Drupal.behaviors.listmixer = function() {
         }
         else {
           // *********** Set up behaviors.
-          Drupal.behaviors.listmixer.interact(this);
-          Drupal.behaviors.listmixer.activate(this);
           Drupal.behaviors.listmixer.listmixerSetup(preset);
         }
       }
@@ -249,6 +247,8 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
     preset.form = preset.targetForm;
     preset.container = preset.interactions.interactions_container;
     Drupal.behaviors.listmixer.submit(preset);
+    Drupal.behaviors.listmixer.interact(preset);
+    Drupal.behaviors.listmixer.activate(preset);
     try {
       // If an attribute has been set by user, get the value.
       var targetValue;
@@ -364,44 +364,34 @@ Drupal.behaviors.listmixer.setupForm = function(preset) {
 Drupal.behaviors.listmixer.setupActivateWidget = function(preset) {
   // @TODO Work on declaring decactivated, can't use === operator as is
   // On activate widget click, set up the interaction.
-  var Activate = new Drupal.behaviors.listmixer.activateBehavior();
-  Activate.init();
+  var Activate = new Drupal.behaviors.listmixer.activateBehavior(preset);
+  Activate.init(preset);
+  /*
+     There are a few kinds of activation.
+      * On load: assumes that a valid node id exists already,
+       and does not need to be selected.
+      * Select: provides a jQuery selectable interface, user must
+        select which node will be the target
+      * Button: after load or select have been executed,
+        an activate/deactivate button will be applied to the current
+        node.
+      * Select Plus Button: make the page selectable, when an item
+        is selected, apply an activate/deactivate button.
+      * Other possible types of activations:
+        ?? Can't think of any.
+  */
+  // @TODO Figure out how to trigger these functions automatically.
   if (preset.activateFunction == 'buttonActivate') {
-    // Add activate button to form.
-    $('form#' + preset.targetFormId).append(preset.activateMarkup);
-    // Hide deactivate button.
-    $('form#' + preset.targetFormId + ' div.listmixer-' + preset.targetFormId + '-deactivate-button').hide();
-    // On click activation button
-    $('form#' + preset.targetFormId + ' div.listmixer-' + preset.targetFormId + '-activate-button').children(".button").click(function() {
-      if(preset.activated == null) {
-        preset.activation = true;
-        preset.activationComplete = false;
-        Drupal.behaviors.listmixer.listmixerActivate(preset);
-        preset.activated = true;
-        preset.deactivated = null;
-        $('form#' + preset.targetFormId + ' div.listmixer-' + preset.targetFormId + '-deactivate-button').show();
-        $('form#' + preset.targetFormId + ' div.listmixer-' + preset.targetFormId + '-activate-button').hide();
-      }
-      return false;
-    });
-    // Set up deactivate button.
-    $('form#' + preset.targetFormId + ' div.listmixer-' + preset.targetFormId + '-deactivate-button').children(".button").click(function() {
-      if(preset.deactivated == null) {
-        preset.activation = false;
-        Drupal.behaviors.listmixer.listmixerDeactivate(preset);
-        preset.deactivated = true;
-        preset.activated = null;
-        $('form#' + preset.targetFormId + ' div.listmixer-' + preset.targetFormId + '-deactivate-button').hide();
-        $('form#' + preset.targetFormId + ' div.listmixer-' + preset.targetFormId + '-activate-button').show();
-        return false;
-      }
-    });
+    Activate.buttonActivate(preset);
   }
   else if (preset.activateFunction == 'selectActivate') {
     Activate.selectActivate(preset);
   }
+  else if (preset.activateFunction == 'selectPlusButtonActivate') {
+    Activate.selectPlusButtonActivate(preset);
+  }
   // Set deactivate on initial load.
- $('form#' + preset.targetFormId + ' div.listmixer-' + preset.targetFormId + '-deactivate-button').children(".button").trigger('click');
+  $('form#' + preset.targetFormId + ' div.listmixer-' + preset.targetFormId + '-deactivate-button').children(".button").trigger('click');
 };
 /**
  * Deactivate function.
