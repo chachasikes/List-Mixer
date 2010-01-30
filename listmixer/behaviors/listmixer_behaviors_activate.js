@@ -1,7 +1,6 @@
 // $Id$
 Drupal.behaviors.listmixer.activateBehavior = function(preset) {
   this.init = function() {
-   // alert('Activate Library Loaded');
   }
 
   /* Library Functions */  
@@ -17,10 +16,13 @@ Drupal.behaviors.listmixer.activateBehavior = function(preset) {
   
   this.loadActivate = function() {
   }
-  this.markup = { 
-    loadActivate : '',
-    buttonActivate : '<div class="listmixer-activate-button"><button class="button"><div class="listmixer-activate-label">Activate</div></button></div><div class="listmixer-deactivate-button"><button class="button"><div class="listmixer-deactivate-label">Deactivate</div></button></div>',
-    selectActivate : '',
+
+  this.markup = function(preset) {
+    return { 
+      loadActivate : '',
+      buttonActivate : '<div class="listmixer-' + preset.targetFormId + '-activate-button listmixer-activate-button"><button class="button"><div class="listmixer-' + preset.targetFormId + '-activate-label listmixer-activate-label">Activate</div></button></div><div class="listmixer-' + preset.targetFormId + '-deactivate-button listmixer-deactivate-button"><button class="button"><div class="listmixer-' + preset.targetFormId + '-deactivate-label listmixer-deactivate-label">Deactivate</div></button></div>',
+      selectActivate : '',
+    }
   };
 }
 
@@ -29,12 +31,15 @@ Drupal.behaviors.listmixer.activateBehavior = function(preset) {
  */
 Drupal.behaviors.listmixer.selectable = function(preset) {
   if(preset.activation === false) {
-    $(preset.interactions.interactions_target_id).attr("id", "selectable");
+    $(preset.interactions.interactions_target_id).attr("id", "selectable-" + preset.targetFormId);
+    $(preset.interactions.interactions_target_id).addClass("selectable");
     	$(function() {
-        	$(preset.interactions.interactions_target_id + "#selectable").selectable({ 
+        	$(preset.interactions.interactions_target_id + "#selectable-" + preset.targetFormId).selectable({ 
            // filter : preset.interactions.interactions_target_id_element,
             selected: function(event, ui) { 
-            // @TODO test the different ways of useing the ui object to figure out the value of what was selected.
+            // @TODO This could be buggy.
+            // Seems like jQuery UI is picky about the target of the selection.
+            // @TODO Test the different ways of useing the ui object to figure out the value of what was selected.
             // This will only support paths for the moment.
             //if (preset.interactions.interactions_target_id_attr === 'href' ) {
               if(ui.selected.pathname !== undefined) {
@@ -44,14 +49,14 @@ Drupal.behaviors.listmixer.selectable = function(preset) {
               Drupal.behaviors.listmixer.listmixerActivate(preset);
               preset.activated = true;
               preset.deactivated = null;
-              $(preset.interactions.interactions_target_id + "#selectable").selectable('destroy');      
+              $(preset.interactions.interactions_target_id + "#selectable-" + preset.targetFormId).selectable('destroy');      
             //}
           }
         });
-  		  $(preset.interactions.interactions_target_id + "#selectable").disableSelection();
+  		  $(preset.interactions.interactions_target_id + "#selectable-" + preset.targetFormId).disableSelection();
       }); 
   }
   else {
-    $(preset.interactions.interactions_target_id + "#selectable").selectable('destroy');
+    $(preset.interactions.interactions_target_id + "#selectable-" + preset.targetFormId).selectable('destroy');
   }
 }

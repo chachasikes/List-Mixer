@@ -157,49 +157,38 @@ function listmixer_behaviors_redirect_callback($type, $name, $root) {
 /**
  * Pass a URL as a $value.
  * If the value is relative to Drupal, convert the url to nid for the path.
+ * @TODO This function just changed, test vigorously. 
  */
 function listmixer_utilities_convert_url_to_nid($value) {
-    // Convert link to value
-    // The value is set in the javascript.
-    $is_relative_link = strpos($value, '/');
-    $is_absolute_link = strpos($value, 'http://');
-    $is_local_link = strpos($value, base_path());
-
-    // If a link is a relative link to something in the drupal system, strip off the drupal path and replace it with absolute path.
-    if (empty($is_absolute_link)) {
-      if ($is_local_link == 0) {
-      // Remove drupal path from the link
-      $value = str_replace(base_path(), '', $value);
-      // Get the node id by looking up the path alias.
-      // This will try to store the node id in the nodereference field.
-      // The nodereference field will be validated, and ignored if necessary during the node_save() function.
-      $path = drupal_get_normal_path($value);
-      // If the path points to a node, get the nid value
-      if (strpos($path, 'node/') >= 0) {
-        $nid = str_replace('node/', '', $path);
-        // Return the node id if is exists
-        return $nid;
-      }
+  $is_relative_link = strpos($value, '/');
+  $path = listmixer_utilities_convert_url_to_path($value);
+  // If the path points to a node, get the nid value
+  if (strpos($path, 'node/') >= 0) {
+    $nid = str_replace('node/', '', $path);
+    if ($is_relative_link == 0){
+      $nid = str_replace('/', '', $nid);
     }
+    // Return the node id if is exists
+    return $nid;
+  }
+  else {
+    return $value;
   }
 }
-
 
 /**
  * Pass a URL as a $value.
  * If the value is relative to Drupal, convert the url to nid for the path.
  */
 function listmixer_utilities_convert_url_to_path($value) {
-    // Convert link to value
-    // The value is set in the javascript.
-    $is_relative_link = strpos($value, '/');
-    $is_absolute_link = strpos($value, 'http://');
-    $is_local_link = strpos($value, base_path());
-
-    // If a link is a relative link to something in the drupal system, strip off the drupal path and replace it with absolute path.
-    if (empty($is_absolute_link)) {
-      // @BUG Check how this validates, it is probably wrong
-      if ($is_local_link == 0) {
+  // Convert link to value
+  // The value is set in the javascript.
+  $is_absolute_link = strpos($value, 'http://');
+  $is_local_link = strpos($value, base_path());
+  $is_node = strpos($value, 'node/');
+  // If a link is a relative link to something in the drupal system, strip off the drupal path and replace it with absolute path.
+  if (empty($is_absolute_link)) {
+    if (($is_local_link == 0) && $is_node == 0) {
       // Remove drupal path from the link
       $value = str_replace(base_path(), '', $value);
       // Get the node id by looking up the path alias.
@@ -209,12 +198,16 @@ function listmixer_utilities_convert_url_to_path($value) {
       // Only return the path if it is valid
       if (!empty($path)) {
         return $path;
-      }
+      } 
+    }
+    else {
+      // Is a path to a node.
+      $path = drupal_get_normal_path($value);
+      return $path;     
     }
   }
   return $value;
 }
-
 
 /**
  * Load a target node, if given nid or path

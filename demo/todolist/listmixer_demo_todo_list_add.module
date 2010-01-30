@@ -40,12 +40,13 @@ function listmixer_demo_todo_list_add_listmixer_default_preset() {
     ),
     'interactions' => 
     array (
-      'interactions_target_id' => 'div#center div.view-to-do-list-current div.views-row',
-      'interactions_region' => 'div#center div.view-to-do-list-current',
-      'interactions_inclusions' => 'form#listmixer-target-todo_list_add',
       'interactions_container' => 'div#center div.view-to-do-list-current',
+      'interactions_region' => 'div#center div.view-to-do-list-current',
+      'interactions_inclusions' => 'form#listmixer-todo_list_add',
+/*       'interactions_inclusions' => 'div.ui-selected', */
       'interactions_source_id' => '',
       'interactions_source_id_attr' => '',
+      'interactions_target_id' => 'div#center div.view-to-do-list-current div.views-row',
       'interactions_target_id_element' => 'h2 a',
       'interactions_target_id_attr' => 'href',
       'interactions_target_field' => 'field_item',

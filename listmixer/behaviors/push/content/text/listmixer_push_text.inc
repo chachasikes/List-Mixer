@@ -17,9 +17,10 @@ function listmixer_behaviors_listmixer_push_text($data) {
   $callback = "admin/ajax/listmixer/behavior/push/listmixer_push_text/push_text";
   if ($data->name == "test") {
     // If POST data has been set, save the node
-    $_POST['target_id'] = '1';
+    $_POST['target_id'] = '/node/2';
     $_POST['input'] = 'Test content generated at: ' . date("F j, Y, g:i:s a");
-    $_POST['target_field'] = 'field_text_babble';
+    $_POST['target_field'] = 'field_item';
+    // Example post string: inputArray=kiwi&input=kiwi&target_id=%2Fnode%2F2&target_field=field_item&interact_function=inputInteract
   }
 
   if (isset($_POST['target_id']) && isset($_POST['input']) && isset($_POST['target_field'])) {

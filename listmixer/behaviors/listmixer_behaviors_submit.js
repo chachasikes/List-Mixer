@@ -17,9 +17,11 @@ Drupal.behaviors.listmixer.submitBehavior = function() {
       alert(Drupal.t('submit checkbox'));
     }
   }
-  this.markup = { 
-    // @TODO checkboxSubmit not quite figured out yet.
-    // checkboxSubmit : '<div class="listmixer-push-submit"><button class="button">Save</button></div>',
-    buttonSubmit : '<div class="listmixer-push-submit"><button class="button">Save</button></div>'
+  this.markup = function(preset) {
+    return { 
+      // @TODO checkboxSubmit not quite figured out yet.
+      // checkboxSubmit : '<div class="listmixer-' + preset.targetFormId + 'push-submit"><button class="button">Save</button></div>',
+      buttonSubmit : '<div class="listmixer-' + preset.targetFormId + 'push-submit listmixer-push-submit"><button class="button">Save</button></div>'
+    }
   };
 }
