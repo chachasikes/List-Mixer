@@ -42,7 +42,6 @@ function listmixer_todo_list_add_listmixer_default_preset() {
     array (
       'interactions_container' => 'div#center div.view-to-do-list-current',
       'interactions_region' => 'div#center div.view-to-do-list-current',
-/*       'interactions_inclusions' => 'form#listmixer-todo_list_add', */
       'interactions_inclusions' => 'div.ui-selected',
       'interactions_source_id' => '',
       'interactions_source_id_attr' => '',
@@ -51,7 +50,7 @@ function listmixer_todo_list_add_listmixer_default_preset() {
       'interactions_target_id_attr' => 'href',
       'interactions_target_field' => 'field_item',
       'interactions_label' => 'Add a to do list item',
-      'interactions_help' => 'Type your to do list item, then click \'Save.\'',
+      'interactions_help' => 'Select a to-do list. Then, type your to-do list item. Click \'Save.\'',
       'interactions_push_label' => '',
       'interactions_submit_label' => 'Save',
       'interactions_activate_label' => 'Select a to-do list',

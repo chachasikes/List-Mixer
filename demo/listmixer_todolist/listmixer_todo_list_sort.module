@@ -14,45 +14,34 @@ function listmixer_todo_list_sort_listmixer_default_preset() {
     'preset_name' => 'todo_list_sort',
     'preset_description' => 'Sort a node that has text fields',
     'preset_method' => 'listmixer_storage_default',
-    'preset_enabled' => '0',
+    'preset_enabled' => '1',
     'behaviors' =>
     array(
-      'activate' => 'activate_select_button',
+      'activate' => 'activate_select',
       'interact' => 'interact_sort',
       'push' => 'push_text',
       'submit' => 'submit_button',
     ),
     'interactions' =>
     array(
-
       'interactions_container' => 'div#center div.view-to-do-list-current',
-      'interactions_region' => 'div#center div.view-to-do-list-current',
-/*       'interactions_inclusions' => 'form#listmixer-todo_list_add', */
-      'interactions_inclusions' => 'div.ui-selected',
+      'interactions_region' => 'div.ui-selected div.field-items',
+      'interactions_inclusions' => 'div.field-item',
 
-/*       'interactions_container' => 'div#center div.view-to-do-list-current', */
-/*       'interactions_region' => 'div.field-items', */
-/*       'interactions_inclusions' => 'form#listmixer-todo_list_add', */
-/*       'interactions_inclusions' => 'div.ui-selected div.field-item', */
-        'interactions_target_id' => 'div#center div.view-to-do-list-current div.views-row',
-        'interactions_target_id_element' => 'h2 a',
-        'interactions_target_id_attr' => 'href',
-        'interactions_target_field' => 'field_item',
-/*         'interactions_region' => 'div.field-items', */
-/*         'interactions_inclusions' => 'div.field-item', */
-/*         'interactions_container' => 'div.view-id-to_do_list_current', */
-        'interactions_source_id' => 'div.field-item',
-        'interactions_help' => '',
-        'interactions_source_content_types' => '',
-        'interactions_label' => 'Sort items',
-        'interactions_interact_label' => '',
-        'interactions_push_label' => '',
-        'interactions_submit_label' => '',
-        'interactions_activate_label' => '',
-        'interactions_source_id_attr' => '',
-        'interactions_target_id_attr' => 'href',
-        'interactions_target_id_element' => '',
+      'interactions_target_id' => 'div#center div.view-to-do-list-current div.views-row',
+      'interactions_target_id_element' => 'h2 a',
+      'interactions_target_id_attr' => 'href',
+      'interactions_target_field' => 'field_item',
 
+      'interactions_source_id' => 'div.field-item',
+      'interactions_source_id_attr' => '',
+      'interactions_help' => '',
+      'interactions_source_content_types' => '',
+      'interactions_label' => 'Sort items',
+      'interactions_interact_label' => '',
+      'interactions_push_label' => '',
+      'interactions_submit_label' => '',
+      'interactions_activate_label' => '',
     ),
   );
   return array($preset);

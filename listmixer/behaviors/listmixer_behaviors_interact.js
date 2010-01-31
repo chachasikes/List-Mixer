@@ -42,38 +42,38 @@ Drupal.behaviors.listmixer.interactBehavior = function(preset) {
   this.markup = function(preset) {
     return { 
       clickInteract : '<div class="listmixer-' 
-          + preset.targetFormId + '-source-value listmixer-source-value"><div class="listmixer-' 
-          + preset.targetFormId + '-source-label listmixer-source-label"><div class="listmixer-' 
-          + preset.targetFormId + '-source-label listmixer-source-label"></div></div>',
+          + preset.containerId + '-source-value listmixer-source-value"><div class="listmixer-' 
+          + preset.containerId + '-source-label listmixer-source-label"><div class="listmixer-' 
+          + preset.containerId + '-source-label listmixer-source-label"></div></div>',
 
       selectInteract : '<div class="listmixer-' 
-          + preset.targetFormId + '-source-value listmixer-source-value"><input type="select" class="listmixer-' 
-          + preset.targetFormId + '-source-value listmixer-source-value"></input><div class="listmixer-'
-          + preset.targetFormId + '-source-label listmixer-source-label"></div></div>',
+          + preset.containerId + '-source-value listmixer-source-value"><input type="select" class="listmixer-' 
+          + preset.containerId + '-source-value listmixer-source-value"></input><div class="listmixer-'
+          + preset.containerId + '-source-label listmixer-source-label"></div></div>',
 
-      inputInteract : '<div class="listmixer-' + preset.targetFormId 
+      inputInteract : '<div class="listmixer-' + preset.containerId 
           + '-source-value listmixer-source-value"><input type="input" class="listmixer-' 
-          + preset.targetFormId + '-source-value listmixer-source-value"></input><div class="listmixer-' 
-          + preset.targetFormId + '-source-label  listmixer-source-label"></div></div>',
+          + preset.containerId + '-source-value listmixer-source-value"></input><div class="listmixer-' 
+          + preset.containerId + '-source-label  listmixer-source-label"></div></div>',
       checkboxInteract : '<div class="listmixer-' 
-          + preset.targetFormId + '-source-value listmixer-source-value"><input type="checkbox" class="listmixer-' 
-          + preset.targetFormId + '-source-value listmixer-source-value"></input><div class="listmixer-' 
-          + preset.targetFormId + '-source-label listmixer-source-label"></div></div>',
-      sortInteract : '<div class="listmixer-' + preset.targetFormId 
+          + preset.containerId + '-source-value listmixer-source-value"><input type="checkbox" class="listmixer-' 
+          + preset.containerId + '-source-value listmixer-source-value"></input><div class="listmixer-' 
+          + preset.containerId + '-source-label listmixer-source-label"></div></div>',
+      sortInteract : '<div class="listmixer-' + preset.containerId 
           + '-source-value listmixer-source-value"><div class="listmixer-' 
-          + preset.targetFormId + '-source-sort-handle listmixer-source-sort-handle"></div><input type="hidden" class="listmixer-' 
-          + preset.targetFormId + '-source-value listmixer-source-value"></input><div class="listmixer-' 
-          + preset.targetFormId + '-source-label listmixer-source-label"></div></div>'
+          + preset.containerId + '-source-sort-handle listmixer-source-sort-handle"></div><input type="hidden" class="listmixer-' 
+          + preset.containerId + '-source-value listmixer-source-value"></input><div class="listmixer-' 
+          + preset.containerId + '-source-label listmixer-source-label"></div></div>'
     }
   };
   // @TODO Weight will change to some sort of controls, and it will take the source value and resave it in a certain order, so it's an extended input field.
   this.validation = function(preset) { 
     return {
-      clickInteract : 'input.listmixer-' + preset.targetFormId + '-source-value', // @TODO Won't work yet
-      selectInteract : 'input.listmixer-' + preset.targetFormId + '-source-value:selected',
-      inputInteract : 'input.listmixer-' + preset.targetFormId + '-source-value', // @TODO How to see if it's empty?
-      checkboxInteract : 'input.listmixer-' + preset.targetFormId + '-source-value:checked',
-      sortInteract : 'input.listmixer-' + preset.targetFormId + '-source-value'
+      clickInteract : 'input.listmixer-' + preset.containerId + '-source-value', // @TODO Won't work yet
+      selectInteract : 'input.listmixer-' + preset.containerId + '-source-value:selected',
+      inputInteract : 'input.listmixer-' + preset.containerId + '-source-value', // @TODO How to see if it's empty?
+      checkboxInteract : 'input.listmixer-' + preset.containerId + '-source-value:checked',
+      sortInteract : 'input.listmixer-' + preset.containerId + '-source-value'
     }
   };
 }
@@ -84,14 +84,14 @@ Drupal.behaviors.listmixer.interactBehavior = function(preset) {
 Drupal.behaviors.listmixer.sortInteract = function(preset) {
   try {
     if(preset.activation === true) {
-      $(preset.interactions.interactions_region).attr("id", "sortable-" + preset.targetFormId);
+      $(preset.interactions.interactions_region).attr("id", "sortable-" + preset.containerId);
       	$(function() {
-        	$(preset.interactions.interactions_region + "#sortable-" + preset.targetFormId).sortable({ items: preset.interactions_inclusions, axis: 'y' });
-    		  $(preset.interactions.interactions_region + "#sortable-" + preset.targetFormId).disableSelection();
+        	$(preset.interactions.interactions_region + "#sortable-" + preset.containerId).sortable({ items: preset.interactions_inclusions, axis: 'y' });
+    		  $(preset.interactions.interactions_region + "#sortable-" + preset.containerId).disableSelection();
       }); 
     }
     else {
-      $(preset.interactions.interactions_region + "#sortable-" + preset.targetFormId).sortable('destroy');
+      $(preset.interactions.interactions_region + "#sortable-" + preset.containerId).sortable('destroy');
       //$(preset.interactions.interactions_region).removeClass('sortable');
     }
   }
