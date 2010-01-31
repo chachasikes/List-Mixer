@@ -1,0 +1,5 @@
+core = "6.x"
+features[node][] = "taxonomy_filter"
+name = "taxonomy_filter"
+package = "Features"
+project = "taxonomy_filter"

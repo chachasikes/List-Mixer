@@ -1,0 +1,3 @@
+<?php
+
+include_once('favorite_links_view.features.inc');

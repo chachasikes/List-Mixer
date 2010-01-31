@@ -9,7 +9,7 @@
  * Implementation of hook_listmixer_default_preset().
  * Generate a default listmixer preset setting.
  */
-function listmixer_demo_babble_listmixer_default_preset() {
+function listmixer_babble_listmixer_default_preset() {
 $preset = array(
   'preset_name' => 'babble',
   'preset_description' => 'This preset adds an input field to a page. Typing in the box saves text to a node.',

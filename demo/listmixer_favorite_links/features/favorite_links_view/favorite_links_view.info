@@ -1,0 +1,6 @@
+core = "6.x"
+dependencies[] = "views"
+features[views][] = "favorite_links_view"
+name = "favorite_links_view"
+package = "Features"
+project = "favorite_links_view"

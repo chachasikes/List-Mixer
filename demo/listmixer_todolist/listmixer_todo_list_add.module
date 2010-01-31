@@ -9,7 +9,7 @@
  * Implementation of hook_listmixer_default_preset().
  * Generate a default listmixer preset setting.
  */
-function listmixer_demo_todo_list_add_listmixer_default_preset() {
+function listmixer_todo_list_add_listmixer_default_preset() {
   $preset = array (
     'preset_name' => 'todo_list_add',
     'preset_description' => 'Add items to a to do list node',

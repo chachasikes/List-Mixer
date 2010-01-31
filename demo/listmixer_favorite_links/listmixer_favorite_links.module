@@ -9,7 +9,7 @@
  * Implementation of hook_listmixer_default_preset().
  * Generate a default listmixer preset setting.
  */
-function listmixer_demo_favorite_links_listmixer_default_preset() {
+function listmixer_favorite_links_listmixer_default_preset() {
   $preset = array(
     'preset_name' => 'favorite_links',
     'preset_description' => 'Save links from any Drupal page into a link node.',

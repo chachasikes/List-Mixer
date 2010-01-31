@@ -1,9 +1,4 @@
 <?php
-// $Id$
-
-/**
- * @file
- */
 
 /**
  * Helper to implementation of hook_views_default_views().
@@ -162,6 +157,10 @@ function _babble_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
+  $handler->override_option('title', 'What I\'m saying');
+  $handler->override_option('empty', '<p>You have not created a Babbler Stream for yourself yet.</p>
+<a href="<?php print base_path(); ?>node/add/babble-stream">Add one</a>');
+  $handler->override_option('empty_format', '3');
   $handler = $view->new_display('block', 'Block', 'block_1');
   $handler->override_option('block_description', '');
   $handler->override_option('block_caching', -1);

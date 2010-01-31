@@ -9,7 +9,7 @@
  * Implementation of hook_listmixer_default_preset().
  * Generate a default listmixer preset setting.
  */
-function listmixer_demo_categorizer_listmixer_default_preset() {
+function listmixer_categorizer_listmixer_default_preset() {
   $preset = array(
     'preset_name' => 'categorizer',
     'preset_description' => 'Select nodes and assign terms to those nodes.',
