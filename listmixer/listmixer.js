@@ -488,9 +488,6 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
           }
         }
         // Add value to input field after input is created
-console.log("source values");
-console.log(sourceValue);
-console.log(sourceValueMarkupProcessed);
         $(this).find('*.' + sourceValueMarkupProcessed + ' input').val(sourceValue);
         // @TODO add label for activate
       });
