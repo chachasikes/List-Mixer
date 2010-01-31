@@ -31,8 +31,8 @@ function listmixer_demo_photoset_sortable_sort_listmixer_default_preset() {
         'interactions_region' => 'div.field-field-reference-photo div.field-items',
         'interactions_inclusions' => 'div.field-item',
 
-        'interactions_source_id' => '',
-        'interactions_source_id_attr' => '',
+        'interactions_source_id' => 'a',
+        'interactions_source_id_attr' => 'href',
 
         'interactions_target_id' => 'div.view-photo-gallery-sortable div.attachment div.view-content h2 a',
         'interactions_target_id_element' => '',
