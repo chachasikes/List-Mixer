@@ -47,7 +47,7 @@ function hook_listmixer_listmixer_default_preset() {
           'preset_id' => '8',
           'interactions_target_id' => 'div.view-id-to_do_list_current div.view-content h2 a',
           'interactions_region' => 'div.view-id-to_do_list_current',
-          'interactions_inclusions' => 'form#listmixer-target-todo_list_add',
+          'interactions_inclusions' => 'form#listmixer-container-todo_list_add',
           'interactions_container' => 'div.view-id-to_do_list_current',
           'interactions_source_id' => '',
           'interactions_target_field' => 'field_item',

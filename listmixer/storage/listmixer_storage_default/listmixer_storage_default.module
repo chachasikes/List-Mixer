@@ -88,7 +88,7 @@ function listmixer_storage_default_load_interactions_form(&$form, &$form_state, 
       <p>Example: table.views-view-grid td</p>
       <ul>
       <li>Tip: If you want an element to show up in the form generated
-       by listmixer, enter this: form#listmixer-target-babble
+       by listmixer, enter this: form#listmixer-container-babble
        (but replace "babble" with the name of your interaction setting</li>
       </ul>',
       '#weight' => 3,
@@ -121,7 +121,7 @@ function listmixer_storage_default_load_interactions_form(&$form, &$form_state, 
       '#title' => t('Selector: Interactive Element Receivers'),
       '#description' => 'Element selector inside interactive region that will receive interactive elements.<br />
       (Example, <em>div.field-item</em> elements that receive checkboxes.)<br />
-      form#listmixer-target-babble',
+      form#listmixer-container-babble',
       '#default_value' => $interactions['interactions_inclusions'],
       '#weight' => 6,
   );
@@ -188,8 +188,8 @@ function listmixer_storage_default_load_interactions_form(&$form, &$form_state, 
     </li>
     </ol>
 
-    <p>Example markup: &lt;div class="class-for-listmixer-target-node-id"&gt;345&lt;/div&gt;</p>
-    <p>Example selector: div.class-for-listmixer-target-node-id</p>
+    <p>Example markup: &lt;div class="class-for-listmixer-container-node-id"&gt;345&lt;/div&gt;</p>
+    <p>Example selector: div.class-for-listmixer-container-node-id</p>
 
     <p>This is an example that would work with the NID field from a view:</p>
     <p>Example markup: &lt;div id="#block-views-babble-block_1"&gt;&lt;div class="views-field-nid"&gt;&lt;span class="field-content"&gt;345&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;</p>

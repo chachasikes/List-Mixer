@@ -9,6 +9,7 @@
  * Implementation of hook_listmixer_default_preset().
  * Generate a default listmixer preset setting.
  */
+/*
 function listmixer_todo_list_sort_listmixer_default_preset() {
   $preset = array(
     'preset_name' => 'todo_list_sort',
@@ -17,7 +18,7 @@ function listmixer_todo_list_sort_listmixer_default_preset() {
     'preset_enabled' => '1',
     'behaviors' =>
     array(
-      'activate' => 'activate_button',
+      'activate' => 'activate_select',
       'interact' => 'interact_sort',
       'push' => 'push_text',
       'submit' => 'submit_button',
@@ -46,3 +47,4 @@ function listmixer_todo_list_sort_listmixer_default_preset() {
   );
   return array($preset);
 }
+*/

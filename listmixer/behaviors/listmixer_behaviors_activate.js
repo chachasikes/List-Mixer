@@ -28,7 +28,7 @@ Drupal.behaviors.listmixer.activateBehavior = function(preset) {
   this.markup = function(preset) {
     return { 
       loadActivate : '',
-      buttonActivate : '<div class="listmixer-' + preset.containerId + '-activate-button listmixer-activate-button"><button class="button"><div class="listmixer-' + preset.containerId + '-activate-label listmixer-activate-label">Activate</div></button></div><div class="listmixer-' + preset.containerId + '-deactivate-button listmixer-deactivate-button"><button class="button"><div class="listmixer-' + preset.containerId + '-deactivate-label listmixer-deactivate-label">Deactivate</div></button></div>',
+      buttonActivate : '<div class="' + preset.containerId + '-activate-button listmixer-activate-button"><button class="button"><div class="' + preset.containerId + '-activate-label listmixer-activate-label">Activate</div></button></div><div class="' + preset.containerId + '-deactivate-button listmixer-deactivate-button"><button class="button"><div class="' + preset.containerId + '-deactivate-label listmixer-deactivate-label">Deactivate</div></button></div>',
       selectActivate : '',
       selectPlusButtonActivate : ''
     }
@@ -75,29 +75,29 @@ Drupal.behaviors.listmixer.addActivateButton = function(preset) {
 console.log(preset);
   $('form#' + preset.containerId).append(preset.activateMarkup);
   // Hide deactivate button.
-  $('form#' + preset.containerId + ' div.listmixer-' + preset.containerId + '-deactivate-button').hide();
+  $('form#' + preset.containerId + ' div.' + preset.containerId + '-deactivate-button').hide();
   // On click activation button
-  $('form#' + preset.containerId + ' div.listmixer-' + preset.containerId + '-activate-button').children(".button").click(function() { 
+  $('form#' + preset.containerId + ' div.' + preset.containerId + '-activate-button').children(".button").click(function() { 
   if(preset.activated == null) {
       preset.activation = true;
       preset.activationComplete = false;
       Drupal.behaviors.listmixer.listmixerActivate(preset);
       preset.activated = true;
       preset.deactivated = null;
-      $('form#' + preset.containerId + ' div.listmixer-' + preset.containerId + '-deactivate-button').show();
-      $('form#' + preset.containerId + ' div.listmixer-' + preset.containerId + '-activate-button').hide();
+      $('form#' + preset.containerId + ' div.' + preset.containerId + '-deactivate-button').show();
+      $('form#' + preset.containerId + ' div.' + preset.containerId + '-activate-button').hide();
     }
     return false;
   });
   // Set up deactivate button.
-  $('form#' + preset.containerId + ' div.listmixer-' + preset.containerId + '-deactivate-button').children(".button").click(function() {
+  $('form#' + preset.containerId + ' div.' + preset.containerId + '-deactivate-button').children(".button").click(function() {
     if(preset.deactivated == null) {
       preset.activation = false;
       Drupal.behaviors.listmixer.listmixerDeactivate(preset);
       preset.deactivated = true;
       preset.activated = null;
-      $('form#' + preset.containerId + ' div.listmixer-' + preset.containerId + '-deactivate-button').hide();
-      $('form#' + preset.containerId + ' div.listmixer-' + preset.containerId + '-activate-button').show();
+      $('form#' + preset.containerId + ' div.' + preset.containerId + '-deactivate-button').hide();
+      $('form#' + preset.containerId + ' div.' + preset.containerId + '-activate-button').show();
       return false;
     }
   });

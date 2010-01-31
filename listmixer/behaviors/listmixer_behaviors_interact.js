@@ -41,39 +41,39 @@ Drupal.behaviors.listmixer.interactBehavior = function(preset) {
   // @TODO 'Click' will be more like a default, and target whatever the container is.
   this.markup = function(preset) {
     return { 
-      clickInteract : '<div class="listmixer-' 
-          + preset.containerId + '-source-value listmixer-source-value"><div class="listmixer-' 
-          + preset.containerId + '-source-label listmixer-source-label"><div class="listmixer-' 
+      clickInteract : '<div class="' 
+          + preset.containerId + '-source-value listmixer-source-value"><div class="' 
+          + preset.containerId + '-source-label listmixer-source-label"><div class="' 
           + preset.containerId + '-source-label listmixer-source-label"></div></div>',
 
-      selectInteract : '<div class="listmixer-' 
-          + preset.containerId + '-source-value listmixer-source-value"><input type="select" class="listmixer-' 
-          + preset.containerId + '-source-value listmixer-source-value"></input><div class="listmixer-'
+      selectInteract : '<div class="' 
+          + preset.containerId + '-source-value listmixer-source-value"><input type="select" class="' 
+          + preset.containerId + '-source-value listmixer-source-value"></input><div class="'
           + preset.containerId + '-source-label listmixer-source-label"></div></div>',
 
-      inputInteract : '<div class="listmixer-' + preset.containerId 
-          + '-source-value listmixer-source-value"><input type="input" class="listmixer-' 
-          + preset.containerId + '-source-value listmixer-source-value"></input><div class="listmixer-' 
+      inputInteract : '<div class="' + preset.containerId 
+          + '-source-value listmixer-source-value"><input type="input" class="' 
+          + preset.containerId + '-source-value listmixer-source-value"></input><div class="' 
           + preset.containerId + '-source-label  listmixer-source-label"></div></div>',
-      checkboxInteract : '<div class="listmixer-' 
-          + preset.containerId + '-source-value listmixer-source-value"><input type="checkbox" class="listmixer-' 
-          + preset.containerId + '-source-value listmixer-source-value"></input><div class="listmixer-' 
+      checkboxInteract : '<div class="' 
+          + preset.containerId + '-source-value listmixer-source-value"><input type="checkbox" class="' 
+          + preset.containerId + '-source-value listmixer-source-value"></input><div class="' 
           + preset.containerId + '-source-label listmixer-source-label"></div></div>',
-      sortInteract : '<div class="listmixer-' + preset.containerId 
-          + '-source-value listmixer-source-value"><div class="listmixer-' 
-          + preset.containerId + '-source-sort-handle listmixer-source-sort-handle"></div><input type="hidden" class="listmixer-' 
-          + preset.containerId + '-source-value listmixer-source-value"></input><div class="listmixer-' 
+      sortInteract : '<div class="' + preset.containerId 
+          + '-source-value listmixer-source-value"><div class="' 
+          + preset.containerId + '-source-sort-handle listmixer-source-sort-handle"></div><input type="hidden" class="' 
+          + preset.containerId + '-source-value listmixer-source-value"></input><div class="' 
           + preset.containerId + '-source-label listmixer-source-label"></div></div>'
     }
   };
   // @TODO Weight will change to some sort of controls, and it will take the source value and resave it in a certain order, so it's an extended input field.
   this.validation = function(preset) { 
     return {
-      clickInteract : 'input.listmixer-' + preset.containerId + '-source-value', // @TODO Won't work yet
-      selectInteract : 'input.listmixer-' + preset.containerId + '-source-value:selected',
-      inputInteract : 'input.listmixer-' + preset.containerId + '-source-value', // @TODO How to see if it's empty?
-      checkboxInteract : 'input.listmixer-' + preset.containerId + '-source-value:checked',
-      sortInteract : 'input.listmixer-' + preset.containerId + '-source-value'
+      clickInteract : 'input.' + preset.containerId + '-source-value', // @TODO Won't work yet
+      selectInteract : 'input.' + preset.containerId + '-source-value:selected',
+      inputInteract : 'input.' + preset.containerId + '-source-value', // @TODO How to see if it's empty?
+      checkboxInteract : 'input.' + preset.containerId + '-source-value:checked',
+      sortInteract : 'input.' + preset.containerId + '-source-value'
     }
   };
 }
