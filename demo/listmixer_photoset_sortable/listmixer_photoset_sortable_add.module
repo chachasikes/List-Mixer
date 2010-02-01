@@ -14,7 +14,7 @@ function listmixer_photoset_sortable_add_listmixer_default_preset() {
     'preset_name' => 'photoset_sortable_add',
     'preset_description' => 'This connects the node ids from a gallery view to a view attachment.',
     'preset_method' => 'listmixer_storage_default',
-    'preset_enabled' => '1',
+    'preset_enabled' => '0',
     'behaviors' =>
     array(
       'activate' => 'activate_load',
@@ -24,22 +24,29 @@ function listmixer_photoset_sortable_add_listmixer_default_preset() {
     ),
     'interactions' =>
     array(
-        'interactions_target_id' => 'div#center div.view-photo-gallery-sortable div.attachment div.view-content h2 a',
+
+        'interactions_label' => 'Make a photoset',
+        'interactions_help' => 'You are making a photoset. Click the checkboxes to select images to save into your photo set. Then click save.',
+
+        'interactions_container' => 'div#center div.view-photo-gallery-sortable',
         'interactions_region' => 'div#center div.view-photo-gallery-sortable',
         'interactions_inclusions' => 'table.views-view-grid td',
-        'interactions_container' => 'div#center div.view-photo-gallery-sortable ',
-        'interactions_source_id' => 'div.views-field-nid span.field-content',
+
+        'interactions_target_id' => 'div#center div.view-photo-gallery-sortable div.attachment div.view-content h2 a',
         'interactions_target_field' => 'field_reference_photo',
-        'interactions_help' => 'You are making a photoset. Click the checkboxes to select images to save into your photo set. Then click save.',
-        'interactions_source_content_types' => '',
-        'interactions_label' => 'Make a photoset',
+        'interactions_target_id_attr' => 'href',
+        'interactions_target_id_element' => '',
+
+        'interactions_source_id' => 'div.views-field-nid span.field-content',
+        'interactions_source_id_attr' => '',
+
         'interactions_interact_label' => 'Add Label',
         'interactions_push_label' => 'Push Label',
         'interactions_submit_label' => 'Save Label',
         'interactions_activate_label' => 'Activate Label',
-        'interactions_source_id_attr' => '',
-        'interactions_target_id_attr' => 'href',
-        'interactions_target_id_element' => '',
+
+        'interactions_source_content_types' => '',
+
     ),
   );
   return array($preset);

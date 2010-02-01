@@ -20,8 +20,8 @@ Drupal.behaviors.listmixer.submitBehavior = function(preset) {
   this.markup = function(preset) {
     return { 
       // @TODO checkboxSubmit not quite figured out yet.
-      // checkboxSubmit : '<div class="' + preset.containerId + 'push-submit"><button class="button">Save</button></div>',
-      buttonSubmit : '<div class="' + preset.containerId + '-push-submit listmixer-push-submit"><button class="button">Save</button></div>'
+      // checkboxSubmit : '<div class="' + preset.interactiveElementContainerId + 'push-submit"><button class="button">Save</button></div>',
+      buttonSubmit : '<div class="' + preset.interactiveElementContainerId + '-push-submit listmixer-push-submit"><button class="button">Save</button></div>'
     }
   };
 }

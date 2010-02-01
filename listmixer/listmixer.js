@@ -101,7 +101,6 @@ Drupal.behaviors.listmixer.activate = function(preset) {
   preset.activateFunction = preset.behaviors.activate.settings.behavior_function;
   preset.activateMarkupArray = Activate.markup(preset);
   preset.activateMarkup = preset.activateMarkupArray[preset.activateFunction];
-  Activate.init();
 };
 /**
  * Submit called when form is created and added to container.
@@ -178,7 +177,6 @@ Drupal.behaviors.listmixer.behaviorBuildCallback = function(preset, type) {
           complete: Drupal.behaviors.listmixer.redirect(preset, preset.data)
         });
       }
-
       return false;
     }
   }
@@ -217,7 +215,7 @@ Drupal.behaviors.listmixer.behaviorSubmitCallback = function(preset, type) {
 /**
  * Do something on redirect (placeholder)
  */
-Drupal.behaviors.listmixer.redirect = function(preset, data) {
+Drupal.behaviors.listmixer.redirect = function(preset, data) { 
   return false;
 };
 /**
@@ -230,137 +228,105 @@ Drupal.behaviors.listmixer.redirect = function(preset, data) {
  * @TODO Break this script into smaller functions.
  */
 Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
-    // Set up target field (for node save function.)
-    preset.targetField = preset.interactions.interactions_target_field;
-    // Set up the target value
-    preset.targetValueAttribute = preset.interactions.interactions_target_id_attr;
-    preset.activationComplete = false;
-    preset.targetId = '';
-    preset.targetIdArray = [];
+  // Set up target field (for node save function.)
+  preset.targetField = preset.interactions.interactions_target_field;
+  // Set up the target value
+  preset.targetValueAttribute = preset.interactions.interactions_target_id_attr;
+  preset.activationComplete = false;
+  preset.targetId = '';
+  preset.targetIdArray = [];
 
-    // *********** Create interaction form and target classes
-    preset.containerId = 'listmixer-container-'+ preset.preset_name;
-    preset.containerFormClass = 'class="' + preset.containerId + '-form listmixer-container-form"';
+  // *********** Create interaction form and target classes
+  preset.containerId = 'listmixer-main-container-'+ preset.preset_name;
+  preset.container = preset.interactions.interactions_container;
 
-    preset.selectedContainerId = 'listmixer-container-'+ preset.preset_name;
-    preset.selectedContainerFormClass = 'class="' + preset.selectedContainerId + '-form listmixer-selected-container-form"';
-    
-    // @TODO Should form be a 'wrap()' function?
-    // @TODO Should this be available to Drupal theme? It's pretty important and shouldn't be messed with.
-    preset.containerForm = '<form id="' + preset.containerId + '" ' + preset.containerFormClass + '></form>';
-    preset.selectedContainerForm = '<form id="' + preset.selectedContainerId + '" ' + preset.selectedContainerFormClass + '></form>';
-    preset.form = preset.containerForm;
-    preset.selectedForm = preset.selectedContainerForm;
-    preset.container = preset.interactions.interactions_container;
+  // Set up interactivity.
+  // This is region here. If the user just wants a form field in block,
+  // Then they need to set it to just the block. Default is 'body' so 
+  // If nothing is entered, it will show up at the top of the page.
+  // Only one form is allowed, if the form should be applied to the 
+  // region container, but not the container if the container is a 
+  // child of the region container.
+  try {
+    // Create the pointer to the container for where the form should be added.
+    // If the main container is the same as the interactive region, apply the form to the main container.
+    if (preset.interactions.interactions_container === preset.interactions.interactions_region) {
+      preset.containerSelector = preset.interactions.interactions_container;
+      preset.interactiveElementContainerSelector = preset.interactions.interactions_container;
+    }
+    // There is some trickiness to how the form container is determined.
+    // Currently, the form container is attached to the most external element, if it has the region.
+    else{
+      preset.containerSelector = preset.interactions.interactions_container + ':has(' + preset.interactions.interactions_region + ')';
+      preset.interactiveElementContainerSelector = preset.interactions.interactions_inclusions + ':has(' + preset.interactions.interactions_region + ')';
+    }
+
+    // Make sure that the form container is valid, if not, alert the site administrator.
+    // @TODO see if show alerts is actually a setting.
+/*       $(preset.containerSelector).length > 0; */
+
+
+    // Set up the main interaction form.
+    Drupal.behaviors.listmixer.setupForm(preset);
+
     // Load up functions and markup for behaviors.
     Drupal.behaviors.listmixer.activate(preset);
-    Drupal.behaviors.listmixer.interact(preset);
-    Drupal.behaviors.listmixer.submit(preset);
 
-    // Set up interactivity.
-    // This is region here. If the user just wants a form field in block,
-    // Then they need to set it to just the block. Default is 'body' so 
-    // If nothing is entered, it will show up at the top of the page.
-    // Only one form is allowed, if the form should be applied to the 
-    // region container, but not the container if the container is a 
-    // child of the region container.
-    try {
-      // Create the pointer to the container for where the form should be added.
-      // If the main container is the same as the interactive region, apply the form to the main container.
-      if (preset.interactions.interactions_container === preset.interactions.interactions_region) {
-        preset.containerSelector = preset.interactions.interactions_container;
-        preset.activatedContainerSelector = preset.interactions.interactions_container;
-      }
-      // There is some trickiness to how the form container is determined.
-      // Currently, the form container is attached to the most external element, if it has the region.
-      else{
-        preset.containerSelector = preset.interactions.interactions_container + ':has(' + preset.interactions.interactions_region + ')';
-        preset.activatedContainerSelector = preset.interactions.interactions_container + ':has(' + preset.interactions.interactions_region + ')';
-      }
-      // Create activate behavior, or load straightaway if set to onLoad
-      // @TODO Change 'loadActivate' to 'onLoad' 
+    // Set up activation.
+    Drupal.behaviors.listmixer.setupActivateWidget(preset);    
 
-/*       What this should do: 
-see if there is no valid target pointed to
-see if the target points to repeating elements
-if it repeats, and the repeating container points to a valid target
-  make the interaction container use the selection container
-  add activate button to selection container
-
-and/or
-  if it is a repeating selector & loadActivate
-  add activate button to each one
-  selecting activate will set the selection container
-  and add interaction elements to the selection container
-
-  always add submit + interact elements to the selection container
-  
-
-*/
-
-/*
-
-      if (preset.behaviors.activate.settings.behavior_function == 'loadActivate') {
-        preset.activation = true;
-        Drupal.behaviors.listmixer.listmixerActivate(preset);
-      }
-      else {
-        // Add activate widget.
-        //Drupal.behaviors.listmixer.listmixerActivate(preset, true);
-        // If activation is two-part (select then activate) make the form container be the 
-        // main interaction container, but apply the save button to the normal form container (child.)
-        preset.containerSelector = preset.interactions.interactions_container;
-        preset.activatedContainerSelector = preset.interactions.interactions_container + ':has(' + preset.interactions.interactions_region + ')';
-
-        Drupal.behaviors.listmixer.setupActivateWidget(preset);
-      }
-*/
-
-          Drupal.behaviors.listmixer.setupActivateWidget(preset);    
-/*
-      if (preset.behaviors.activate.settings.behavior_function == 'loadActivate') {
-        preset.activation = true;
-        Drupal.behaviors.listmixer.listmixerActivate(preset);
-      }
-      else {
-        // Add activate widget.
-        //Drupal.behaviors.listmixer.listmixerActivate(preset, true);
-        // If activation is two-part (select then activate) make the form container be the 
-        // main interaction container, but apply the save button to the normal form container (child.)
-        preset.containerSelector = preset.interactions.interactions_container;
-        preset.activatedContainerSelector = preset.interactions.interactions_container + ':has(' + preset.interactions.interactions_region + ')';
-        preset.activation = false;
-        Drupal.behaviors.listmixer.setupActivateWidget(preset);
-      }
-*/
-
-      // Make sure that the form container is valid.
-      $(preset.containerSelector).length > 0;
-      // Set up form.
-      Drupal.behaviors.listmixer.setupForm(preset);
+  }
+  catch(err3) {
+    if(preset.administerSettings === true) {
+      alert(Drupal.t('ListMixer Error: Interactive region and main container conflict in preset ' + preset.preset_name + '. Edit: admin/build/listmixer/' + preset.preset_id + ''));
     }
-    catch(err3) {
-      if(preset.administerSettings === true) {
-        alert(Drupal.t('ListMixer Error: Interactive region and main container conflict in preset ' + preset.preset_name + '. Edit: admin/build/listmixer/' + preset.preset_id + ''));
-      }
-    }
+  }
 };
 /**
  * Set up interaction form.
  */
 Drupal.behaviors.listmixer.setupForm = function(preset) {
-  console.log(preset.containerSelector);
+  // Create variables pointing to the main container form for this preset.
+  preset.containerFormClass = 'class="' + preset.containerId + '-form listmixer-container-form"';
+  preset.containerFormSelector = 'form#' +  preset.containerId;
+  preset.containerForm = '<form id="' + preset.containerId + '" ' + preset.containerFormClass + '></form>';
+  preset.form = preset.containerForm;
+
+  // Add the form to the interaction.
   $(preset.containerSelector).prepend(preset.form);
-  // *********** Handle help text
-  preset.interactionsHelp = preset.interactions.interactions_help;
-  // Append help text to interaction container.
-  // *********** Handle interaction label
+
+  // Add interaction label.
+  // @TODO: Wrap label in Drupal.t()? Will be plain markup? CSS is allowed...so see which function is appropriate.
+  // Also, users could be encouraged to wrap their text in Drupal.t() and assign it to the preset from a function.
   preset.interactionsLabel = preset.interactions.interactions_label;
-  $('form#' + preset.containerId).prepend('<div class="' + preset.containerId + '-interaction-help  listmixer-interaction-help">' + preset.interactionsHelp + '</div>');
-  $('form#' + preset.containerId).prepend('<div class="' + preset.containerId + '-interaction-label listmixer-interaction-label">' + preset.interactionsLabel + '</div>');
+  $(preset.containerFormSelector).prepend('<div class="' + preset.interactiveElementContainerId + '-interaction-label listmixer-interaction-label">' + preset.interactionsLabel + '</div>');
+
+  // Add help text.
+  // @TODO: Wrap help text in Drupal.t()? Will be plain markup? CSS is allowed...so see which function is appropriate.
+  preset.interactionsHelp = preset.interactions.interactions_help;
+  $(preset.containerFormSelector).prepend('<div class="' + preset.interactiveElementContainerId + '-interaction-help  listmixer-interaction-help">' + preset.interactionsHelp + '</div>');
 };
 /**
  * Add activate widget.
+  @TODO Rewritre
+  // Create activate behavior, or load straightaway if set to onLoad
+  // @TODO Change 'loadActivate' to 'onLoad' 
+
+  What this should do: 
+    see if there is no valid target pointed to
+    see if the target points to repeating elements
+    if it repeats, and the repeating container points to a valid target
+      make the interaction container use the selection container
+      add activate button to selection container
+    
+    and/or
+      if it is a repeating selector & loadActivate
+      add activate button to each one
+      selecting activate will set the selection container
+      and add interaction elements to the selection container
+    
+      always add submit + interact elements to the selection container
+
  */
 Drupal.behaviors.listmixer.setupActivateWidget = function(preset) {
 
@@ -370,7 +336,7 @@ Drupal.behaviors.listmixer.setupActivateWidget = function(preset) {
   // @TODO Work on declaring decactivated, can't use === operator as is
   // On activate widget click, set up the interaction.
   var Activate = new Drupal.behaviors.listmixer.activateBehavior(preset);
-  Activate.init(preset);
+  /*   Activate.init(preset); */
   /*
      There are a few kinds of activation.
       * On load: assumes that a valid node id exists already,
@@ -390,7 +356,7 @@ Drupal.behaviors.listmixer.setupActivateWidget = function(preset) {
     Activate.buttonActivate(preset);
   }
   else if (preset.activateFunction == 'loadActivate') {
-    preset.activation = false;
+    preset.activation = true;
   }
   else if (preset.activateFunction == 'selectActivate') {
     Activate.selectActivate(preset);
@@ -398,8 +364,6 @@ Drupal.behaviors.listmixer.setupActivateWidget = function(preset) {
   else if (preset.activateFunction == 'selectPlusButtonActivate') {
     Activate.selectPlusButtonActivate(preset);
   }
-  // Set deactivate on initial load.
-  $('form#' + preset.containerId + ' div.' + preset.containerId + '-deactivate-button').children(".button").trigger('click');
 };
 /**
  * Deactivate function.
@@ -415,6 +379,8 @@ Drupal.behaviors.listmixer.listmixerDeactivate = function(preset) {
  *
  */
 Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
+
+  // @TODO on deactivate, remove or hide.
   // ********* Load target nid or path.
   try {
     // If an attribute has been set by user, get the value.
@@ -438,8 +404,8 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
             preset.targetIdArray.push(targetValue);
           }  
         });
-        $(preset.interactions.interactions_target_id).hide();
-      } 
+/*         $(preset.interactions.interactions_target_id).hide(); */
+      }
     }
   }
   catch(err) {
@@ -487,7 +453,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
       // @TODO make the form into textfields and rearrange and rewrite the help.
   
       var Interact = new Drupal.behaviors.listmixer.interactBehavior();
-      Interact.init();
+
       preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
       // @TODO See if there is any possible way to get this function to load.
       // Otherwise, maybe store the function in the php??
@@ -496,6 +462,28 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
       }
       // ********* Assign source value to each included interaction element.
       $.each($(preset.interactions.interactions_region + ' ' + preset.interactions.interactions_inclusions), function() {
+  
+
+
+        if($(this).attr("id") !== null) {
+          preset.currentSelectionId = $(this).attr("id");
+        }
+        else {
+          preset.currentSelectionId = "test";
+        }
+
+        preset.interactiveElementContainerId = 'listmixer-container-'+ preset.preset_name + '-' + preset.currentSelectionId;
+        preset.interactiveElementContainerFormClass = 'class="' + preset.interactiveElementContainerId + '-' + preset.currentSelectionId + '-form listmixer-selected-container-form"';
+        preset.interactiveElementContainerFormSelector = 'form#' +  preset.interactiveElementContainerId;
+        preset.interactiveElementContainerForm = '<form id="' + preset.interactiveElementContainerId + '" ' + preset.interactiveElementContainerFormClass + '></form>';
+
+       // Set up interact elements.
+        Drupal.behaviors.listmixer.interact(preset);
+
+        // Set up submit elements.
+        Drupal.behaviors.listmixer.submit(preset);
+
+
         var sourceValue = null;
         var sourceElement = null;
         var Interact = new Drupal.behaviors.listmixer.interactBehavior();
@@ -503,8 +491,10 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
         preset.interactMarkupArray = Interact.markup(preset);
         preset.interactMarkup = preset.interactMarkupArray[preset.interactFunction];
         Interact.init();
-        var sourceValueMarkup = 'div.' + preset.containerId + '-source-value';
-        var sourceValueMarkupProcessed = '' + preset.containerId + '-processed-value-' + preset.preset_name;
+
+
+        var sourceValueMarkup = 'div.' + preset.interactiveElementContainerId + '-source-value';
+        var sourceValueMarkupProcessed = '' + preset.interactiveElementContainerId + '-processed-value-' + preset.preset_name;
         // @TODO check sourceValue is numeric
         // The selector might be empty if user enters nothing, if so, just use the default input.
         if(preset.sourceValueSelector != '') {
@@ -542,14 +532,21 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
         else{
           // Only add interactive elements if a valid value is present.
           if(preset.activation === true) {
+   
             $(this).addClass(sourceValueMarkupProcessed);
-            $(this).prepend(preset.interactMarkup);
             $(this).find(sourceValueMarkup).addClass(sourceValueMarkupProcessed);
+
+            $(this).prepend(preset.interactiveElementContainerForm);
+            $(this).append(preset.interactMarkup);
+            $(this).append(preset.submitMarkup);
           }
           else{
             $(this).removeClass(sourceValueMarkupProcessed);
             $(this).find(sourceValueMarkup).remove();
+            $(preset.interactiveElementContainerFormSelector).remove(); // @TODO Test remove feature.
+            $(preset.interactiveElementContainerFormSelector).find('div.' + preset.interactiveElementContainerId + '-push-submit').remove();
           }
+
         }
         // Add value to input field after input is created
         $(this).find('*.' + sourceValueMarkupProcessed + ' input').val(sourceValue);
@@ -562,18 +559,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
       }
     }
 
-    // Add button to form/containter
-    // Only add interactive elements if a valid value is present.
-console.log(preset.containerId);
-console.log(preset.submitMarkup);
-//activatedContainerSelector
-    if(preset.activation === true) {
-      $('form#' + preset.containerId).append(preset.submitMarkup);
-    }
-    else{
-      // @TODO test that remove works
-      $('form#' + preset.containerId).find('div.' + preset.containerId + '-push-submit').remove();
-    }
+
   
     // ********* Find the button (which might not be a button) and add a click function to it.
     // Set up data object on page load.
@@ -586,7 +572,9 @@ console.log(preset.submitMarkup);
       // @TODO Collect other data here if necessary
     };
     // Activate push callback. (For example, click a button.)
-    $('form#' + preset.containerId + ' div.' + preset.containerId + '-push-submit').children(".button").click(function() {
+
+    $('div.' + preset.interactiveElementContainerId + '-push-submit').children(".button").click(function() {
+
       Drupal.behaviors.listmixer.push(preset); 
       //@TODO make sure target_id is available to push function
 
