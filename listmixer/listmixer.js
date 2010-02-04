@@ -2,232 +2,64 @@
 
 /**
  * @file
- * This Javascript file is responsible for applying interactive behaviors and
- * elements to the appropriate html elements.
- *
- * 1. The interactive presets create an array on every Drupal page. listmixer.js 
- * looks for the html element that signals that a preset should be applied to
- * a page.
- * 
- * 2. If found, listmixer.js will proceed with applying elements. It will throw
- * errors to the user if they have defined incorrect markup.
- * @TODO Make the errors only display to users with privileges 
- * to create presets.
- * 
- * The behaviors work as such:
- * 1. On load: most of the interactivity is set up, awaiting 
- * a trigger from user.
- * 2. Activate will apply the interactive elements to the page.
- * 3. Interact will collect an array of data that should be saved.
- * 4. Submit will trigger the data to be saved.
- * 5. Push triggers a callback function which sends the data to Drupal.
- * 
- * @TODO: Make this file camelCase: http://drupal.org/node/172169
- * This will be a little tricky because of all the stuff that comes from PHP
-  
-  "Variables added through drupal_add_js() should also be lowerCamelCased, 
-  so that they can be consistent with other variables once they are used in JavaScript."
-
-
- * please tell me.
- * @TODO: Clear data on all page loads
- * @TODO: Make themeable output exist in Drupal.theme
-
-    DEFINE IT:
-    Drupal.theme.prototype.powered = function(color, height, width) {
-      return '<img src="/misc/powered-'+ color +'-'+ height +'x'+ width +'.png" />";
-    }
-
-    CALL IT:
-    $('.footer').append(Drupal.theme('powered', 'black', 135, 42));
-
-    OVERRIDE IT:
-    Drupal.theme.prototype.powered = function(color, height, width) {
-      return '<img src="/sites/all/themes/powered_images/powered-'+ color +'-'+ height +'x'+ width
-
-    +'.png" />";
-    }
  */
 
 var pageLoaded = 0;
-/**
- * Set up listmixer if main interaction container is on the rendered page.
- */
+
 Drupal.behaviors.listmixer = function() {
   if (pageLoaded === 0) {
-    // Read through each preset and set up the first time the page is loaded.
     $.each(Drupal.settings.listmixer, function() {
-      // If interaction involves saving content to target nodes.
-      // listmixer_storage_default is required even if preset is created
-      // programatically. Leaving this in while I think about how that part 
-      // will work.
       if (this.preset_method == 'listmixer_storage_default') {
         var preset = this;
-
-        // ************ Use variables set by user.
-        // Make sure that a container is found. 
-        // This should be done first, as nothing else will happen if there is no container on the page.
         var interactionsContainerExists = $.find(this.interactions.interactions_container);
-        // Interaction container not found, do nothing, other wise, proceed.
-        if (interactionsContainerExists == '') {
-          // No container found, do nothing. Go find the next preset.
-          // @TODO return false was escaping the each() loop completely.
-        }
-        else {
-          // *********** Set up behaviors.
+        if (interactionsContainerExists != '') {
           Drupal.behaviors.listmixer.listmixerSetup(preset);
         }
       }
+      return false;
     });
   }
-  // Increment the pageLoaded variable everytime this function is 
-  // called (usually on page load.)
   pageLoaded++;
 };
-// ******* Build functions that load the behaviors.
-// Load javascript behavior libraries.
-/**
- * Interact is called when elements are being applied to a container.
- */
-Drupal.behaviors.listmixer.interact = function(preset) {
-  Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'interact');
-};
-/**
- * Activate is called from the setup function.
- */
-Drupal.behaviors.listmixer.activate = function(preset) {
-  Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'activate');
-  var Activate = new Drupal.behaviors.listmixer.activateBehavior(preset);
-  preset.activateFunction = preset.behaviors.activate.settings.behavior_function;
-  preset.activateMarkupArray = Activate.markup(preset);
-  preset.activateMarkup = preset.activateMarkupArray[preset.activateFunction];
-};
-/**
- * Submit called when form is created and added to container.
- */
-Drupal.behaviors.listmixer.submit = function(preset) {
-  Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'submit');
-  var Submit = new Drupal.behaviors.listmixer.submitBehavior(preset);
-  preset.submitFunction = preset.behaviors.submit.settings.behavior_function;
-  preset.submitMarkupArray = Submit.markup(preset);
-  preset.submitMarkup = preset.submitMarkupArray[preset.submitFunction];
-};
-/**
- * Push is called when user interacts with submit button.
- */
-Drupal.behaviors.listmixer.push = function(preset) {
-  var Push = new Drupal.behaviors.listmixer.pushBehavior(preset);
-  Push.init();
-  // Load data for interact button validation.
-  var Interact = new Drupal.behaviors.listmixer.interactBehavior(preset);
-  preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
-  preset.interactMarkupArray = Interact.markup(preset);
-  preset.interactMarkup = preset.interactMarkupArray[preset.interactFunction];
-  preset.interactValidationArray = Interact.validation(preset);
-  preset.interactValidation = preset.interactValidationArray[preset.interactFunction];
-  Interact.init();
 
-  // Get value from interact element.
-  $.each($(preset.interactions.interactions_region + ' ' + preset.interactValidation), function(){
-    // Collect the value from each of the interactive elements.
-    // Store values in data object in preset.
-    preset.data.inputArray.push($(this).val());
-  });
-  Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'push');
-  // @TODO Check that the callback isn't reloading the page. 
-  return false;
-};
-/**
- * Load javascript includes, set up the callbacks for all behaviors.
- */
-Drupal.behaviors.listmixer.behaviorBuildCallback = function(preset, type) {
-  var presetId = preset.preset_id;
-  var callback;
-  var behaviorName;
-  var behaviorFunction;
-  // Create an array of the settings for the current behavior.
-  var behavior = preset.behaviors[type];
-  if (behavior.settings !== null) {
-    callback = Drupal.settings.basePath + behavior.settings.behavior_callback;
-    behaviorFunction = behavior.settings.behavior_function;
-    behaviorName =  behavior.settings.behavior_name;
 
-    // Load data from settings array contained in each behavior.
-    // @TODO a callback is called. a menu item figures out who the callback is for, looks up the registry and calls the appropriate function.
-    // Grab data from somewhere that's stored somewhere else.
-    // The data might need to be cleaned up if the funciton is used several times before submitting  
-    // Ajax call to callback for this behavior.
-    // @TODO currently this runs automatically, make push happen after submit behavior is activated.
-    if (callback !== null) {
-      if (type == 'push') {
-        if (preset.data.inputArray.length > 0) {
-          preset.data.input = preset.data.inputArray.toString();
-        }
-        if (preset.targetIdArray.length > 0) {
-          preset.targetId = preset.targetIdArray.toString();
-          preset.data.target_id = preset.targetIdArray.toString();
-        }
-
-        // @TODO Temporarily making 'push' the only function that performs callback.
-        // Adding to other behaviors will require some more advanced features.
-        $.ajax({
-          type: "POST",
-          url: callback,
-          data: preset.data,
-          complete: Drupal.behaviors.listmixer.redirect(preset, preset.data)
-        });
-      }
-      return false;
-    }
-  }
-  return false;
-};
-/**
- * Load javascript includes, set up the callbacks for all behaviors.
- */
-Drupal.behaviors.listmixer.behaviorSubmitCallback = function(preset, type) {
-  var presetId = preset.preset_id;
-  var callback;
-  var behaviorName;
-  var behaviorFunction;
-  // Create an array of the settings for the current behavior.
-  var behavior = preset.behaviors[type];
-  if (behavior.settings !== null) {
-    // @TODO rename _redirect to _submit_callback, and _callback to _build_callback
-    callback = Drupal.settings.basePath + behavior.settings.behavior_redirect;
-    behaviorName =  behavior.settings.behavior_name;
-
-    // Load data from settings array contained in each behavior.
-    // @TODO a callback is called. a menu item figures out who the callback is for, looks up the registry and calls the appropriate function.
-    // Grab data from somewhere that's stored somewhere else.
-    // The data might need to be cleaned up if the funciton is used several times before submitting
-
-    var data = {data_label : ''};
-       
-    // Ajax call to callback for this behavior.
-    // @TODO currently this runs automatically, make push happen after submit behavior is activated.
-    if (callback !== null) {
-      $.post(callback, data, Drupal.behaviors.listmixer.redirect(preset, preset.data));
-    }
-  }
-  return false;
-};
-/**
- * Do something on redirect (placeholder)
- */
-Drupal.behaviors.listmixer.redirect = function(preset, data) { 
-  return false;
-};
-/**
- * Set up listmixer interactivity based on presets created by user.
- * 1. Set up target field (for node save function.)
- * 2. Set up target region.
- * 3. Set up interactivity.
- *
- * @TODO Add validation function if necessary
- * @TODO Break this script into smaller functions.
- */
 Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
+
+
+  // Set up Interactive container.
+  Drupal.behaviors.listmixer.listmixerSetupContainer(preset);
+
+  // Set up target values.
+  Drupal.behaviors.listmixer.listmixerSetupTarget(preset);
+
+  // Set up container form. 
+  Drupal.behaviors.listmixer.listmixerSetupContainerForm(preset);
+  
+  // Load up functions and markup for activation.
+  Drupal.behaviors.listmixer.activate(preset);
+
+  // Set up activation.
+  Drupal.behaviors.listmixer.setupActivateWidget(preset);  
+}
+
+
+Drupal.behaviors.listmixer.listmixerSetupContainer = function(preset) {
+  if (preset.interactions.interactions_container === preset.interactions.interactions_region) {
+    preset.containerSelector = preset.interactions.interactions_container;
+    preset.interactiveElementContainerSelector = preset.interactions.interactions_container;
+  }
+  // There is some trickiness to how the form container is determined.
+  // Currently, the form container is attached to the most external element, if it has the region.
+  else{
+    preset.containerSelector = preset.interactions.interactions_container + ':has(' + preset.interactions.interactions_region + ')';
+    preset.interactiveElementContainerSelector = preset.interactions.interactions_inclusions + ':has(' + preset.interactions.interactions_region + ')';
+  }
+  // *********** Create interaction form and target classes
+  preset.containerId = 'listmixer-main-container-'+ preset.preset_name;
+  preset.container = preset.interactions.interactions_container;
+
+};
+Drupal.behaviors.listmixer.listmixerSetupTarget = function(preset) {
   // Set up target field (for node save function.)
   preset.targetField = preset.interactions.interactions_target_field;
   // Set up the target value
@@ -235,57 +67,8 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
   preset.activationComplete = false;
   preset.targetId = '';
   preset.targetIdArray = [];
-
-  // *********** Create interaction form and target classes
-  preset.containerId = 'listmixer-main-container-'+ preset.preset_name;
-  preset.container = preset.interactions.interactions_container;
-
-  // Set up interactivity.
-  // This is region here. If the user just wants a form field in block,
-  // Then they need to set it to just the block. Default is 'body' so 
-  // If nothing is entered, it will show up at the top of the page.
-  // Only one form is allowed, if the form should be applied to the 
-  // region container, but not the container if the container is a 
-  // child of the region container.
-  try {
-    // Create the pointer to the container for where the form should be added.
-    // If the main container is the same as the interactive region, apply the form to the main container.
-    if (preset.interactions.interactions_container === preset.interactions.interactions_region) {
-      preset.containerSelector = preset.interactions.interactions_container;
-      preset.interactiveElementContainerSelector = preset.interactions.interactions_container;
-    }
-    // There is some trickiness to how the form container is determined.
-    // Currently, the form container is attached to the most external element, if it has the region.
-    else{
-      preset.containerSelector = preset.interactions.interactions_container + ':has(' + preset.interactions.interactions_region + ')';
-      preset.interactiveElementContainerSelector = preset.interactions.interactions_inclusions + ':has(' + preset.interactions.interactions_region + ')';
-    }
-
-    // Make sure that the form container is valid, if not, alert the site administrator.
-    // @TODO see if show alerts is actually a setting.
-/*       $(preset.containerSelector).length > 0; */
-
-
-    // Set up the main interaction form.
-    Drupal.behaviors.listmixer.setupForm(preset);
-
-    // Load up functions and markup for behaviors.
-    Drupal.behaviors.listmixer.activate(preset);
-
-    // Set up activation.
-    Drupal.behaviors.listmixer.setupActivateWidget(preset);    
-
-  }
-  catch(err3) {
-    if(preset.administerSettings === true) {
-      alert(Drupal.t('ListMixer Error: Interactive region and main container conflict in preset ' + preset.preset_name + '. Edit: admin/build/listmixer/' + preset.preset_id + ''));
-    }
-  }
 };
-/**
- * Set up interaction form.
- */
-Drupal.behaviors.listmixer.setupForm = function(preset) {
+Drupal.behaviors.listmixer.listmixerSetupContainerForm = function(preset) {
   // Create variables pointing to the main container form for this preset.
   preset.containerFormClass = 'class="' + preset.containerId + '-form listmixer-container-form"';
   preset.containerFormSelector = 'form#' +  preset.containerId;
@@ -306,65 +89,65 @@ Drupal.behaviors.listmixer.setupForm = function(preset) {
   preset.interactionsHelp = preset.interactions.interactions_help;
   $(preset.containerFormSelector).prepend('<div class="' + preset.interactiveElementContainerId + '-interaction-help  listmixer-interaction-help">' + preset.interactionsHelp + '</div>');
 };
-/**
- * Add activate widget.
-  @TODO Rewritre
-  // Create activate behavior, or load straightaway if set to onLoad
-  // @TODO Change 'loadActivate' to 'onLoad' 
+Drupal.behaviors.listmixer.buildBehavior = function(preset, type) {
+  var presetId = preset.preset_id;
+  var callback;
+  var behaviorName;
+  var behaviorFunction;
+  // Create an array of the settings for the current behavior.
+  var behavior = preset.behaviors[type];
+  if (behavior.settings !== null) {
+    callback = Drupal.settings.basePath + behavior.settings.behavior_callback;
+    behaviorFunction = behavior.settings.behavior_function;
+    behaviorName =  behavior.settings.behavior_name;
 
-  What this should do: 
-    see if there is no valid target pointed to
-    see if the target points to repeating elements
-    if it repeats, and the repeating container points to a valid target
-      make the interaction container use the selection container
-      add activate button to selection container
-    
-    and/or
-      if it is a repeating selector & loadActivate
-      add activate button to each one
-      selecting activate will set the selection container
-      and add interaction elements to the selection container
-    
-      always add submit + interact elements to the selection container
-
- */
-Drupal.behaviors.listmixer.setupActivateWidget = function(preset) {
-
-  // Make deactivated by default.
-  preset.activation = false;
-
-  // @TODO Work on declaring decactivated, can't use === operator as is
-  // On activate widget click, set up the interaction.
-  var Activate = new Drupal.behaviors.listmixer.activateBehavior(preset);
-  /*   Activate.init(preset); */
-  /*
-     There are a few kinds of activation.
-      * On load: assumes that a valid node id exists already,
-       and does not need to be selected.
-      * Select: provides a jQuery selectable interface, user must
-        select which node will be the target
-      * Button: after load or select have been executed,
-        an activate/deactivate button will be applied to the current
-        node.
-      * Select Plus Button: make the page selectable, when an item
-        is selected, apply an activate/deactivate button.
-      * Other possible types of activations:
-        ?? Can't think of any.
-  */
-  // @TODO Figure out how to trigger these functions automatically.
-  if (preset.activateFunction == 'buttonActivate') {
-    Activate.buttonActivate(preset);
-  }
-  else if (preset.activateFunction == 'loadActivate') {
-    preset.activation = true;
-  }
-  else if (preset.activateFunction == 'selectActivate') {
-    Activate.selectActivate(preset);
-  }
-  else if (preset.activateFunction == 'selectPlusButtonActivate') {
-    Activate.selectPlusButtonActivate(preset);
+    if (callback !== null) {
+      if (type == 'push') {
+        if (preset.data.inputArray.length > 0) {
+          preset.data.input = preset.data.inputArray.toString();
+        }
+        if (preset.targetIdArray.length > 0) {
+          preset.targetId = preset.targetIdArray.toString();
+          preset.data.target_id = preset.targetIdArray.toString();
+        }
+      }
+      $.ajax({
+        type: "POST",
+        url: callback,
+        data: preset.data,
+        complete: Drupal.behaviors.listmixer.redirect(preset, preset.data)
+      });
+    }
   }
 };
+Drupal.behaviors.listmixer.activate = function(preset) {
+  Drupal.behaviors.listmixer.buildBehavior(preset, 'activate');
+  preset.ActivateBehavior = new Drupal.behaviors.listmixer.activateBehavior(preset);
+  preset.activateFunction = preset.behaviors.activate.settings.behavior_function;
+  preset.activateMarkupArray = preset.ActivateBehavior.markup(preset);
+  preset.activateMarkup = preset.activateMarkupArray[preset.activateFunction];
+};
+Drupal.behaviors.listmixer.setupActivateWidget = function(preset) {
+  // Make deactivated by default.
+  preset.activation = false;
+  preset.ActivateBehavior.init(preset);
+
+  // @TODO Figure out how to trigger these functions automatically.
+  if (preset.activateFunction == 'buttonActivate') {
+    preset.ActivateBehavior.buttonActivate(preset);
+  }
+  else if (preset.activateFunction == 'loadActivate') {
+    preset.ActivateBehavior.activation = true;
+  }
+  else if (preset.activateFunction == 'selectActivate') {
+    preset.ActivateBehavior.selectActivate(preset);
+  }
+  else if (preset.activateFunction == 'selectPlusButtonActivate') {
+    preset.ActivateBehavior.selectPlusButtonActivate(preset);
+  }
+};
+
+
 /**
  * Deactivate function.
  */
@@ -598,4 +381,101 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
   }
   else {
   }
+};
+
+
+
+
+
+
+
+
+// ******* Build functions that load the behaviors.
+// Load javascript behavior libraries.
+/**
+ * Interact is called when elements are being applied to a container.
+ */
+Drupal.behaviors.listmixer.interact = function(preset) {
+  Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'interact');
+};
+/**
+ * Activate is called from the setup function.
+ */
+
+/**
+ * Submit called when form is created and added to container.
+ */
+Drupal.behaviors.listmixer.submit = function(preset) {
+  Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'submit');
+  var Submit = new Drupal.behaviors.listmixer.submitBehavior(preset);
+  preset.submitFunction = preset.behaviors.submit.settings.behavior_function;
+  preset.submitMarkupArray = Submit.markup(preset);
+  preset.submitMarkup = preset.submitMarkupArray[preset.submitFunction];
+};
+/**
+ * Push is called when user interacts with submit button.
+ */
+Drupal.behaviors.listmixer.push = function(preset) {
+  var Push = new Drupal.behaviors.listmixer.pushBehavior(preset);
+  Push.init();
+  // Load data for interact button validation.
+  var Interact = new Drupal.behaviors.listmixer.interactBehavior(preset);
+  preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
+  preset.interactMarkupArray = Interact.markup(preset);
+  preset.interactMarkup = preset.interactMarkupArray[preset.interactFunction];
+  preset.interactValidationArray = Interact.validation(preset);
+  preset.interactValidation = preset.interactValidationArray[preset.interactFunction];
+  Interact.init();
+
+  // Get value from interact element.
+  $.each($(preset.interactions.interactions_region + ' ' + preset.interactValidation), function(){
+    // Collect the value from each of the interactive elements.
+    // Store values in data object in preset.
+    preset.data.inputArray.push($(this).val());
+    console.log(preset);
+/*     return false; */
+  });
+  Drupal.behaviors.listmixer.behaviorBuildCallback(preset, 'push');
+  // @TODO Check that the callback isn't reloading the page. 
+/*   return false; */
+};
+
+
+/**
+ * Load javascript includes, set up the callbacks for all behaviors.
+ */
+Drupal.behaviors.listmixer.behaviorSubmitCallback = function(preset, type) {
+  var presetId = preset.preset_id;
+  var callback;
+  var behaviorName;
+  var behaviorFunction;
+  // Create an array of the settings for the current behavior.
+  var behavior = preset.behaviors[type];
+  if (behavior.settings !== null) {
+    // @TODO rename _redirect to _submit_callback, and _callback to _build_callback
+    callback = Drupal.settings.basePath + behavior.settings.behavior_redirect;
+    behaviorName =  behavior.settings.behavior_name;
+
+    // Load data from settings array contained in each behavior.
+    // @TODO a callback is called. a menu item figures out who the callback is for, looks up the registry and calls the appropriate function.
+    // Grab data from somewhere that's stored somewhere else.
+    // The data might need to be cleaned up if the funciton is used several times before submitting
+
+    var data = {data_label : ''};
+       
+    // Ajax call to callback for this behavior.
+    // @TODO currently this runs automatically, make push happen after submit behavior is activated.
+    if (callback !== null) {
+      $.post(callback, data, Drupal.behaviors.listmixer.redirect(preset, preset.data));
+    }
+  }
+/*   return false; */
+};
+/**
+ * Do something on redirect (placeholder)
+ */
+Drupal.behaviors.listmixer.redirect = function(preset, data) { 
+  alert("test");
+  console.log(preset);
+  return false;
 };
