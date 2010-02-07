@@ -129,13 +129,11 @@ Drupal.behaviors.listmixer.deactivate = function(preset) {
   Drupal.behaviors.listmixer.activate(preset);
 };
 Drupal.behaviors.listmixer.activate = function(preset) {
+  // Load interaction region.
+  Drupal.behaviors.listmixer.activateLoadInteractionRegion(preset);
 
   // Set up interact.
   Drupal.behaviors.listmixer.setupInteract(preset);
-
-
-  // Load interaction region.
-  Drupal.behaviors.listmixer.activateLoadInteractionRegion(preset);
 
   // Set up submit elements (before interaction)
   Drupal.behaviors.listmixer.setupSubmit(preset);
@@ -150,23 +148,12 @@ Drupal.behaviors.listmixer.activateLoadInteractionRegion = function(preset) {
   preset.interactionsRegion = $(preset.interactions.interactions_region).html();
 };
 Drupal.behaviors.listmixer.setupInteract = function(preset) {
+console.log(preset);
   preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
   preset.Interact = new Drupal.behaviors.listmixer.interactBehavior();
-  preset.interactMarkupArray = preset.Interact.markup(preset);
-  preset.interactMarkup = preset.interactMarkupArray[preset.interactFunction];
 
-
-  preset.interactValidationArray = preset.Interact.validation(preset);
-  preset.interactValidation = preset.interactValidationArray[preset.interactFunction];
-
- if(preset.activationComplete === false) {
-    var hideSourceValue = false;
-    preset.sourceValueSelector = preset.interactions.interactions_source_id;
-    preset.sourceValueAttribute = preset.interactions.interactions_source_id_attr;
-
-    preset.Interact[preset.interactFunction](preset);
-    preset.activationComplete = true;
-  }
+  preset.sourceValueSelector = preset.interactions.interactions_source_id;
+  preset.sourceValueAttribute = preset.interactions.interactions_source_id_attr;
 
   if($(this).attr("id") !== null) {
     preset.currentSelectionId = $(this).attr("id");
@@ -179,6 +166,17 @@ Drupal.behaviors.listmixer.setupInteract = function(preset) {
   preset.interactiveElementContainerFormClass = 'class="' + preset.interactiveElementContainerId + '-' + preset.currentSelectionId + '-form listmixer-selected-container-form"';
   preset.interactiveElementContainerFormSelector = 'form#' +  preset.interactiveElementContainerId;
   preset.interactiveElementContainerForm = '<form id="' + preset.interactiveElementContainerId + '" ' + preset.interactiveElementContainerFormClass + '></form>';
+
+  if(preset.activationComplete === false) {
+    var hideSourceValue = false;
+    preset.interactMarkupArray = preset.Interact.markup(preset);
+    preset.interactMarkup = preset.interactMarkupArray[preset.interactFunction];
+    preset.interactValidationArray = preset.Interact.validation(preset);
+    preset.interactValidation = preset.interactValidationArray[preset.interactFunction];
+
+    preset.Interact[preset.interactFunction](preset);
+    preset.activationComplete = true;
+  }
 
   var sourceValue = null;
   var sourceElement = null;
