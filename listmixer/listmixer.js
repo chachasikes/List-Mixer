@@ -132,14 +132,15 @@ Drupal.behaviors.listmixer.activate = function(preset) {
   // Load interaction region.
   Drupal.behaviors.listmixer.activateLoadInteractionRegion(preset);
 
-  // Set up interact.
-  Drupal.behaviors.listmixer.setupInteract(preset);
-
-  // Set up submit elements (before interaction)
+  // Set up submit elements.
   Drupal.behaviors.listmixer.setupSubmit(preset);
 
   // Set up push callback on submit feature.
   Drupal.behaviors.listmixer.setupPush(preset);
+
+  // ********* Assign source value to each included interaction element.
+  Drupal.behaviors.listmixer.setupInteract(preset);
+
 };
 Drupal.behaviors.listmixer.activateLoadInteractionRegion = function(preset) {
   if (preset.interactions.interactions_region === undefined) {
@@ -148,124 +149,109 @@ Drupal.behaviors.listmixer.activateLoadInteractionRegion = function(preset) {
   preset.interactionsRegion = $(preset.interactions.interactions_region).html();
 };
 Drupal.behaviors.listmixer.setupInteract = function(preset) {
-console.log(preset);
-  preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
-  preset.Interact = new Drupal.behaviors.listmixer.interactBehavior();
-
-  preset.sourceValueSelector = preset.interactions.interactions_source_id;
-  preset.sourceValueAttribute = preset.interactions.interactions_source_id_attr;
-
-  if($(this).attr("id") !== null) {
-    preset.currentSelectionId = $(this).attr("id");
-  }
-  else {
-    preset.currentSelectionId = "listmixer-interaction";
-  }
-
-  preset.interactiveElementContainerId = 'listmixer-container-'+ preset.preset_name + '-' + preset.currentSelectionId;
-  preset.interactiveElementContainerFormClass = 'class="' + preset.interactiveElementContainerId + '-' + preset.currentSelectionId + '-form listmixer-selected-container-form"';
-  preset.interactiveElementContainerFormSelector = 'form#' +  preset.interactiveElementContainerId;
-  preset.interactiveElementContainerForm = '<form id="' + preset.interactiveElementContainerId + '" ' + preset.interactiveElementContainerFormClass + '></form>';
-
-  if(preset.activationComplete === false) {
-    var hideSourceValue = false;
-    preset.interactMarkupArray = preset.Interact.markup(preset);
-    preset.interactMarkup = preset.interactMarkupArray[preset.interactFunction];
-    preset.interactValidationArray = preset.Interact.validation(preset);
-    preset.interactValidation = preset.interactValidationArray[preset.interactFunction];
-
-    preset.Interact[preset.interactFunction](preset);
-    preset.activationComplete = true;
-  }
-
-  var sourceValue = null;
-  var sourceElement = null;
-
-  var sourceValueMarkup = 'div.' + preset.interactiveElementContainerId + '-source-value';
-  var sourceValueMarkupProcessed = '' + preset.interactiveElementContainerId + '-processed-value-' + preset.preset_name;
-  // @TODO check sourceValue is numeric
-  // The selector might be empty if user enters nothing, if so, just use the default input.
-  if(preset.sourceValueSelector != '') {
-    if(preset.sourceValueSelector == preset.interactions.interactions_inclusions) {
-      sourceElement = $(this);
+  $.each($(preset.interactions.interactions_region + ' ' + preset.interactions.interactions_inclusions), function () {
+    preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
+    preset.Interact = new Drupal.behaviors.listmixer.interactBehavior();
+  
+    preset.sourceValueSelector = preset.interactions.interactions_source_id;
+    preset.sourceValueAttribute = preset.interactions.interactions_source_id_attr;
+  
+    if($(this).attr("id") !== null) {
+      preset.currentSelectionId = $(this).attr("id");
     }
     else {
-      sourceElement = $(this).find(preset.sourceValueSelector);
+      preset.currentSelectionId = "listmixer-interaction";
     }
-    // Get each source id
-    if(preset.sourceValueAttribute !== '') {
-      sourceValue = sourceElement.attr(preset.sourceValueAttribute);
+  
+    preset.interactiveElementContainerId = 'listmixer-container-'+ preset.preset_name + '-' + preset.currentSelectionId;
+    preset.interactiveElementContainerFormClass = 'class="' + preset.interactiveElementContainerId + '-' + preset.currentSelectionId + '-form listmixer-selected-container-form"';
+    preset.interactiveElementContainerFormSelector = 'form#' +  preset.interactiveElementContainerId;
+    preset.interactiveElementContainerForm = '<form id="' + preset.interactiveElementContainerId + '" ' + preset.interactiveElementContainerFormClass + '></form>';
+  
+    if(preset.activationComplete === false) {
+      var hideSourceValue = false;
+      preset.interactMarkupArray = preset.Interact.markup(preset);
+      preset.interactMarkup = preset.interactMarkupArray[preset.interactFunction];
+      preset.interactValidationArray = preset.Interact.validation(preset);
+      preset.interactValidation = preset.interactValidationArray[preset.interactFunction];
+  
+      preset.Interact[preset.interactFunction](preset);
+      preset.activationComplete = true;
     }
-    else {
-      sourceValue = sourceElement.html();
+  
+    var sourceValue = null;
+    var sourceElement = null;
+  
+    var sourceValueMarkup = 'div.' + preset.interactiveElementContainerId + '-source-value';
+    var sourceValueMarkupProcessed = '' + preset.interactiveElementContainerId + '-processed-value-' + preset.preset_name;
+    // @TODO check sourceValue is numeric
+    // The selector might be empty if user enters nothing, if so, just use the default input.
+    if(preset.sourceValueSelector != '') {
+      if(preset.sourceValueSelector == preset.interactions.interactions_inclusions) {
+        sourceElement = $(this);
+      }
+      else {
+        sourceElement = $(this).find(preset.sourceValueSelector);
+      }
+      // Get each source id
+      if(preset.sourceValueAttribute !== '') {
+        sourceValue = sourceElement.attr(preset.sourceValueAttribute);
+      }
+      else {
+        sourceValue = sourceElement.html();
+      }
+      // Hide the source selector. (@TODO, make this an option)
+      if(hideSourceValue === true) {
+        sourceElement.hide();
+      }
+      if(sourceValue !== null) {
+        // Only add interactive elements if a valid value is present.
+        if(preset.activation === true) {
+          $(this).addClass(sourceValueMarkupProcessed);
+          $(this).prepend(preset.interactMarkup);
+  
+          $(this).find(sourceValueMarkup).addClass(sourceValueMarkupProcessed);
+        }
+        else{
+          $(this).removeClass(sourceValueMarkupProcessed);
+          $(this).find(sourceValueMarkup).remove();
+        }
+      }
     }
-    // Hide the source selector. (@TODO, make this an option)
-    if(hideSourceValue === true) {
-      sourceElement.hide();
-    }
-    if(sourceValue !== null) {
+    else{
       // Only add interactive elements if a valid value is present.
       if(preset.activation === true) {
+  
         $(this).addClass(sourceValueMarkupProcessed);
-        $(this).prepend(preset.interactMarkup);
-
         $(this).find(sourceValueMarkup).addClass(sourceValueMarkupProcessed);
+  
+        $(this).prepend(preset.interactiveElementContainerForm);
+        $(this).append(preset.interactMarkup);
+        $(this).append(preset.submitMarkup);
       }
       else{
         $(this).removeClass(sourceValueMarkupProcessed);
         $(this).find(sourceValueMarkup).remove();
+        $(preset.interactiveElementContainerFormSelector).remove(); // @TODO Test remove feature.
+        $(preset.interactiveElementContainerFormSelector).find('div.' + preset.interactiveElementContainerId + '-push-submit').remove();
       }
     }
-  }
-  else{
-    // Only add interactive elements if a valid value is present.
-    if(preset.activation === true) {
-
-      $(this).addClass(sourceValueMarkupProcessed);
-      $(this).find(sourceValueMarkup).addClass(sourceValueMarkupProcessed);
-
-      $(this).prepend(preset.interactiveElementContainerForm);
-      $(this).append(preset.interactMarkup);
-      $(this).append(preset.submitMarkup);
-    }
-    else{
-      $(this).removeClass(sourceValueMarkupProcessed);
-      $(this).find(sourceValueMarkup).remove();
-      $(preset.interactiveElementContainerFormSelector).remove(); // @TODO Test remove feature.
-      $(preset.interactiveElementContainerFormSelector).find('div.' + preset.interactiveElementContainerId + '-push-submit').remove();
-    }
-  }
-  // Add value to input field after input is created
-  $(this).find('*.' + sourceValueMarkupProcessed + ' input').val(sourceValue);
-  // @TODO add label for activate
+    // Add value to input field after input is created
+    $(this).find('*.' + sourceValueMarkupProcessed + ' input').val(sourceValue);
+    // @TODO add label for activate
+  });
 };
-
-
-
-
-
-// ******* Build functions that load the behaviors.
-
-/**
- * Activate is called from the setup function.
- */
-
 /**
  * Submit called when form is created and added to container.
  */
 Drupal.behaviors.listmixer.setupSubmit = function(preset) {
-/*   Drupal.behaviors.listmixer.buildBehavior(preset, 'submit'); */
   preset.submitFunction = preset.behaviors.submit.settings.behavior_function;
   preset.Submit = new Drupal.behaviors.listmixer.submitBehavior(preset);
   preset.submitMarkupArray = preset.Submit.markup(preset);
   preset.submitMarkup = preset.submitMarkupArray[preset.submitFunction];
-
   preset.Submit[preset.submitFunction](preset);
 };
 Drupal.behaviors.listmixer.setupPush = function(preset) {
-  // ********* Assign source value to each included interaction element.
-  $.each($(preset.interactions.interactions_region + ' ' + preset.interactions.interactions_inclusions), Drupal.behaviors.listmixer.setupInteract(preset));
-  
     // ********* Find the button (which might not be a button) and add a click function to it.
     // Set up data object on page load.
     preset.data = {

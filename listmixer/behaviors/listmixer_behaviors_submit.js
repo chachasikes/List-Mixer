@@ -8,13 +8,13 @@ Drupal.behaviors.listmixer.submitBehavior = function(preset) {
   
   this.buttonSubmit = function() {  
     if(preset.administerSettings === true) {
-      alert(Drupal.t('submit button'));
+/*       alert(Drupal.t('submit button')); */
     }
   }
    
   this.checkboxSubmit = function() {
     if(preset.administerSettings === true) {
-      alert(Drupal.t('submit checkbox'));
+/*       alert(Drupal.t('submit checkbox')); */
     }
   }
   this.markup = function(preset) {
