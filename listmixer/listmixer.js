@@ -16,7 +16,7 @@ Drupal.behaviors.listmixer = function() {
           Drupal.behaviors.listmixer.setup(preset);
         }
       }
-      return false;
+/*       return false; */
     });
   }
   pageLoaded++;
@@ -132,12 +132,6 @@ Drupal.behaviors.listmixer.activate = function(preset) {
   // Load interaction region.
   Drupal.behaviors.listmixer.activateLoadInteractionRegion(preset);
 
-  // Set up submit elements.
-  Drupal.behaviors.listmixer.setupSubmit(preset);
-
-  // Set up push callback on submit feature.
-  Drupal.behaviors.listmixer.setupPush(preset);
-
   // ********* Assign source value to each included interaction element.
   Drupal.behaviors.listmixer.setupInteract(preset);
 
@@ -149,6 +143,7 @@ Drupal.behaviors.listmixer.activateLoadInteractionRegion = function(preset) {
   preset.interactionsRegion = $(preset.interactions.interactions_region).html();
 };
 Drupal.behaviors.listmixer.setupInteract = function(preset) {
+
   $.each($(preset.interactions.interactions_region + ' ' + preset.interactions.interactions_inclusions), function () {
     preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
     preset.Interact = new Drupal.behaviors.listmixer.interactBehavior();
@@ -156,18 +151,20 @@ Drupal.behaviors.listmixer.setupInteract = function(preset) {
     preset.sourceValueSelector = preset.interactions.interactions_source_id;
     preset.sourceValueAttribute = preset.interactions.interactions_source_id_attr;
   
+/*
     if($(this).attr("id") !== null) {
       preset.currentSelectionId = $(this).attr("id");
     }
     else {
-      preset.currentSelectionId = "listmixer-interaction";
-    }
-  
+       }
+*/
+     preset.currentSelectionId = "listmixer-interaction";
+
     preset.interactiveElementContainerId = 'listmixer-container-'+ preset.preset_name + '-' + preset.currentSelectionId;
     preset.interactiveElementContainerFormClass = 'class="' + preset.interactiveElementContainerId + '-' + preset.currentSelectionId + '-form listmixer-selected-container-form"';
     preset.interactiveElementContainerFormSelector = 'form#' +  preset.interactiveElementContainerId;
     preset.interactiveElementContainerForm = '<form id="' + preset.interactiveElementContainerId + '" ' + preset.interactiveElementContainerFormClass + '></form>';
-  
+
     if(preset.activationComplete === false) {
       var hideSourceValue = false;
       preset.interactMarkupArray = preset.Interact.markup(preset);
@@ -227,7 +224,13 @@ Drupal.behaviors.listmixer.setupInteract = function(preset) {
   
         $(this).prepend(preset.interactiveElementContainerForm);
         $(this).append(preset.interactMarkup);
-        $(this).append(preset.submitMarkup);
+        // Set up submit elements.
+        Drupal.behaviors.listmixer.setupSubmit(preset);
+        $(this).append(preset.submitMarkup);   
+   
+        // Set up push callback on submit feature.
+        Drupal.behaviors.listmixer.setupPush(preset);
+
       }
       else{
         $(this).removeClass(sourceValueMarkupProcessed);
@@ -263,9 +266,8 @@ Drupal.behaviors.listmixer.setupPush = function(preset) {
       // @TODO Collect other data here if necessary
     };
     // Activate push callback. (For example, click a button.)
-    $('div.' + preset.interactiveElementContainerId + '-push-submit').children(".button").click(function() {
-  
-      Drupal.behaviors.listmixer.push(preset);
+    $('div.' + preset.interactiveElementContainerId + '-push-submit').children('.button').click(function() {
+      Drupal.behaviors.listmixer.executePush(preset);
       //@TODO make sure target_id is available to push function
   
       // If page stayed loaded, clear out the data array.
@@ -282,7 +284,7 @@ Drupal.behaviors.listmixer.setupPush = function(preset) {
   
       // Do not reload page.
       // @TODO... actually the reloading can be nice.
-      // return false;
+/*        return true; */
   });
 }
 /**
@@ -290,54 +292,16 @@ Drupal.behaviors.listmixer.setupPush = function(preset) {
  */
 Drupal.behaviors.listmixer.executePush = function(preset) {
   preset.Push = new Drupal.behaviors.listmixer.pushBehavior(preset);
-  preset.Push.init();
-
   // Get value from interact element.
   $.each($(preset.interactions.interactions_region + ' ' + preset.interactValidation), function(){
     // Collect the value from each of the interactive elements.
     // Store values in data object in preset.
     preset.data.inputArray.push($(this).val());
-    /*     return false; */
+/*     return false; */
   });
   Drupal.behaviors.listmixer.buildBehaviorCallback(preset, 'push');
   // @TODO Check that the callback isn't reloading the page.
-  /*   return false; */
-};
-/**
- * Load javascript includes, set up the callbacks for all behaviors.
- */
-Drupal.behaviors.listmixer.behaviorSubmitCallback = function(preset, type) {
-  var presetId = preset.preset_id;
-  var callback;
-  var behaviorName;
-  var behaviorFunction;
-  // Create an array of the settings for the current behavior.
-  var behavior = preset.behaviors[type];
-  if (behavior.settings !== null) {
-    // @TODO rename _redirect to _submit_callback, and _callback to _build_callback
-    callback = Drupal.settings.basePath + behavior.settings.behavior_redirect;
-    behaviorName =  behavior.settings.behavior_name;
-
-    // Load data from settings array contained in each behavior.
-    // @TODO a callback is called. a menu item figures out who the callback is for, looks up the registry and calls the appropriate function.
-    // Grab data from somewhere that's stored somewhere else.
-    // The data might need to be cleaned up if the funciton is used several times before submitting
-
-    var data = {data_label : ''};
-
-    // Ajax call to callback for this behavior.
-    // @TODO currently this runs automatically, make push happen after submit behavior is activated.
-    if (callback !== null) {
-      $.post(callback, data, Drupal.behaviors.listmixer.redirect(preset, preset.data));
-    }
-  }
 /*   return false; */
-};
-/**
- * Do something on redirect (placeholder)
- */
-Drupal.behaviors.listmixer.redirect = function(preset, data) {
-  return false;
 };
 Drupal.behaviors.listmixer.buildBehaviorCallback = function(preset, type) {
   var callback;
@@ -363,8 +327,15 @@ Drupal.behaviors.listmixer.buildBehaviorCallback = function(preset, type) {
         type: "POST",
         url: callback,
         data: preset.data,
-        complete: Drupal.behaviors.listmixer.redirect(preset, preset.data)
+/*         complete: Drupal.behaviors.listmixer.redirect(preset, preset.data) */
       });
     }
   }
+/*   return true; */
+};
+/**
+ * Do something on redirect (placeholder)
+ */
+Drupal.behaviors.listmixer.redirect = function(preset, data) {
+/*   return true; */
 };
