@@ -13,7 +13,7 @@ Drupal.behaviors.listmixer = function() {
         var preset = this;
         var interactionsContainerExists = $.find(this.interactions.interactions_container);
         if (interactionsContainerExists !== '') {
-          Drupal.behaviors.listmixer.listmixerSetup(preset);
+          Drupal.behaviors.listmixer.setup(preset);
         }
       }
       return false;
@@ -21,20 +21,22 @@ Drupal.behaviors.listmixer = function() {
   }
   pageLoaded++;
 };
-Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
+Drupal.behaviors.listmixer.setup = function(preset) {
   // Set up Interactive container.
-  Drupal.behaviors.listmixer.listmixerSetupContainer(preset);
-
-  // Set up target values.
-  Drupal.behaviors.listmixer.listmixerSetupTarget(preset);
+  Drupal.behaviors.listmixer.setupContainer(preset);
 
   // Set up form in container.
-  Drupal.behaviors.listmixer.listmixerSetupContainerForm(preset);
+  Drupal.behaviors.listmixer.setupContainerForm(preset);
+
+
+  // Load target values.
+  Drupal.behaviors.listmixer.activateLoadTarget(preset);
 
   // Set up functions and markup for activation.
   Drupal.behaviors.listmixer.setupActivate(preset);
+
 };
-Drupal.behaviors.listmixer.listmixerSetupContainer = function(preset) {
+Drupal.behaviors.listmixer.setupContainer = function(preset) {
   if (preset.interactions.interactions_container === preset.interactions.interactions_region) {
     preset.containerSelector = preset.interactions.interactions_container;
     preset.interactiveElementContainerSelector = preset.interactions.interactions_container;
@@ -49,16 +51,7 @@ Drupal.behaviors.listmixer.listmixerSetupContainer = function(preset) {
   preset.containerId = 'listmixer-main-container-' + preset.preset_name;
   preset.container = preset.interactions.interactions_container;
 };
-Drupal.behaviors.listmixer.listmixerSetupTarget = function(preset) {
-  // Set up target field (for node save function.)
-  preset.targetField = preset.interactions.interactions_target_field;
-  // Set up the target value
-  preset.targetValueAttribute = preset.interactions.interactions_target_id_attr;
-  preset.activationComplete = false;
-  preset.targetId = '';
-  preset.targetIdArray = [];
-};
-Drupal.behaviors.listmixer.listmixerSetupContainerForm = function(preset) {
+Drupal.behaviors.listmixer.setupContainerForm = function(preset) {
   // Create variables pointing to the main container form for this preset.
   preset.containerFormClass = 'class="' + preset.containerId + '-form listmixer-container-form"';
   preset.containerFormSelector = 'form#' +  preset.containerId;
@@ -72,59 +65,41 @@ Drupal.behaviors.listmixer.listmixerSetupContainerForm = function(preset) {
   // @TODO: Wrap label in Drupal.t()? Will be plain markup? CSS is allowed...so see which function is appropriate.
   // Also, users could be encouraged to wrap their text in Drupal.t() and assign it to the preset from a function.
   preset.interactionsLabel = preset.interactions.interactions_label;
-  $(preset.containerFormSelector).prepend('<div class="' + preset.interactiveElementContainerId + '-interaction-label listmixer-interaction-label">' + preset.interactionsLabel + '</div>');
+  $(preset.containerFormSelector).prepend('<div class="' + preset.interactiveElementContainerSelector + '-interaction-label listmixer-interaction-label">' + preset.interactionsLabel + '</div>');
 
   // Add help text.
   // @TODO: Wrap help text in Drupal.t()? Will be plain markup? CSS is allowed...so see which function is appropriate.
   preset.interactionsHelp = preset.interactions.interactions_help;
-  $(preset.containerFormSelector).prepend('<div class="' + preset.interactiveElementContainerId + '-interaction-help  listmixer-interaction-help">' + preset.interactionsHelp + '</div>');
+  $(preset.containerFormSelector).prepend('<div class="' + preset.interactiveElementContainerSelector + '-interaction-help  listmixer-interaction-help">' + preset.interactionsHelp + '</div>');
 };
 Drupal.behaviors.listmixer.setupActivate = function(preset) {
   // Make deactivated by default.
   preset.activation = false;
-
+  preset.activateFunction = preset.behaviors.activate.settings.behavior_function;
   preset.ActivateBehavior = new Drupal.behaviors.listmixer.activateBehavior(preset);
   // Load markup.
   preset.activateMarkupArray = preset.ActivateBehavior.markup(preset);
   preset.activateMarkup = preset.activateMarkupArray[preset.activateFunction];
-  // Load function.
-  preset.activateFunction = preset.behaviors.activate.settings.behavior_function;
+  // Load activate function.
   preset.ActivateBehavior[preset.activateFunction](preset);
   // Make activate true if activation is supposed to happen on load.
   if (preset.activateFunction == 'loadActivate') {
     preset.ActivateBehavior.activation = true;
   }
 };
-Drupal.behaviors.listmixer.listmixerDeactivate = function(preset) {
-  // Set activated/deactivated state.
-  preset.activation = false;
-  // Only allow 1 activation.
+Drupal.behaviors.listmixer.activateLoadTarget = function(preset) {
+  // Set up target field (for node save function.)
+  preset.targetField = preset.interactions.interactions_target_field;
+  // Set up the target value
+  preset.targetValueAttribute = preset.interactions.interactions_target_id_attr;
   preset.activationComplete = false;
-  Drupal.behaviors.listmixer.listmixerActivate(preset);
-};
-Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
-  // Load target values.
-  Drupal.behaviors.listmixer.listmixerActivateLoadTarget(preset);
+  preset.targetId = '';
+  preset.targetIdArray = [];
 
-  // Load interaction region.
-  Drupal.behaviors.listmixer.listmixerActivateLoadInteractionRegion(preset);
-
-  // Load interact.
-  Drupal.behaviors.listmixer.listmixerLoadInteract(preset);
-
-  // Set up submit elements (before interaction)
-  Drupal.behaviors.listmixer.submit(preset);
-
-  // Set up interact.
-  Drupal.behaviors.listmixer.listmixerSetupInteract(preset);
-
-  // Set up push callback on submit feature.
-  Drupal.behaviors.listmixer.listmixerSetupPush(preset);
-};
-Drupal.behaviors.listmixer.listmixerActivateLoadTarget = function(preset) {
   var targetValue;
   if(preset.interactions.interactions_target_id_element !== '') {
-    // For multiple targets
+    // For multiple targets, do nothing. 
+    // The value must be determined in the activate function.
   }
   else {
     if(preset.targetValueAttribute !== '') {
@@ -146,18 +121,40 @@ Drupal.behaviors.listmixer.listmixerActivateLoadTarget = function(preset) {
     }
   }
 };
-Drupal.behaviors.listmixer.listmixerActivateLoadInteractionRegion = function(preset) {
+Drupal.behaviors.listmixer.deactivate = function(preset) {
+  // Set activated/deactivated state.
+  preset.activation = false;
+  // Only allow 1 activation.
+  preset.activationComplete = false;
+  Drupal.behaviors.listmixer.activate(preset);
+};
+Drupal.behaviors.listmixer.activate = function(preset) {
+
+  // Set up interact.
+  Drupal.behaviors.listmixer.setupInteract(preset);
+
+
+  // Load interaction region.
+  Drupal.behaviors.listmixer.activateLoadInteractionRegion(preset);
+
+  // Set up submit elements (before interaction)
+  Drupal.behaviors.listmixer.setupSubmit(preset);
+
+  // Set up push callback on submit feature.
+  Drupal.behaviors.listmixer.setupPush(preset);
+};
+Drupal.behaviors.listmixer.activateLoadInteractionRegion = function(preset) {
   if (preset.interactions.interactions_region === undefined) {
     preset.interactions.interactions_region = 'body';
   }
   preset.interactionsRegion = $(preset.interactions.interactions_region).html();
 };
-Drupal.behaviors.listmixer.listmixerLoadInteract = function(preset) {
+Drupal.behaviors.listmixer.setupInteract = function(preset) {
+  preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
   preset.Interact = new Drupal.behaviors.listmixer.interactBehavior();
   preset.interactMarkupArray = preset.Interact.markup(preset);
   preset.interactMarkup = preset.interactMarkupArray[preset.interactFunction];
-  preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
-  preset.Interact[preset.interactFunction](preset);
+
 
   preset.interactValidationArray = preset.Interact.validation(preset);
   preset.interactValidation = preset.interactValidationArray[preset.interactFunction];
@@ -166,53 +163,11 @@ Drupal.behaviors.listmixer.listmixerLoadInteract = function(preset) {
     var hideSourceValue = false;
     preset.sourceValueSelector = preset.interactions.interactions_source_id;
     preset.sourceValueAttribute = preset.interactions.interactions_source_id_attr;
-    preset.InteractBehavior = new Drupal.behaviors.listmixer.interactBehavior();
-    preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
-    if (preset.interactFunction == 'sortInteract') {
-      preset.InteractBehavior.sortInteract(preset);
-    }
+
+    preset.Interact[preset.interactFunction](preset);
     preset.activationComplete = true;
   }
-};
-Drupal.behaviors.listmixer.listmixerSetupPush = function(preset) {
-  // ********* Assign source value to each included interaction element.
-  $.each($(preset.interactions.interactions_region + ' ' + preset.interactions.interactions_inclusions), Drupal.behaviors.listmixer.listmixerSetupInteract(preset));
-  
-    // ********* Find the button (which might not be a button) and add a click function to it.
-    // Set up data object on page load.
-    preset.data = {
-      'inputArray' : [],
-      'input' : '',
-      'target_id' : preset.targetId,
-      'target_field' : preset.targetField,
-      'interact_function' : preset.interactFunction
-      // @TODO Collect other data here if necessary
-    };
-    // Activate push callback. (For example, click a button.)
-    $('div.' + preset.interactiveElementContainerId + '-push-submit').children(".button").click(function() {
-  
-      Drupal.behaviors.listmixer.push(preset);
-      //@TODO make sure target_id is available to push function
-  
-      // If page stayed loaded, clear out the data array.
-      preset.data = {
-      'inputArray' : [],
-      'input' : '',
-      'target_id' : preset.targetId,
-      'target_field' : preset.targetField,
-      'interact_function' : preset.interactFunction
-      };
-  
-      // @TODO Change input val clearing.
-      // $('form.listmixer-container-form div.listmixer-interact-input input').val('');
-  
-      // Do not reload page.
-      // @TODO... actually the reloading can be nice.
-      // return false;
-  });
-}
 
-Drupal.behaviors.listmixer.listmixerSetupInteract = function(preset) {
   if($(this).attr("id") !== null) {
     preset.currentSelectionId = $(this).attr("id");
   }
@@ -224,8 +179,6 @@ Drupal.behaviors.listmixer.listmixerSetupInteract = function(preset) {
   preset.interactiveElementContainerFormClass = 'class="' + preset.interactiveElementContainerId + '-' + preset.currentSelectionId + '-form listmixer-selected-container-form"';
   preset.interactiveElementContainerFormSelector = 'form#' +  preset.interactiveElementContainerId;
   preset.interactiveElementContainerForm = '<form id="' + preset.interactiveElementContainerId + '" ' + preset.interactiveElementContainerFormClass + '></form>';
-  // Set up interaction.
-  Drupal.behaviors.listmixer.interact(preset);
 
   var sourceValue = null;
   var sourceElement = null;
@@ -302,14 +255,52 @@ Drupal.behaviors.listmixer.listmixerSetupInteract = function(preset) {
 /**
  * Submit called when form is created and added to container.
  */
-Drupal.behaviors.listmixer.submit = function(preset) {
+Drupal.behaviors.listmixer.setupSubmit = function(preset) {
 /*   Drupal.behaviors.listmixer.buildBehavior(preset, 'submit'); */
+  preset.submitFunction = preset.behaviors.submit.settings.behavior_function;
   preset.Submit = new Drupal.behaviors.listmixer.submitBehavior(preset);
   preset.submitMarkupArray = preset.Submit.markup(preset);
   preset.submitMarkup = preset.submitMarkupArray[preset.submitFunction];
-  preset.submitFunction = preset.behaviors.submit.settings.behavior_function;
+
   preset.Submit[preset.submitFunction](preset);
 };
+Drupal.behaviors.listmixer.setupPush = function(preset) {
+  // ********* Assign source value to each included interaction element.
+  $.each($(preset.interactions.interactions_region + ' ' + preset.interactions.interactions_inclusions), Drupal.behaviors.listmixer.setupInteract(preset));
+  
+    // ********* Find the button (which might not be a button) and add a click function to it.
+    // Set up data object on page load.
+    preset.data = {
+      'inputArray' : [],
+      'input' : '',
+      'target_id' : preset.targetId,
+      'target_field' : preset.targetField,
+      'interact_function' : preset.interactFunction
+      // @TODO Collect other data here if necessary
+    };
+    // Activate push callback. (For example, click a button.)
+    $('div.' + preset.interactiveElementContainerId + '-push-submit').children(".button").click(function() {
+  
+      Drupal.behaviors.listmixer.push(preset);
+      //@TODO make sure target_id is available to push function
+  
+      // If page stayed loaded, clear out the data array.
+      preset.data = {
+      'inputArray' : [],
+      'input' : '',
+      'target_id' : preset.targetId,
+      'target_field' : preset.targetField,
+      'interact_function' : preset.interactFunction
+      };
+  
+      // @TODO Change input val clearing.
+      // $('form.listmixer-container-form div.listmixer-interact-input input').val('');
+  
+      // Do not reload page.
+      // @TODO... actually the reloading can be nice.
+      // return false;
+  });
+}
 /**
  * Push is called when user interacts with submit button.
  */
