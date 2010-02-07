@@ -49,8 +49,12 @@ function listmixer_todo_list_add_listmixer_default_preset() {
       'interactions_region' => 'div.views-row',
 */
 
+/*
       'interactions_region' => 'div#selectable-listmixer-main-container-todo_list_add.ui-selectable:has(h2 a.ui-selected)',
       'interactions_inclusions' => '',
+*/
+      'interactions_region' => 'div#center div.view-to-do-list-current',
+      'interactions_inclusions' => 'div.ui-selectable:has(h2 a.ui-selected)',
 
       'interactions_target_id' => 'div#center div.view-to-do-list-current div.views-row',
       'interactions_target_id_element' => 'h2 a',

@@ -6,6 +6,7 @@ Drupal.behaviors.listmixer.submitBehavior = function(preset) {
   this.buttonSubmit = function(preset) {  
     $('div.' + preset.interactiveElementContainerId + '-push-submit').children('.button').click(function() {
       Drupal.behaviors.listmixer.executePush(preset);
+      Drupal.behaviors.listmixer.reloadPage();
     });
   }
   this.buttonSubmitRefresh = function(preset) {  

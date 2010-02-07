@@ -2,7 +2,18 @@
 
 /**
  * @file
+ * This Javascript file is responsible for creatings and applying interactive
+ * preset behaviors and elements to the appropriate html elements on a rendered
+ * Drupal page.
+ *
+ * How it works:
+ * *_Presets are loaded from an array passed from the Drupal page,
+ * in Drupal.settings.listmixer.
+ *
+ * *_The interaction is set up, and awaits activation from the user.
+ * *_Upon activation
  */
+
 
 var pageLoaded = 0;
 
@@ -62,13 +73,11 @@ Drupal.behaviors.listmixer.setupContainerForm = function(preset) {
   // Add interaction label.
   // @TODO: Wrap label in Drupal.t()? Will be plain markup? CSS is allowed...so see which function is appropriate.
   // Also, users could be encouraged to wrap their text in Drupal.t() and assign it to the preset from a function.
-  preset.interactionsLabel = preset.interactions.interactions_label;
-  $(preset.containerFormSelector).prepend('<div class="' + preset.interactiveElementContainerSelector + '-interaction-label listmixer-interaction-label">' + preset.interactionsLabel + '</div>');
+  $(preset.containerFormSelector).prepend('<div class="' + preset.interactiveElementContainerSelector + '-interaction-label listmixer-interaction-label">' + preset.interactions.interactions_label + '</div>');
 
   // Add help text.
   // @TODO: Wrap help text in Drupal.t()? Will be plain markup? CSS is allowed...so see which function is appropriate.
-  preset.interactionsHelp = preset.interactions.interactions_help;
-  $(preset.containerFormSelector).prepend('<div class="' + preset.interactiveElementContainerSelector + '-interaction-help  listmixer-interaction-help">' + preset.interactionsHelp + '</div>');
+  $(preset.containerFormSelector).prepend('<div class="' + preset.interactiveElementContainerSelector + '-interaction-help  listmixer-interaction-help">' + preset.interactions.interactions_help + '</div>');
 };
 Drupal.behaviors.listmixer.setupActivate = function(preset) {
   // Make deactivated by default.
@@ -78,6 +87,7 @@ Drupal.behaviors.listmixer.setupActivate = function(preset) {
   // Load markup.
   preset.activateMarkupArray = preset.ActivateBehavior.markup(preset);
   preset.activateMarkup = preset.activateMarkupArray[preset.activateFunction];
+
   // Load activate function.
   preset.ActivateBehavior[preset.activateFunction](preset);
   // Make activate true if activation is supposed to happen on load.
@@ -96,7 +106,7 @@ Drupal.behaviors.listmixer.activateLoadTarget = function(preset) {
 
   var targetValue;
   if(preset.interactions.interactions_target_id_element !== '') {
-    // For multiple targets, do nothing. 
+    // For multiple targets, do nothing.
     // The value must be determined in the activate function.
   }
   else {
@@ -132,7 +142,6 @@ Drupal.behaviors.listmixer.activate = function(preset) {
 
   // ********* Assign source value to each included interaction element.
   Drupal.behaviors.listmixer.setupInteract(preset);
-
 };
 Drupal.behaviors.listmixer.activateLoadInteractionRegion = function(preset) {
   if (preset.interactions.interactions_region === undefined) {
@@ -141,14 +150,13 @@ Drupal.behaviors.listmixer.activateLoadInteractionRegion = function(preset) {
   preset.interactionsRegion = $(preset.interactions.interactions_region).html();
 };
 Drupal.behaviors.listmixer.setupInteract = function(preset) {
-
   $.each($(preset.interactions.interactions_region + ' ' + preset.interactions.interactions_inclusions), function () {
     preset.interactFunction = preset.behaviors.interact.settings.behavior_function;
     preset.Interact = new Drupal.behaviors.listmixer.interactBehavior();
-  
+
     preset.sourceValueSelector = preset.interactions.interactions_source_id;
     preset.sourceValueAttribute = preset.interactions.interactions_source_id_attr;
-  
+
 /*
     if($(this).attr("id") !== null) {
       preset.currentSelectionId = $(this).attr("id");
@@ -157,24 +165,23 @@ Drupal.behaviors.listmixer.setupInteract = function(preset) {
      preset.currentSelectionId = "listmixer-interaction";
     }
 */
-     preset.currentSelectionId = "listmixer-interaction";
+    preset.currentSelectionId = "listmixer-interaction";
 
     preset.interactiveElementContainerId = 'listmixer-container-'+ preset.preset_name + '-' + preset.currentSelectionId;
     preset.interactiveElementContainerFormClass = 'class="' + preset.interactiveElementContainerId + '-' + preset.currentSelectionId + '-form listmixer-selected-container-form"';
     preset.interactiveElementContainerFormSelector = 'form#' +  preset.interactiveElementContainerId;
     preset.interactiveElementContainerForm = '<form id="' + preset.interactiveElementContainerId + '" ' + preset.interactiveElementContainerFormClass + '></form>';
-
     if(preset.activationComplete === false) {
       var hideSourceValue = false;
       preset.interactMarkupArray = preset.Interact.markup(preset);
       preset.interactMarkup = preset.interactMarkupArray[preset.interactFunction];
       preset.interactValidationArray = preset.Interact.validation(preset);
       preset.interactValidation = preset.interactValidationArray[preset.interactFunction];
-  
+
       preset.Interact[preset.interactFunction](preset);
       preset.activationComplete = true;
     }
-  
+
     var sourceValue = null;
     var sourceElement = null;
     var hideSourceValue = false;
@@ -218,13 +225,22 @@ Drupal.behaviors.listmixer.setupInteract = function(preset) {
       if(preset.activation === true) {
         $(this).addClass(sourceValueMarkupProcessed);
         $(this).find(sourceValueMarkup).addClass(sourceValueMarkupProcessed);
-        $(this).prepend(preset.interactiveElementContainerForm);
+        $(this).append(preset.interactiveElementContainerForm);
         $(this).append(preset.interactMarkup);
 
         // Set up submit elements.
         Drupal.behaviors.listmixer.setupSubmit(preset);
-        $(this).append(preset.submitMarkup);   
-   
+
+        // Rebuild activate markup.
+        preset.activateMarkupArray = preset.ActivateBehavior.markup(preset);
+        preset.activateMarkup = preset.activateMarkupArray[preset.activateFunction];
+
+        // Load activate function.
+        preset.ActivateBehavior[preset.activateFunction](preset);
+
+        $(preset.interactiveElementContainerFormSelector).append(preset.activateMarkup);
+        $(preset.interactiveElementContainerFormSelector).append(preset.submitMarkup);
+
         // Set up push callback on submit feature.
         Drupal.behaviors.listmixer.setupPush(preset);
         preset.Submit[preset.submitFunction](preset);
@@ -280,7 +296,7 @@ Drupal.behaviors.listmixer.executePush = function(preset) {
   });
   Drupal.behaviors.listmixer.buildBehaviorCallback(preset, 'push');
   // @TODO Check that the callback isn't reloading the page.
-  
+
   // If page stayed loaded, clear out the data array.
   preset.data = {
   'inputArray' : [],
