@@ -197,6 +197,7 @@ function listmixer_behaviors_registry_build() {
 
   /* SUBMIT functions */
   $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('submit', 'Submit Button', $enabled, '', 'button', 'submit_button', 'Submit Button', 'buttonSubmit');
+  $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('submit', 'Submit & Refresh Button', $enabled, '', 'button_refresh', 'submit_button_refresh', 'Submit & Refresh Button', 'buttonSubmitRefresh');
   // $listmixer_behaviors_registry[] = listmixer_behaviors_registry_build_behavior('submit', 'Submit Checkbox', $enabled, '', 'checkbox', 'submit_checkbox', 'Submit Checkbox', 'checkboxSubmit');
 
   // Reset preset cache.

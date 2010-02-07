@@ -34,7 +34,7 @@ function listmixer_todo_list_add_listmixer_default_preset() {
       ),
       'submit' => 
       array (
-        'behavior_name' => 'submit_button',
+        'behavior_name' => 'submit_button_refresh',
         'behavior_type' => 'submit',
       ),
     ),
