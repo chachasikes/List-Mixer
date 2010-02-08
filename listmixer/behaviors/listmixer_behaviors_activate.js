@@ -26,6 +26,8 @@ Drupal.behaviors.listmixer.activateBehavior = function(preset) {
   }
 
   this.loadActivate = function(preset) {
+    preset.activation = true;
+    Drupal.behaviors.listmixer.activate(preset);
   }
 
   this.markup = function(preset) {
@@ -43,7 +45,6 @@ Drupal.behaviors.listmixer.activateBehavior = function(preset) {
  * Add selectable capabilities to target id
  */
 Drupal.behaviors.listmixer.selectable = function(preset) {
-console.log(preset.activation);
   if(preset.activation === false) {
     $(preset.interactions.interactions_target_id).attr("id", "selectable-" + preset.containerId);
     $(preset.interactions.interactions_target_id).addClass("selectable");
@@ -53,18 +54,18 @@ console.log(preset.activation);
             filter : preset.interactions.interactions_target_id_element,
             // On select, set the target id array, and activate the interaction.
             selected: function(event, ui) {
-              if(ui.selected.pathname !== undefined) {
-                preset.targetIdArray.push(ui.selected.pathname);
-              }
-              preset.activation = true;
-              Drupal.behaviors.listmixer.activate(preset);
-              preset.activated = true;
-              preset.deactivated = null;
-              $(preset.interactions.interactions_target_id + "#selectable-" + preset.interactiveElementContainerId).selectable('destroy');
-              // Add deactivation button.
-              $('div.' + preset.interactiveElementContainerId + '-deactivate-button').children('.button').click(function() {
-                Drupal.behaviors.listmixer.deactivate(preset);
-              });
+            if(ui.selected.pathname !== undefined) {
+              preset.targetIdArray.push(ui.selected.pathname);
+            }
+            preset.activation = true;
+            Drupal.behaviors.listmixer.activate(preset);
+            preset.activated = true;
+            preset.deactivated = null;
+            $(preset.interactions.interactions_target_id + "#selectable-" + preset.interactiveElementContainerId).selectable('destroy');
+            // Add deactivation button.
+            $('div.' + preset.interactiveElementContainerId + '-deactivate-button').children('.button').click(function() {
+              Drupal.behaviors.listmixer.deactivate(preset);
+            });
           }
         });
   		  $(preset.interactions.interactions_target_id + "#selectable-" + preset.interactiveElementContainerId).disableSelection();
@@ -77,6 +78,7 @@ console.log(preset.activation);
 }
 
 Drupal.behaviors.listmixer.addActivateButton = function(preset) {
+  // @TODO Move to CSS, add a class and show hide with CSS.
   // Add activate button to form.
   $('form#' + preset.interactiveElementContainerId).append(preset.activateMarkup);
   // Hide deactivate button.
@@ -85,7 +87,7 @@ Drupal.behaviors.listmixer.addActivateButton = function(preset) {
   $('form#' + preset.interactiveElementContainerId + ' div.' + preset.interactiveElementContainerId + '-activate-button').children(".button").click(function() {
   if(preset.activated == null) {
       preset.activation = true;
-      preset.activationComplete = false;
+      preset.presetIsActive = false;
       Drupal.behaviors.listmixer.activate(preset);
       preset.activated = true;
       preset.deactivated = null;

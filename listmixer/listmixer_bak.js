@@ -235,7 +235,7 @@ Drupal.behaviors.listmixer.listmixerSetup = function(preset) {
   preset.targetField = preset.interactions.interactions_target_field;
   // Set up the target value
   preset.targetValueAttribute = preset.interactions.interactions_target_id_attr;
-  preset.activationComplete = false;
+  preset.presetIsActive = false;
   preset.targetId = '';
   preset.targetIdArray = [];
 
@@ -375,7 +375,7 @@ Drupal.behaviors.listmixer.listmixerDeactivate = function(preset) {
   // Set activated/deactivated state.
   preset.activation = false;
   // Only allow 1 activation.
-  preset.activationComplete = false;
+  preset.presetIsActive = false;
   Drupal.behaviors.listmixer.listmixerActivate(preset);
 };
 /**
@@ -441,7 +441,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
   // ******** Activate interaction.
   // For only 1 activation per preset.
   // Otherwise, all activations/deactivations are handled individually.
-  if(preset.activationComplete === false) {
+  if(preset.presetIsActive === false) {
     // If the interaction container matches the restriction container, make interactive elements live in the form. 
     var hideSourceValue = false;
     // Set up selector for the sourceValue (for input values)
@@ -597,7 +597,7 @@ Drupal.behaviors.listmixer.listmixerActivate = function(preset) {
       // @TODO... actually the reloading can be nice.
       // return false;
     });
-  preset.activationComplete = true;
+  preset.presetIsActive = true;
   }
   else {
   }

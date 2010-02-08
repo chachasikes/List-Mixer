@@ -117,16 +117,18 @@ function listmixer_init() {
   if ($access) {
     $path = drupal_get_path('module', 'listmixer');
     // Add main javascript file.
-    drupal_add_js($path .'/listmixer.js', 'footer');
+    drupal_add_js($path . '/listmixer.js', 'footer');
 
     // Add behavior JS libraries
-    drupal_add_js($path .'/behaviors/listmixer_behaviors_activate.js', 'footer');
-    drupal_add_js($path .'/behaviors/listmixer_behaviors_push.js', 'footer');
-    drupal_add_js($path .'/behaviors/listmixer_behaviors_submit.js', 'footer');
-    drupal_add_js($path .'/behaviors/listmixer_behaviors_interact.js', 'footer');
+    drupal_add_js($path . '/behaviors/listmixer_behaviors_activate.js', 'footer');
+    drupal_add_js($path . '/behaviors/listmixer_behaviors_push.js', 'footer');
+    drupal_add_js($path . '/behaviors/listmixer_behaviors_submit.js', 'footer');
+    drupal_add_js($path . '/behaviors/listmixer_behaviors_interact.js', 'footer');
+
+    // drupal_add_js($path . '/jquerylint/jquery.lint.js', 'footer');
 
     // Add custom style sheet.
-    drupal_add_css($path .'/listmixer.css');
+    drupal_add_css($path . '/listmixer.css');
 
     // Add JQuery User Interface
     jquery_ui_add('ui.sortable');
